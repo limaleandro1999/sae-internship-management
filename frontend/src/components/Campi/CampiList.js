@@ -3,7 +3,7 @@ import { List, Datagrid, TextField } from 'react-admin';
 
 function CampiList(props) {
   return (
-    <List {...props}>
+    <List {...props} title='Campi'>
       <Datagrid>
         <TextField source='name' label='Nome'/>
         <TextField source='emailAddress' label='Email'/>

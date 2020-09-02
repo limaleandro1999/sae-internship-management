@@ -13,7 +13,7 @@ const validateAddress = required('O campo endereço é obrigatório');
 
 function CampiCreate(props) {
   return (
-    <Create {...props}>
+    <Create {...props} title='Novo Campus'>
       <SimpleForm>
         <TextInput source='name' label='Nome' fullWidth={true} validate={validateName}/>
         <TextInput source='emailAddress' label='Email' fullWidth={true} validate={validateEmail}/>
