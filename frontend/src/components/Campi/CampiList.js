@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Datagrid, TextField } from 'react-admin';
+import { List, Datagrid, TextField, EditButton, ShowButton } from 'react-admin';
 
 function CampiList(props) {
   return (
@@ -10,6 +10,8 @@ function CampiList(props) {
         <TextField source='phone' label='Telefone'/>
         <TextField source='city' label='Cidade'/>
         <TextField source='address' label='Endereço'/>
+        <EditButton/>
+        <ShowButton/>
       </Datagrid>
     </List>
   );
