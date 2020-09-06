@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Raw } from 'typeorm';
 
 import { Campus } from './campus.entity';
 import { CreateCampusDTO } from './dto/create-campus.dto';
 import { UpdateCampusDTO } from './dto/update-campus.dto';
+import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 
 @Injectable()
 export class CampiService {
@@ -13,8 +14,10 @@ export class CampiService {
     private campiRepository: Repository<Campus>
   ) {}
 
-  findAll(order?: object, skip?: number, take?: number, filter?: object): Promise<[Campus[], number]> {
-    return this.campiRepository.findAndCount({ order, skip, take });
+  findAll(order?: object, skip?: number, take?: number, filter?: BaseFilter): Promise<[Campus[], number]> {
+    const { q } = filter;
+    const whereClause = q ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) } : null;
+    return this.campiRepository.findAndCount({ order, skip, take, where: whereClause });
   }
 
   findOne(id: number | string): Promise<Campus> {

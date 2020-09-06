@@ -20,6 +20,7 @@ import { RequestParamsMiddleware } from './common/middlewares/request-params.mid
       password: 'root',
       database: 'postgres',
       synchronize: true,
+      logging: true,
       entities: [Campus],
     }),
     CampiModule,

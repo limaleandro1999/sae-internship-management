@@ -1,9 +1,17 @@
 import React from 'react';
-import { List, Datagrid, TextField, EditButton, ShowButton } from 'react-admin';
+import { List, Datagrid, TextField, TextInput, EditButton, ShowButton, Filter } from 'react-admin';
+
+function CampiFilters(props) {
+  return (
+    <Filter {...props}>
+      <TextInput label='Pesquisa' source='q' alwaysOn/>
+    </Filter>
+  );
+}
 
 function CampiList(props) {
   return (
-    <List {...props} title='Campi'>
+    <List {...props} title='Campi' filters={<CampiFilters/>}>
       <Datagrid>
         <TextField source='name' label='Nome'/>
         <TextField source='emailAddress' label='Email'/>
