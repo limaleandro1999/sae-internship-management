@@ -4,7 +4,6 @@ import { CampiService } from './campi.service';
 import { CreateCampusDTO } from './dto/create-campus.dto';
 import { UpdateCampusDTO } from './dto/update-campus.dto';
 import { RequestWithQueryInfo } from 'src/common/interfaces/request-query-info.interface';
-import { Response } from 'express';
 
 @Controller('campi')
 export class CampiController {
