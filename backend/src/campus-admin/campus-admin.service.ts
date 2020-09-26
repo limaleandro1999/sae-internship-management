@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { v4 } from 'uuid';
+
 import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 import { Raw, Repository } from 'typeorm';
 import { CampusAdmin } from './campus-admin.entity';
@@ -18,8 +20,12 @@ export class CampusAdminService {
     return this.campusAdminRepository.findAndCount({ order, skip, take, where: whereClause });
   }
 
+  findByConfirmationId(confirmationId: string): Promise<CampusAdmin> {
+    return this.campusAdminRepository.findOne({ where: { confirmationId } });
+  }
+
   create(campusAdmin: CreateCampusAdminDTO): Promise<CampusAdmin> {
-    const campusAdminObj = this.campusAdminRepository.create(campusAdmin);
+    const campusAdminObj = this.campusAdminRepository.create({ ...campusAdmin, confirmationId: v4() });
     return this.campusAdminRepository.save(campusAdminObj);
   }
 }

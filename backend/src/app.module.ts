@@ -31,7 +31,7 @@ import { EmailsService } from './emails/emails.service';
     MailerModule.forRoot({
       transport: 'smtps://limaleandro1999@gmail.com:a6Z7g3BD8nhJLMkb@smtp-relay.sendinblue.com',
       template: {
-        dir: process.env.PWD + '/backend/templates',
+        dir: 'D:\\projects\\internship-management\\backend\\templates',
         adapter: new HandlebarsAdapter(),
         options: {
           strict: true,

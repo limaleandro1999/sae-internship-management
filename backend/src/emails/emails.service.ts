@@ -11,15 +11,15 @@ export class EmailsService {
     const {
       to,
       name,
-      confirmationlink,
+      confirmationLink,
     } = confirmationEmail;
-
+    
     await this.mailerService.sendMail({
       to,
       from: 'leandro.lima+test1231@oowlish.com',
       context: {
         name,
-        confirmationlink,
+        confirmationLink,
       },
       subject: 'Confirme seu cadastro',
       template: 'confirmation-email',

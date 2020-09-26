@@ -22,7 +22,7 @@ export class CampusAdminController {
     await this.emailService.sendConfirmationEmail({
       to: campusAdmin.email,
       name: campusAdmin.name,
-      confirmationlink: '',
+      confirmationLink: `localhost:3001/finish-create/${campusAdmin.confirmationId}`,
     });
 
     return campusAdmin;
