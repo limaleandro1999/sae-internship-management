@@ -14,6 +14,8 @@ import { RequestParamsMiddleware } from './common/middlewares/request-params.mid
 import { CampusAdminModule } from './campus-admin/campus-admin.module';
 import { CampusAdmin } from './campus-admin/campus-admin.entity';
 import { EmailsService } from './emails/emails.service';
+import { UsersModule } from './users/users.module';
+import { User } from './users/user.entity';
 
 @Module({
   imports: [
@@ -26,7 +28,7 @@ import { EmailsService } from './emails/emails.service';
       database: 'postgres',
       synchronize: true,
       logging: true,
-      entities: [Campus, CampusAdmin],
+      entities: [Campus, CampusAdmin, User],
     }),
     MailerModule.forRoot({
       transport: 'smtps://limaleandro1999@gmail.com:a6Z7g3BD8nhJLMkb@smtp-relay.sendinblue.com',
@@ -40,6 +42,7 @@ import { EmailsService } from './emails/emails.service';
     }),
     CampiModule,
     CampusAdminModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailsService],

@@ -1,29 +1,23 @@
-import { hash } from "bcrypt";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+
 import { Campus } from "src/campi/campus.entity";
 import { User } from "src/users/user.entity";
-import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class CampusAdmin extends User {
+export class CampusAdmin {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column()
-  name: string;
+  firstName: string;
+
+  @Column()
+  lastName: string;
 
   @ManyToOne(() => Campus, campus => campus.campusAdmins)
   campus: Campus | number;
 
-  @Column({
-    default: false,
-  })
-  active: boolean;
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  async hashPassword() {
-    if (this.password) {
-      this.password = await hash(this.password, 10); 
-    }
-  }
+  @OneToOne(() => User)
+  @JoinColumn()
+  user: User | number;
 }

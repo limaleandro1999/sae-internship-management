@@ -2,13 +2,19 @@ import { Controller, Get, Post, Req } from '@nestjs/common';
 import { Body } from '@nestjs/common/decorators/http/route-params.decorator';
 import { RequestWithQueryInfo } from 'src/common/interfaces/request-query-info.interface';
 import { EmailsService } from 'src/emails/emails.service';
+import { UserType } from 'src/users/user.entity';
+import { UsersService } from 'src/users/users.service';
 import { CampusAdmin } from './campus-admin.entity';
 import { CampusAdminService } from './campus-admin.service';
 import { CreateCampusAdminDTO } from './dto/create-campus-admin.dto';
 
 @Controller('campus-admin')
 export class CampusAdminController {
-  constructor(private readonly campusAdminService: CampusAdminService, private readonly emailService: EmailsService){}
+  constructor(
+    private readonly campusAdminService: CampusAdminService, 
+    private readonly userService: UsersService,
+    private readonly emailService: EmailsService
+  ){}
 
   @Get()
   findAll(@Req() req: RequestWithQueryInfo): Promise<[CampusAdmin[], number]> {
@@ -17,12 +23,21 @@ export class CampusAdminController {
   }
 
   @Post()
-  async create(@Body() createCampusDTO: CreateCampusAdminDTO): Promise<CampusAdmin> {
-    const campusAdmin = await this.campusAdminService.create(createCampusDTO);
+  async create(@Body() createCampusAdminDTO: CreateCampusAdminDTO): Promise<CampusAdmin> {
+    const campusAdminUser = await this.userService.create({ 
+      email: createCampusAdminDTO.email, 
+      type: UserType.CAMPUS_ADMIN, 
+      active: false 
+    });
+    const campusAdmin = await this.campusAdminService.create({ 
+      ...createCampusAdminDTO, 
+      user: campusAdminUser 
+    });
+
     await this.emailService.sendConfirmationEmail({
-      to: campusAdmin.email,
-      name: campusAdmin.name,
-      confirmationLink: `localhost:3001/finish-create/${campusAdmin.confirmationId}`,
+     to: campusAdminUser.email,
+     name: campusAdmin.firstName,
+     confirmationLink: `localhost:3001/finish-create/${campusAdminUser.confirmationId}`,
     });
 
     return campusAdmin;

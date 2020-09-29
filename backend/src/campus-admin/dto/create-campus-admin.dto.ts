@@ -1,6 +1,6 @@
 export class CreateCampusAdminDTO {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   campus: number;
-  password: string;
 }
