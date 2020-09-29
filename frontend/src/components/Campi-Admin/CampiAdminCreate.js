@@ -8,7 +8,8 @@ function CampiAdminCreate(props) {
   return (
     <Create {...props} title='Novo Campus'>
       <SimpleForm>
-        <TextInput source='name' label='Nome' fullWidth={true} validate={validateName}/>
+        <TextInput source='firstName' label='Nome' fullWidth={true} validate={validateName}/>
+        <TextInput source='lastName' label='Sobrenome' fullWidth={true} validate={validateName}/>
         <TextInput source='email' label='Email' fullWidth={true} validate={validateEmail}/>
         <ReferenceInput source='campus' label='Campus' reference='campi'>
           <SelectInput optionText='name' />

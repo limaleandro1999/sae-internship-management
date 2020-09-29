@@ -13,8 +13,9 @@ function CampiAdminList(props) {
   return (
     <List {...props} title='Campus Admin' filters={<CampiFilters/>}>
       <Datagrid>
-        <TextField source='name' label='Nome'/>
-        <TextField source='email' label='Email'/>
+        <TextField source='firstName' label='Nome'/>
+        <TextField source='lastName' label='Sobrenome'/>
+        <TextField source='user.email' label='Email'/>
         <EditButton/>
         <ShowButton/>
       </Datagrid>

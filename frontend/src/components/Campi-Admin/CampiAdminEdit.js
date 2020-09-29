@@ -8,7 +8,8 @@ function CampiAdminEdit(props) {
   return (
     <Edit {...props} title='Novo Campus'>
       <SimpleForm>
-        <TextInput source='name' label='Nome' fullWidth={true} validate={validateName}/>
+        <TextInput source='firstName' label='Nome' fullWidth={true} validate={validateName}/>
+        <TextInput source='lastName' label='Sobrenome' fullWidth={true} validate={validateName}/>
         <TextInput source='email' label='Email' fullWidth={true} validate={validateEmail}/>
       </SimpleForm>
     </Edit>

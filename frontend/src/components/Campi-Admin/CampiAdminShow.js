@@ -9,7 +9,8 @@ function CampiAdminShow(props) {
   return (
     <Show {...props} title={<CampusAdminTitle/>}>
       <SimpleShowLayout>
-        <TextField source='name' label='Nome'/>
+        <TextField source='firstName' label='Nome'/>
+        <TextField source='lastName' label='Sobrenome'/>
         <TextField source='email' label='Email'/>
       </SimpleShowLayout>
     </Show>
