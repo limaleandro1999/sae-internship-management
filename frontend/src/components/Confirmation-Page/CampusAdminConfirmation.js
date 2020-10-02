@@ -1,16 +1,79 @@
-import React from 'react';
+import React, { useState } from 'react';
+import clsx from 'clsx';
 import { useParams } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
 
-import { TextField } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
+
+import axios from 'axios';
+
+const useStyle = makeStyles((theme) => ({
+  textField: {
+    width: '400px',
+    margin: '10px',
+  },
+  button: {
+    margin: '10px',
+  }
+}));
+
+const Main = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: #f4f4f4;
+  height: 100vh;
+`;
+
+const MainTitle = styled.h1`
+  margin: 30px;
+`;
+
+const Description = styled.h3`
+  margin: 30px;
+  width: 400px;
+  text-align: justify;
+`;
+
+const ErrorMessage = styled.p`
+  color: #de0b2b;
+  margin: 5px;
+`;
+
+const errorsByStatusCode = {
+  403: 'O email informado não foi cadastrado',
+}
 
 function CampusAdminConfirmation() {
-  let { confirmationId } = useParams();
+  const { confirmationId } = useParams();
+  const classes = useStyle();
+  const [user, setUser] = useState({ email: '', password: '', confirmationId });
+  const [errors, setErrors] = useState([]);
+
+  const handleInputChange = event => {
+    setUser({ ...user, [event.target.name]: event.target.value });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await axios.post('http://localhost:3000/users/confirm', user);
+      setErrors([]);
+    } catch (error) {
+      setErrors([errorsByStatusCode[error.response.status]]);
+    }
+  };
+
   return (
-    <div>
-      <TextField label='Email'/>
-      <TextField label='Password' type='password'/>
-      <TextField label='Confirm Password' type='password'/>
-    </div>
+    <Main>
+      <MainTitle>Olá! Seja bem-vindo!</MainTitle>
+      <Description>Por favor complete seu cadastro utilizando o email que foi cadastrado e escolha uma senha para sua conta.</Description>
+      {errors.map((error, idx) => (<ErrorMessage key={idx}>{error}</ErrorMessage>))}
+      <TextField className={clsx(classes.textField)} label='Email' name='email' value={user.email} onChange={handleInputChange}/>
+      <TextField className={clsx(classes.textField)} label='Senha' name='password' type='password' value={user.password} onChange={handleInputChange}/>
+      <Button color="primary" className={clsx(classes.button)} onClick={handleSubmit}>Concluir</Button>
+    </Main>
   );
 }
 

@@ -28,7 +28,11 @@ export class User {
   @Column()
   confirmationId: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: UserType,
+    default: UserType.INTERN,
+  })
   type: UserType;
 
   @Column({
