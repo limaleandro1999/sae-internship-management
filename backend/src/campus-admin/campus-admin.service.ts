@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 import { Raw, Repository } from 'typeorm';
 import { CampusAdmin } from './campus-admin.entity';
-import { CreateCampusAdminDTO } from './dto/create-campus-admin.dto';
 
 @Injectable()
 export class CampusAdminService {

@@ -9,7 +9,7 @@ function CampiFilters(props) {
   );
 }
 
-function CampiAdminList(props) {
+function CampusAdminList(props) {
   return (
     <List {...props} title='Campus Admin' filters={<CampiFilters/>}>
       <Datagrid>
@@ -23,4 +23,4 @@ function CampiAdminList(props) {
   );
 }
 
-export default CampiAdminList;
+export default CampusAdminList;

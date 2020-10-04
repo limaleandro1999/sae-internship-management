@@ -4,7 +4,7 @@ import { Edit, SimpleForm, TextInput, required, email } from 'react-admin';
 const validateName = required('O campo nome é obrigatório');
 const validateEmail = [required('O campo email é obrigatório'), email('Email inválido')];
 
-function CampiAdminEdit(props) {
+function CampusAdminEdit(props) {
   return (
     <Edit {...props} title='Novo Campus'>
       <SimpleForm>
@@ -16,4 +16,4 @@ function CampiAdminEdit(props) {
   );
 }
 
-export default CampiAdminEdit;
+export default CampusAdminEdit;

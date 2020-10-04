@@ -37,7 +37,7 @@ export class CampusAdminController {
     await this.emailService.sendConfirmationEmail({
      to: campusAdminUser.email,
      name: campusAdmin.firstName,
-     confirmationLink: `localhost:3001/finish-create/${campusAdminUser.confirmationId}`,
+     confirmationLink: `localhost:3001/account-confirmation/${campusAdminUser.confirmationId}`,
     });
 
     return campusAdmin;

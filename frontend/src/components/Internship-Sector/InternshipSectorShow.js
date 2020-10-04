@@ -1,13 +1,13 @@
 import React from 'react';
 import { Show, SimpleShowLayout, TextField } from 'react-admin';
 
-function CampusAdminTitle({ record }) {
+function InternshipSectorTitle({ record }) {
   return <span>{record ? `${record.name}` : ''}</span>;
 };
 
-function CampiAdminShow(props) {
+function InternshipSectorShow(props) {
   return (
-    <Show {...props} title={<CampusAdminTitle/>}>
+    <Show {...props} title={<InternshipSectorTitle/>}>
       <SimpleShowLayout>
         <TextField source='firstName' label='Nome'/>
         <TextField source='lastName' label='Sobrenome'/>
@@ -17,4 +17,4 @@ function CampiAdminShow(props) {
   );
 }
 
-export default CampiAdminShow;
+export default InternshipSectorShow;

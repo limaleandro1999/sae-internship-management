@@ -22,6 +22,11 @@ export class UsersService {
     return !!user;
   }
 
+  async isConfirmed(confirmationId: string): Promise<boolean> {
+    const user = await this.userRepository.findOne({ where: { confirmationId, active: true } });
+    return !!user;
+  }
+
   async confirmUser(confirmUserDTO: ConfirmUserDTO) {
     const { confirmationId, password, email } = confirmUserDTO;
     const user = await this.userRepository.findOne({ where: { email, confirmationId } });
