@@ -1,0 +1,12 @@
+{
+  "name": "gerenciamento-de-estagio",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:limaleandro1999/internship-management.git",
+  "author": "Leandro Lima <leandro.lima@oowlish.com>",
+  "license": "MIT",
+  "scripts": {
+    "start:backend:dev": "cd ./backend/ && yarn start:dev",
+    "start:frontend": "cd ./frontend/ && yarn start"
+  }
+}

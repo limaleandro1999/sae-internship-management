@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { CampusAdmin } from 'src/campus-admin/campus-admin.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
 export class Campus {
@@ -19,4 +20,7 @@ export class Campus {
 
   @Column()
   city: string;
+
+  @OneToMany(() => CampusAdmin, campusAdmin => campusAdmin.campus)
+  campusAdmins: CampusAdmin[];
 }

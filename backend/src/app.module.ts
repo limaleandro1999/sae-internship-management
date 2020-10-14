@@ -1,6 +1,8 @@
 import { Module, NestModule, MiddlewareConsumer, RequestMethod} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MailerModule } from '@nestjs-modules/mailer';
 import { Connection } from 'typeorm';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -9,6 +11,13 @@ import { CampiModule } from './campi/campi.module';
 import { Campus } from './campi/campus.entity';
 
 import { RequestParamsMiddleware } from './common/middlewares/request-params.middleware';
+import { CampusAdminModule } from './campus-admin/campus-admin.module';
+import { CampusAdmin } from './campus-admin/campus-admin.entity';
+import { EmailsService } from './emails/emails.service';
+import { UsersModule } from './users/users.module';
+import { User } from './users/user.entity';
+import { InternshipSectorModule } from './internship-sector/internship-sector.module';
+import { InternshipSector } from './internship-sector/internship-sector.entity';
 
 @Module({
   imports: [
@@ -21,12 +30,25 @@ import { RequestParamsMiddleware } from './common/middlewares/request-params.mid
       database: 'postgres',
       synchronize: true,
       logging: true,
-      entities: [Campus],
+      entities: [Campus, CampusAdmin, User, InternshipSector],
+    }),
+    MailerModule.forRoot({
+      transport: 'smtps://limaleandro1999@gmail.com:a6Z7g3BD8nhJLMkb@smtp-relay.sendinblue.com',
+      template: {
+        dir: 'D:\\projects\\internship-management\\backend\\templates',
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
     }),
     CampiModule,
+    CampusAdminModule,
+    UsersModule,
+    InternshipSectorModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, EmailsService],
 })
 export class AppModule implements NestModule {
   constructor(private connection: Connection) {}
