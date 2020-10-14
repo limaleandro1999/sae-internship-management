@@ -18,6 +18,8 @@ import { UsersModule } from './users/users.module';
 import { User } from './users/user.entity';
 import { InternshipSectorModule } from './internship-sector/internship-sector.module';
 import { InternshipSector } from './internship-sector/internship-sector.entity';
+import { CoursesModule } from './courses/courses.module';
+import { Course } from './courses/course.entity';
 
 @Module({
   imports: [
@@ -30,7 +32,7 @@ import { InternshipSector } from './internship-sector/internship-sector.entity';
       database: 'postgres',
       synchronize: true,
       logging: true,
-      entities: [Campus, CampusAdmin, User, InternshipSector],
+      entities: [Campus, CampusAdmin, User, InternshipSector, Course],
     }),
     MailerModule.forRoot({
       transport: 'smtps://limaleandro1999@gmail.com:a6Z7g3BD8nhJLMkb@smtp-relay.sendinblue.com',
@@ -46,6 +48,7 @@ import { InternshipSector } from './internship-sector/internship-sector.entity';
     CampusAdminModule,
     UsersModule,
     InternshipSectorModule,
+    CoursesModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailsService],
