@@ -14,7 +14,7 @@ export class InternshipSectorService {
   findAll(order?: object, skip?: number, take?: number, filter?: BaseFilter): Promise<[InternshipSector[], number]> {
     const { q } = filter;
     const whereClause = q ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) } : null;
-    return this.internshipSectorRepository.findAndCount({ order, skip, take, where: whereClause });
+    return this.internshipSectorRepository.findAndCount({ order, skip, take, where: whereClause, relations: ['user'] });
   }
 
   findByConfirmationId(confirmationId: string): Promise<InternshipSector> {

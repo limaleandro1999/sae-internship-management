@@ -12,10 +12,10 @@ export class CampusAdminService {
     private campusAdminRepository: Repository<CampusAdmin>
   ){}
 
-  findAll(order?: object, skip?: number, take?: number, filter?: BaseFilter): Promise<[CampusAdmin[], number]> {
+  findAll(order?: Record<string, unknown>, skip?: number, take?: number, filter?: BaseFilter): Promise<[CampusAdmin[], number]> {
     const { q } = filter;
     const whereClause = q ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) } : null;
-    return this.campusAdminRepository.findAndCount({ order, skip, take, where: whereClause });
+    return this.campusAdminRepository.findAndCount({ order, skip, take, where: whereClause, relations: ['user'] });
   }
 
   findByConfirmationId(confirmationId: string): Promise<CampusAdmin> {
