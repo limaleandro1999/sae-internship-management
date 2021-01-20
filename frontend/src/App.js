@@ -1,6 +1,7 @@
 import React from 'react';
-import { Admin, Resource } from 'react-admin';
+import { Admin, Resource, defaultTheme } from 'react-admin';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { merge } from 'lodash';
 
 import { CampiCreate, CampiList, CampiEdit, CampiShow } from './components/Campi';
 import { CampusAdminCreate, CampusAdminList, CampusAdminEdit, CampusAdminShow } from './components/Campus-Admin';
@@ -11,6 +12,17 @@ import CampusAdminConfirmation from './components/Confirmation-Page/CampusAdminC
 import api from './utils/api';
 
 function App() {
+  console.log(defaultTheme)
+  const theme = merge({}, defaultTheme, {
+    palette: {
+      secondary: {
+        dark: '#086218',
+        light: '#086218',
+        main: '#086218',
+      },
+    },
+  });
+
   return (
     <Router>
       <Switch>
@@ -19,7 +31,7 @@ function App() {
         </Route>
       </Switch>
       <Route path='/admin'>
-        <Admin dataProvider={api}>
+        <Admin theme={theme} dataProvider={api}>
           <Resource name='campi' list={CampiList} create={CampiCreate} edit={CampiEdit} show={CampiShow} options={{ label: 'Campi' }}/>
           <Resource name='campus-admin' list={CampusAdminList} create={CampusAdminCreate} edit={CampusAdminEdit} show={CampusAdminShow} options={{ label: 'Adm. de Campus' }}/>
           <Resource name='internship-sector' list={InternshipSectorList} create={InternshipSectorCreate} edit={InternshipSectorEdit} show={InternshipSectorShow} options={{ label: 'Setor de Estágio' }}/>
