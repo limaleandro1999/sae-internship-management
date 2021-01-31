@@ -35,4 +35,8 @@ export class UsersService {
     
     return this.userRepository.update({ confirmationId }, user);
   }
+
+  findUser(email: string) {
+    return this.userRepository.findOne({ email });
+  }
 }
