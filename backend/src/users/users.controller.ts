@@ -1,4 +1,5 @@
 import { Body, Controller, Get, HttpStatus, Post, Req, Res } from '@nestjs/common';
+import { Public } from 'src/common/decorators/public.decorator';
 import { ConfirmUserDTO } from './dto/confirm-user.dto';
 import { IsConfirmedRequest } from './interfaces/is-confirmed-request.interface';
 import { UsersService } from './users.service';
@@ -7,6 +8,7 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly userService: UsersService){}
 
+  @Public()
   @Post('/confirm')
   async confirmUser(@Body() confirmUserDTO: ConfirmUserDTO, @Res() res) {
     const { email, confirmationId } = confirmUserDTO;
@@ -16,6 +18,7 @@ export class UsersController {
     return res.status(HttpStatus.FORBIDDEN).json({message: 'Email doesn\'t match'});
   }
 
+  @Public()
   @Get('/is-confirmed/:confirmationId')
   async isConfirmed(@Req() req: IsConfirmedRequest, @Res() res) {
     const { confirmationId } = req.params;

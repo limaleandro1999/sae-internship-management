@@ -16,10 +16,10 @@ export class InternshipSector {
   @Column()
   registrationNumber: string;
 
-  @ManyToOne(() => Campus, campus => campus.campusAdmins)
+  @ManyToOne(() => Campus, campus => campus.campusAdmins, { eager: true })
   campus: Campus | number;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, user => user.internshipSector)
   @JoinColumn()
   user: User | number;
 }

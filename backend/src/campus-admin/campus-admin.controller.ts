@@ -19,11 +19,11 @@ export class CampusAdminController {
   @Get()
   findAll(@Req() req: RequestWithQueryInfo): Promise<[CampusAdmin[], number]> {
     const { order, skip, filter, take } = req.queryInfo;
-    return this.campusAdminService.findAll(order, skip, take, filter);
+    return this.campusAdminService.findAll(order, skip, take, filter, req.user.campusId);
   }
 
   @Post()
-  async create(@Body() createCampusAdminDTO: CreateCampusAdminDTO): Promise<CampusAdmin> {
+  async create(@Req() req: RequestWithQueryInfo, @Body() createCampusAdminDTO: CreateCampusAdminDTO): Promise<CampusAdmin> {
     const campusAdminUser = await this.userService.create({ 
       email: createCampusAdminDTO.email, 
       type: UserType.CAMPUS_ADMIN, 
@@ -32,12 +32,12 @@ export class CampusAdminController {
     const campusAdmin = await this.campusAdminService.create({ 
       ...createCampusAdminDTO, 
       user: campusAdminUser 
-    });
+    }, req.user.campusId);
 
     await this.emailService.sendConfirmationEmail({
-     to: campusAdminUser.email,
-     name: campusAdmin.firstName,
-     confirmationLink: `localhost:3001/account-confirmation/${campusAdminUser.confirmationId}`,
+      to: campusAdminUser.email,
+      name: campusAdmin.firstName,
+      confirmationLink: `localhost:3001/account-confirmation/${campusAdminUser.confirmationId}`,
     });
 
     return campusAdmin;

@@ -14,10 +14,10 @@ export class CampusAdmin {
   @Column()
   lastName: string;
 
-  @ManyToOne(() => Campus, campus => campus.campusAdmins)
+  @ManyToOne(() => Campus, campus => campus.campusAdmins, { eager: true })
   campus: Campus | number;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, user => user.campusAdmin)
   @JoinColumn()
   user: User | number;
 }

@@ -10,9 +10,9 @@ import { CourseCreate, CourseEdit, CourseList, CourseShow } from './components/C
 import CampusAdminConfirmation from './components/Confirmation-Page/CampusAdminConfirmation';
 
 import api from './utils/api';
+import authProvider from './utils/authService';
 
 function App() {
-  console.log(defaultTheme)
   const theme = merge({}, defaultTheme, {
     palette: {
       secondary: {
@@ -31,11 +31,13 @@ function App() {
         </Route>
       </Switch>
       <Route path='/admin'>
-        <Admin theme={theme} dataProvider={api}>
-          <Resource name='campi' list={CampiList} create={CampiCreate} edit={CampiEdit} show={CampiShow} options={{ label: 'Campi' }}/>
-          <Resource name='campus-admin' list={CampusAdminList} create={CampusAdminCreate} edit={CampusAdminEdit} show={CampusAdminShow} options={{ label: 'Adm. de Campus' }}/>
-          <Resource name='internship-sector' list={InternshipSectorList} create={InternshipSectorCreate} edit={InternshipSectorEdit} show={InternshipSectorShow} options={{ label: 'Setor de Estágio' }}/>
-          <Resource name='courses' list={CourseList} create={CourseCreate} edit={CourseEdit} show={CourseShow} options={{ label: 'Cursos' }}/>
+        <Admin theme={theme} dataProvider={api} authProvider={authProvider}>
+          { permissions => [
+            ['Admin'].includes(permissions) ? <Resource name='campi' list={CampiList} create={CampiCreate} edit={CampiEdit} show={CampiShow} options={{ label: 'Campi' }}/> : null,
+            ['Admin', 'Campus_Admin'].includes(permissions) ? <Resource name='campus-admin' list={CampusAdminList} create={CampusAdminCreate} edit={CampusAdminEdit} show={CampusAdminShow} options={{ label: 'Adm. de Campus' }}/> : null,
+            ['Admin', 'Campus_Admin'].includes(permissions) ? <Resource name='internship-sector' list={InternshipSectorList} create={InternshipSectorCreate} edit={InternshipSectorEdit} show={InternshipSectorShow} options={{ label: 'Setor de Estágio' }}/> : null,
+            ['Admin', 'Campus_Admin', 'Internship-Sector'].includes(permissions) ? <Resource name='courses' list={CourseList} create={CourseCreate} edit={CourseEdit} show={CourseShow} options={{ label: 'Cursos' }}/> : null,
+          ]}
         </Admin>
       </Route>
     </Router>
