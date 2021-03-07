@@ -13,17 +13,18 @@ export class CoursesService {
     private courseRepository: Repository<Course>
   ) {}
 
-  findAll(order?: object, skip?: number, take?: number, filter?: BaseFilter): Promise<[Course[], number]> {
+  findAll(order?: object, skip?: number, take?: number, filter?: BaseFilter, campusId?: number): Promise<[Course[], number]> {
     const { q } = filter;
     const whereClause = q ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) } : null;
-    return this.courseRepository.findAndCount({ order, skip, take, where: whereClause });
+    return this.courseRepository.findAndCount({ order, skip, take, where: {  ...whereClause, campus: campusId } });
   }
 
   findOne(id: number | string): Promise<Course> {
     return this.courseRepository.findOne(id);
   }
 
-  create(course: CreateCourseDTO): Promise<Course> {
+  create(course: CreateCourseDTO, campusId?: number): Promise<Course> {
+    course.campus = campusId ? campusId : course.campus;
     return this.courseRepository.save(course);
   }
 

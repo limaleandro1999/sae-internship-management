@@ -4,13 +4,26 @@ import { CampiService } from './campi.service';
 import { CreateCampusDTO } from './dto/create-campus.dto';
 import { UpdateCampusDTO } from './dto/update-campus.dto';
 import { RequestWithQueryInfo } from 'src/common/interfaces/request-query-info.interface';
+import { UsersService } from 'src/users/users.service';
+import { UserType } from 'src/users/user.entity';
+import { Response } from 'express';
 
 @Controller('campi')
 export class CampiController {
-  constructor(private readonly campiService: CampiService) {}
+  constructor(
+    private readonly campiService: CampiService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Get()
-  findAll(@Req() req: RequestWithQueryInfo): Promise<[Campus[], number]> {
+  async findAll(@Req() req: RequestWithQueryInfo, @Res() res: Response): Promise<[Campus[], number] | Response<any, Record<string, any>>> {
+    // TODO: Use roles instead of this logic
+    const user = await this.usersService.findUser(req.user.email);
+
+    if (user.type !== UserType.ADMIN) {
+      return res.status(403);
+    }
+
     const { order, skip, filter, take } = req.queryInfo;
     return this.campiService.findAll(order, skip, take, filter);
   }

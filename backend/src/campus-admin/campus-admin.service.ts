@@ -12,17 +12,18 @@ export class CampusAdminService {
     private campusAdminRepository: Repository<CampusAdmin>
   ){}
 
-  findAll(order?: Record<string, unknown>, skip?: number, take?: number, filter?: BaseFilter): Promise<[CampusAdmin[], number]> {
+  findAll(order?: Record<string, unknown>, skip?: number, take?: number, filter?: BaseFilter, campusId?: number): Promise<[CampusAdmin[], number]> {
     const { q } = filter;
     const whereClause = q ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) } : null;
-    return this.campusAdminRepository.findAndCount({ order, skip, take, where: whereClause, relations: ['user'] });
+    return this.campusAdminRepository.findAndCount({ order, skip, take, where: {  ...whereClause, campus: campusId }, relations: ['user'] });
   }
 
   findByConfirmationId(confirmationId: string): Promise<CampusAdmin> {
     return this.campusAdminRepository.findOne({ where: { confirmationId } });
   }
 
-  create(campusAdmin: CampusAdmin): Promise<CampusAdmin> {
+  create(campusAdmin: CampusAdmin, campusId?: number): Promise<CampusAdmin> {
+    campusAdmin.campus = campusId ? campusId : campusAdmin.campus;
     const campusAdminObj = this.campusAdminRepository.create({ ...campusAdmin });
     return this.campusAdminRepository.save(campusAdminObj);
   }

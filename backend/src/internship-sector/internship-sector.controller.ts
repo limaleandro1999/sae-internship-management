@@ -18,11 +18,11 @@ export class InternshipSectorController {
   @Get()
   findAll(@Req() req: RequestWithQueryInfo): Promise<[InternshipSector[], number]> {
     const { order, skip, filter, take } = req.queryInfo;
-    return this.internshipSectorService.findAll(order, skip, take, filter);
+    return this.internshipSectorService.findAll(order, skip, take, filter, req.user.campusId);
   }
 
   @Post()
-  async create(@Body() createInternshipSectorDTO: CreateInternshipSectorDTO): Promise<InternshipSector> {
+  async create(@Req() req: RequestWithQueryInfo, @Body() createInternshipSectorDTO: CreateInternshipSectorDTO): Promise<InternshipSector> {
     const internshipSectorUser = await this.userService.create({ 
       email: createInternshipSectorDTO.email, 
       type: UserType.INTERNSHIP_SECTOR, 
@@ -30,13 +30,13 @@ export class InternshipSectorController {
     });
     const internshipSector = await this.internshipSectorService.create({ 
       ...createInternshipSectorDTO, 
-      user: internshipSectorUser 
-    });
+      user: internshipSectorUser
+    }, req.user.campusId);
 
     await this.emailService.sendConfirmationEmail({
-     to: internshipSectorUser.email,
-     name: internshipSector.firstName,
-     confirmationLink: `localhost:3001/account-confirmation/${internshipSectorUser.confirmationId}`,
+      to: internshipSectorUser.email,
+      name: internshipSector.firstName,
+      confirmationLink: `localhost:3001/account-confirmation/${internshipSectorUser.confirmationId}`,
     });
 
     return internshipSector;
