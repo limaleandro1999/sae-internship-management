@@ -16,7 +16,7 @@ export class EmailsService {
     
     await this.mailerService.sendMail({
       to,
-      from: 'leandro.lima+test1231@oowlish.com',
+      from: 'no-replay@gerenciadordeestagaio.com',
       context: {
         name,
         confirmationLink,

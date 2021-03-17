@@ -1,5 +1,6 @@
 import { hash } from "bcrypt";
 import { CampusAdmin } from "src/campus-admin/campus-admin.entity";
+import { InternshipAdvisor } from "src/internship-advisors/internship-advisor.entity";
 import { InternshipSector } from "src/internship-sector/internship-sector.entity";
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { v4 } from "uuid";
@@ -8,7 +9,7 @@ export enum UserType {
   ADMIN = 'Admin',
   CAMPUS_ADMIN = 'Campus_Admin',
   INTERNSHIP_SECTOR = 'Internship_Sector',
-  INTERNSHIP_TUTOR = 'Internship_Tutor',
+  INTERNSHIP_ADVISOR = 'Internship_Advisor',
   INTERN = 'Intern', 
 }
 
@@ -43,10 +44,13 @@ export class User {
   active: boolean;
 
   @OneToOne(() => InternshipSector, internshipSector => internshipSector.user, { eager: true })
-  internshipSector: InternshipSector
+  internshipSector: InternshipSector;
 
   @OneToOne(() => CampusAdmin, campusAdmin => campusAdmin.user, { eager: true })
-  campusAdmin: CampusAdmin
+  campusAdmin: CampusAdmin;
+
+  @OneToOne(() => InternshipAdvisor, internshipAdvisor => internshipAdvisor.user, { eager: true })
+  internshipAdvisor: InternshipAdvisor;
 
   @BeforeInsert()
   @BeforeUpdate()

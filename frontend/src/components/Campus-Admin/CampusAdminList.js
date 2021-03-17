@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Datagrid, TextField, TextInput, EditButton, ShowButton, Filter } from 'react-admin';
+import { List, Datagrid, TextField, TextInput, EditButton, ShowButton, Filter, BooleanField  } from 'react-admin';
 
 function CampiFilters(props) {
   return (
@@ -16,7 +16,8 @@ function CampusAdminList(props) {
         <TextField source='firstName' label='Nome'/>
         <TextField source='lastName' label='Sobrenome'/>
         <TextField source='user.email' label='Email'/>
-                <ShowButton label='Mostrar'/>
+        <BooleanField source='user.active' label='Ativo?'/>
+        <ShowButton label='Mostrar'/>
         <EditButton label='Editar'/>
       </Datagrid>
     </List>

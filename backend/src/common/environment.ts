@@ -6,6 +6,7 @@ import { Course } from "../courses/course.entity";
 import { InternshipSector } from "../internship-sector/internship-sector.entity";
 import { User } from "../users/user.entity";
 import { Company } from "src/companies/company.entity";
+import { InternshipAdvisor } from "src/internship-advisors/internship-advisor.entity";
 
 export const environment = {
   database: {
@@ -17,15 +18,19 @@ export const environment = {
     database: 'postgres',
     synchronize: true,
     logging: true,
-    entities: [Campus, CampusAdmin, User, InternshipSector, Course, Company],
+    entities: [Campus, CampusAdmin, User, InternshipSector, Course, Company, InternshipAdvisor],
   },
   mailer: {
     transport: {
-      host: 'localhost',
-      port: 25,
+      host: 'smtp.gmail.com',
+      port: 587,
       tls: {
         rejectUnauthorized: false
       },
+      auth: {
+        user: 'limaleandro1999@gmail.com',
+        pass: '130599Lopes@'
+      }
     },
     template: {
       dir: 'D:\\projects\\internship-management\\backend\\templates',

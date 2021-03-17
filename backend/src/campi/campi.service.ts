@@ -14,7 +14,7 @@ export class CampiService {
     private campiRepository: Repository<Campus>
   ) {}
 
-  findAll(order?: object, skip?: number, take?: number, filter?: BaseFilter): Promise<[Campus[], number]> {
+  findAll(order?, skip?: number, take?: number, filter?: BaseFilter): Promise<[Campus[], number]> {
     const { q } = filter;
     const whereClause = q ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) } : null;
     return this.campiRepository.findAndCount({ order, skip, take, where: whereClause });
