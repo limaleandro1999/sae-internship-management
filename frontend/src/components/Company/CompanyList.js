@@ -1,7 +1,7 @@
 import React from 'react';
 import { List, Datagrid, TextField, TextInput, EditButton, ShowButton, Filter } from 'react-admin';
 
-function CourseFilters(props) {
+function CompanyFilters(props) {
   return (
     <Filter {...props}>
       <TextInput label='Pesquisa' source='q' alwaysOn/>
@@ -9,17 +9,19 @@ function CourseFilters(props) {
   );
 }
 
-function CourseList(props) {
+function CompanyList(props) {
   return (
-    <List {...props} title='Course' filters={<CourseFilters/>}>
+    <List {...props} title='Empresa' filters={<CompanyFilters/>}>
       <Datagrid>
         <TextField source='name' label='Nome'/>
-        <TextField source='code' label='Código'/>
-                <ShowButton label='Mostrar'/>
+        <TextField source='cnpj' label='CNPJ'/>
+        <TextField source='email' label='E-mail'/>
+        <TextField source='phone' label='Telefone'/>
+        <ShowButton label='Mostrar'/>
         <EditButton label='Editar'/>
       </Datagrid>
     </List>
   );
 }
 
-export default CourseList;
+export default CompanyList;

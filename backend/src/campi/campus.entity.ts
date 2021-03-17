@@ -1,4 +1,5 @@
 import { CampusAdmin } from 'src/campus-admin/campus-admin.entity';
+import { Company } from 'src/companies/company.entity';
 import { Course } from 'src/courses/course.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
@@ -27,4 +28,7 @@ export class Campus {
 
   @OneToMany(() => Course, course => course.campus)
   courses: Course[];
+
+  @OneToMany(() => Company, company => company.campus)
+  companies: Company[];
 }

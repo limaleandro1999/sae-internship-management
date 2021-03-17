@@ -18,8 +18,8 @@ function CampiList(props) {
         <TextField source='phone' label='Telefone'/>
         <TextField source='city' label='Cidade'/>
         <TextField source='address' label='Endereço'/>
-        <EditButton/>
-        <ShowButton/>
+                <ShowButton label='Mostrar'/>
+        <EditButton label='Editar'/>
       </Datagrid>
     </List>
   );

@@ -16,8 +16,8 @@ function InternshipSectorList(props) {
         <TextField source='firstName' label='Nome'/>
         <TextField source='lastName' label='Sobrenome'/>
         <TextField source='user.email' label='Email'/>
-        <EditButton/>
-        <ShowButton/>
+                <ShowButton label='Mostrar'/>
+        <EditButton label='Editar'/>
       </Datagrid>
     </List>
   );
