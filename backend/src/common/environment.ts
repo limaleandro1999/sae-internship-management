@@ -5,6 +5,7 @@ import { CampusAdmin } from "../campus-admin/campus-admin.entity";
 import { Course } from "../courses/course.entity";
 import { InternshipSector } from "../internship-sector/internship-sector.entity";
 import { User } from "../users/user.entity";
+import { Company } from "src/companies/company.entity";
 
 export const environment = {
   database: {
@@ -16,7 +17,7 @@ export const environment = {
     database: 'postgres',
     synchronize: true,
     logging: true,
-    entities: [Campus, CampusAdmin, User, InternshipSector, Course],
+    entities: [Campus, CampusAdmin, User, InternshipSector, Course, Company],
   },
   mailer: {
     transport: {

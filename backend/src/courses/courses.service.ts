@@ -13,7 +13,7 @@ export class CoursesService {
     private courseRepository: Repository<Course>
   ) {}
 
-  findAll(order?: object, skip?: number, take?: number, filter?: BaseFilter, campusId?: number): Promise<[Course[], number]> {
+  findAll(order?, skip?: number, take?: number, filter?: BaseFilter, campusId?: number): Promise<[Course[], number]> {
     const { q } = filter;
     const whereClause = q ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) } : null;
     return this.courseRepository.findAndCount({ order, skip, take, where: {  ...whereClause, campus: campusId } });

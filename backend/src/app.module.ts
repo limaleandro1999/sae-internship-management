@@ -17,6 +17,7 @@ import { AuthModule } from './auth/auth.module';
 import { environment } from './common/environment';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { CompaniesModule } from './companies/companies.module';
 
 const { database, mailer } = environment;
 @Module({
@@ -29,6 +30,7 @@ const { database, mailer } = environment;
     InternshipSectorModule,
     CoursesModule,
     AuthModule,
+    CompaniesModule,
   ],
   controllers: [AppController],
   providers: [
