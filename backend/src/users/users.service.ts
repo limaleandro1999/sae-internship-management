@@ -29,7 +29,7 @@ export class UsersService {
 
   async confirmUser(confirmUserDTO: ConfirmUserDTO) {
     const { confirmationId, password, email } = confirmUserDTO;
-    const user = await this.userRepository.findOne({ where: { email, confirmationId } });
+    const user = await this.userRepository.findOne({ where: { email, confirmationId }, loadEagerRelations: false});
     user.password = password;
     user.active = true;
     

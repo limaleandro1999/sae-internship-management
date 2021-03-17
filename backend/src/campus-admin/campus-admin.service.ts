@@ -18,10 +18,6 @@ export class CampusAdminService {
     return this.campusAdminRepository.findAndCount({ order, skip, take, where: {  ...whereClause, campus: campusId }, relations: ['user'] });
   }
 
-  findByConfirmationId(confirmationId: string): Promise<CampusAdmin> {
-    return this.campusAdminRepository.findOne({ where: { confirmationId } });
-  }
-
   create(campusAdmin: CampusAdmin, campusId?: number): Promise<CampusAdmin> {
     campusAdmin.campus = campusId ? campusId : campusAdmin.campus;
     const campusAdminObj = this.campusAdminRepository.create({ ...campusAdmin });

@@ -11,14 +11,10 @@ export class InternshipSectorService {
     private internshipSectorRepository: Repository<InternshipSector>
   ){}
 
-  findAll(order?: object, skip?: number, take?: number, filter?: BaseFilter, campusId?: number): Promise<[InternshipSector[], number]> {
+  findAll(order?, skip?: number, take?: number, filter?: BaseFilter, campusId?: number): Promise<[InternshipSector[], number]> {
     const { q } = filter;
     const whereClause = q ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) } : null;
     return this.internshipSectorRepository.findAndCount({ order, skip, take, where: {  ...whereClause, campus: campusId }, relations: ['user'] });
-  }
-
-  findByConfirmationId(confirmationId: string): Promise<InternshipSector> {
-    return this.internshipSectorRepository.findOne({ where: { confirmationId } });
   }
 
   create(internshipSector: InternshipSector, campusId?: number): Promise<InternshipSector> {

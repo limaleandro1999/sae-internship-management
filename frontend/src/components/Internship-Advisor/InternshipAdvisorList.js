@@ -1,7 +1,7 @@
 import React from 'react';
 import { List, Datagrid, TextField, TextInput, EditButton, ShowButton, Filter, BooleanField  } from 'react-admin';
 
-function InternshipSectorFilters(props) {
+function InternshipAdvisorFilters(props) {
   return (
     <Filter {...props}>
       <TextInput label='Pesquisa' source='q' alwaysOn/>
@@ -9,12 +9,13 @@ function InternshipSectorFilters(props) {
   );
 }
 
-function InternshipSectorList(props) {
+function InternshipAdvisorList(props) {
   return (
-    <List {...props} title='Campus Admin' filters={<InternshipSectorFilters/>}>
+    <List {...props} title='Orientadores de Estágio' filters={<InternshipAdvisorFilters/>}>
       <Datagrid>
         <TextField source='firstName' label='Nome'/>
         <TextField source='lastName' label='Sobrenome'/>
+        <TextField source='phone' label='Telefone'/>
         <TextField source='user.email' label='Email'/>
         <BooleanField source='user.active' label='Ativo?'/>
         <ShowButton label='Mostrar'/>
@@ -24,4 +25,4 @@ function InternshipSectorList(props) {
   );
 }
 
-export default InternshipSectorList;
+export default InternshipAdvisorList;
