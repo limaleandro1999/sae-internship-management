@@ -28,8 +28,8 @@ export const environment = {
         rejectUnauthorized: false
       },
       auth: {
-        user: 'limaleandro1999@gmail.com',
-        pass: '130599Lopes@'
+        user: process.env.SMTP_EMAIL,
+        pass: process.env.SMTP_PASSWORD,
       }
     },
     template: {
