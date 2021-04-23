@@ -1,0 +1,3 @@
+worker: yarn build
+worker: yarn global add serve
+web: serve -l $PORT -s build
