@@ -2,6 +2,7 @@ import { Module, NestModule, MiddlewareConsumer, RequestMethod} from '@nestjs/co
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Connection } from 'typeorm';
+import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -14,17 +15,16 @@ import { UsersModule } from './users/users.module';
 import { InternshipSectorModule } from './internship-sector/internship-sector.module';
 import { CoursesModule } from './courses/courses.module';
 import { AuthModule } from './auth/auth.module';
-import { environment } from './common/environment';
+import environment from './common/environment';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { CompaniesModule } from './companies/companies.module';
 import { InternshipAdvisorsModule } from './internship-advisors/internship-advisors.module';
-
-const { database, mailer } = environment;
 @Module({
   imports: [
-    TypeOrmModule.forRoot({ ...database, type: 'postgres' }),
-    MailerModule.forRoot(mailer),
+    ConfigModule.forRoot({ load: [environment] }),
+    TypeOrmModule.forRoot({ ...environment().database, type: 'postgres' }),
+    MailerModule.forRoot(environment().mailer),
     CampiModule,
     CampusAdminModule,
     UsersModule,

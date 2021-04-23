@@ -26,6 +26,8 @@ function App() {
     },
   });
 
+  document.title = getPageTitle();
+
   return (
     <Router>
       <Switch>
@@ -47,6 +49,18 @@ function App() {
       </Route>
     </Router>
   );
+}
+
+function getPageTitle() {
+  if (window.location.pathname.includes('/admin')) {
+    return 'Painel Administrativo';
+  }
+
+  if (window.location.pathname.includes('/account-confirmation')) {
+    return 'Confirme sua conta!';
+  }
+
+  return '';
 }
 
 export default App;

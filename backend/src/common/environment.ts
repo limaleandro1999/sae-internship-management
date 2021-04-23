@@ -8,14 +8,14 @@ import { User } from "../users/user.entity";
 import { Company } from "src/companies/company.entity";
 import { InternshipAdvisor } from "src/internship-advisors/internship-advisor.entity";
 
-export const environment = {
+export default () => ({
   server: {
     port: process.env.PORT ?? 3000,
   },
   database: {
     type: process.env.DB_TYPE ?? 'postgres',
     host: process.env.DB_HOST ?? 'localhost',
-    port: process.env.DB_PORT ?? 5432,
+    port: parseInt(process.env.DB_PORT) ?? 5432,
     username: process.env.DB_USERNAME ?? 'postgres',
     password: process.env.DB_PASSWORD ?? 'root',
     database: process.env.DB_DATABASE ?? 'postgres',
@@ -30,6 +30,7 @@ export const environment = {
       tls: {
         rejectUnauthorized: false
       },
+      service: 'gmail',
       auth: {
         user: process.env.SMTP_EMAIL,
         pass: process.env.SMTP_PASSWORD,
@@ -43,4 +44,4 @@ export const environment = {
       },
     },
   },
-}
+});
