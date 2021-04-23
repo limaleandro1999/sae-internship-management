@@ -21,6 +21,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "yarn global add serve && serve -l $PORT -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
