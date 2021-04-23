@@ -13,6 +13,7 @@ export default () => ({
     port: process.env.PORT ?? 3000,
   },
   database: {
+    url: process.env.DATABASE_URL ?? '',
     type: process.env.DB_TYPE ?? 'postgres',
     host: process.env.DB_HOST ?? 'localhost',
     port: parseInt(process.env.DB_PORT) ?? 5432,

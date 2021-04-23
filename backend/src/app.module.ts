@@ -23,7 +23,11 @@ import { InternshipAdvisorsModule } from './internship-advisors/internship-advis
 @Module({
   imports: [
     ConfigModule.forRoot({ load: [environment] }),
-    TypeOrmModule.forRoot({ ...environment().database, type: 'postgres' }),
+    TypeOrmModule.forRoot(
+      environment().database.url ? 
+      { url: environment().database.url, ssl: environment().database.ssl, type: 'postgres' } 
+      : { ...environment().database, type: 'postgres' }
+    ),
     MailerModule.forRoot(environment().mailer),
     CampiModule,
     CampusAdminModule,
