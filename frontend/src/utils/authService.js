@@ -1,13 +1,16 @@
 import { AUTH_LOGIN, AUTH_LOGOUT, AUTH_CHECK, AUTH_ERROR, AUTH_GET_PERMISSIONS } from 'react-admin';
 
+import { environment } from './environment';
+
 export default (type, params) => {
   if (type === AUTH_LOGIN) {
     const { username: email, password } = params;
-    const request = new Request('http://localhost:3000/auth/login', {
+    const request = new Request(`${environment.server.serverUrl}/auth/login`, {
       method: 'POST',
       body: JSON.stringify({ email, password }),
       headers: new Headers({ 'Content-Type': 'application/json' }),
     });
+
     return fetch(request)
       .then(response => {
         if (response.status < 200 || response.status >= 300) {
@@ -28,10 +31,12 @@ export default (type, params) => {
 
   if (type === AUTH_ERROR) {
     const status  = params.status;
+
     if (status === 401 || status === 403) {
-        localStorage.removeItem('token');
-        return Promise.reject();
+      localStorage.removeItem('token');
+      return Promise.reject();
     }
+
     return Promise.resolve();
   }
 
