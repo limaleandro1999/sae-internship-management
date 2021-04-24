@@ -9,12 +9,12 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-  ){}
+  ) {}
 
   async validateUser(email: string, password: string) {
     const user = await this.usersService.findUser(email);
 
-    if (user && await compare(password, user.password)) {
+    if (user && (await compare(password, user.password))) {
       user.password = undefined;
       return user;
     }
@@ -23,7 +23,11 @@ export class AuthService {
   }
 
   login(user: User) {
-    const payload = { email: user.email, sub: user.id, campusId: user.getCampusId() };
+    const payload = {
+      email: user.email,
+      sub: user.id,
+      campusId: user.getCampusId(),
+    };
 
     return {
       access_token: this.jwtService.sign(payload),

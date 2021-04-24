@@ -12,6 +12,9 @@ export class Course {
   @Column()
   code: string;
 
-  @ManyToOne(() => Campus, campus => campus.courses)
+  @ManyToOne(
+    () => Campus,
+    campus => campus.courses,
+  )
   campus: Campus | number;
 }

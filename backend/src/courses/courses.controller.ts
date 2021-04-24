@@ -12,7 +12,13 @@ export class CoursesController {
   @Get()
   findAll(@Req() req: RequestWithQueryInfo): Promise<[Course[], number]> {
     const { order, skip, filter, take } = req.queryInfo;
-    return this.courseService.findAll(order, skip, take, filter, req.user.campusId);
+    return this.courseService.findAll(
+      order,
+      skip,
+      take,
+      filter,
+      req.user.campusId,
+    );
   }
 
   @Get(':id')
@@ -21,12 +27,18 @@ export class CoursesController {
   }
 
   @Post()
-  create(@Req() req: RequestWithQueryInfo, @Body() createCourseDTO: CreateCourseDTO): Promise<Course> {
+  create(
+    @Req() req: RequestWithQueryInfo,
+    @Body() createCourseDTO: CreateCourseDTO,
+  ): Promise<Course> {
     return this.courseService.create(createCourseDTO, req.user.campusId);
   }
 
   @Put(':id')
-  updated(@Param('id') id: string, @Body() updateCourseDTO: UpdateCourseDTO): Promise<Course> {
+  updated(
+    @Param('id') id: string,
+    @Body() updateCourseDTO: UpdateCourseDTO,
+  ): Promise<Course> {
     return this.courseService.update(id, updateCourseDTO);
   }
 }

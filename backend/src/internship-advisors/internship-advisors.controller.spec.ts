@@ -9,7 +9,9 @@ describe('InternshipAdvisorsController', () => {
       controllers: [InternshipAdvisorsController],
     }).compile();
 
-    controller = module.get<InternshipAdvisorsController>(InternshipAdvisorsController);
+    controller = module.get<InternshipAdvisorsController>(
+      InternshipAdvisorsController,
+    );
   });
 
   it('should be defined', () => {

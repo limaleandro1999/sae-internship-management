@@ -8,12 +8,8 @@ export class EmailsService {
   constructor(private readonly mailerService: MailerService) {}
 
   async sendConfirmationEmail(confirmationEmail: ConfirmationEmailDTO) {
-    const {
-      to,
-      name,
-      confirmationLink,
-    } = confirmationEmail;
-    
+    const { to, name, confirmationLink } = confirmationEmail;
+
     await this.mailerService.sendMail({
       to,
       from: 'no-replay@gerenciadordeestagaio.com',
@@ -23,6 +19,6 @@ export class EmailsService {
       },
       subject: 'Confirme seu cadastro',
       template: 'confirmation-email',
-    })
+    });
   }
 }

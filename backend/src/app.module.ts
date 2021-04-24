@@ -1,4 +1,9 @@
-import { Module, NestModule, MiddlewareConsumer, RequestMethod} from '@nestjs/common';
+import {
+  Module,
+  NestModule,
+  MiddlewareConsumer,
+  RequestMethod,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Connection } from 'typeorm';
@@ -54,12 +59,12 @@ import { InternshipAdvisorsModule } from './internship-advisors/internship-advis
   ],
   controllers: [AppController],
   providers: [
-    AppService, 
+    AppService,
     EmailsService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
-    }
+    },
   ],
 })
 export class AppModule implements NestModule {

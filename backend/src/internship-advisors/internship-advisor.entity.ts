@@ -1,6 +1,13 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Campus } from "src/campi/campus.entity";
-import { User } from "src/users/user.entity";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Campus } from 'src/campi/campus.entity';
+import { User } from 'src/users/user.entity';
 
 @Entity()
 export class InternshipAdvisor {
@@ -16,10 +23,17 @@ export class InternshipAdvisor {
   @Column()
   phone: string;
 
-  @ManyToOne(() => Campus, campus => campus.internshipAdvisors, { eager: true })
+  @ManyToOne(
+    () => Campus,
+    campus => campus.internshipAdvisors,
+    { eager: true },
+  )
   campus: Campus | number;
 
-  @OneToOne(() => User, user => user.internshipAdvisor)
+  @OneToOne(
+    () => User,
+    user => user.internshipAdvisor,
+  )
   @JoinColumn()
   user: User | number;
 }

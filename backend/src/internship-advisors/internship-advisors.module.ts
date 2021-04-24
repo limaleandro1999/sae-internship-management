@@ -10,6 +10,6 @@ import { UsersService } from 'src/users/users.service';
 @Module({
   imports: [TypeOrmModule.forFeature([InternshipAdvisor, User])],
   providers: [InternshipAdvisorsService, EmailsService, UsersService],
-  controllers: [InternshipAdvisorsController]
+  controllers: [InternshipAdvisorsController],
 })
 export class InternshipAdvisorsModule {}

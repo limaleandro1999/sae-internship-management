@@ -57,6 +57,9 @@ export class Company {
   @Column()
   representativePhone: string;
 
-  @ManyToOne(() => Campus, campus => campus.companies)
+  @ManyToOne(
+    () => Campus,
+    campus => campus.companies,
+  )
   campus: Campus | number;
 }

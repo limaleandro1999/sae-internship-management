@@ -8,18 +8,37 @@ import { InternshipSector } from './internship-sector.entity';
 export class InternshipSectorService {
   constructor(
     @InjectRepository(InternshipSector)
-    private internshipSectorRepository: Repository<InternshipSector>
-  ){}
+    private internshipSectorRepository: Repository<InternshipSector>,
+  ) {}
 
-  findAll(order?, skip?: number, take?: number, filter?: BaseFilter, campusId?: number): Promise<[InternshipSector[], number]> {
+  findAll(
+    order?,
+    skip?: number,
+    take?: number,
+    filter?: BaseFilter,
+    campusId?: number,
+  ): Promise<[InternshipSector[], number]> {
     const { q } = filter;
-    const whereClause = q ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) } : null;
-    return this.internshipSectorRepository.findAndCount({ order, skip, take, where: {  ...whereClause, campus: campusId }, relations: ['user'] });
+    const whereClause = q
+      ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) }
+      : null;
+    return this.internshipSectorRepository.findAndCount({
+      order,
+      skip,
+      take,
+      where: { ...whereClause, campus: campusId },
+      relations: ['user'],
+    });
   }
 
-  create(internshipSector: InternshipSector, campusId?: number): Promise<InternshipSector> {
+  create(
+    internshipSector: InternshipSector,
+    campusId?: number,
+  ): Promise<InternshipSector> {
     internshipSector.campus = campusId ? campusId : internshipSector.campus;
-    const internshipSectorObj = this.internshipSectorRepository.create({ ...internshipSector });
+    const internshipSectorObj = this.internshipSectorRepository.create({
+      ...internshipSector,
+    });
     return this.internshipSectorRepository.save(internshipSectorObj);
   }
 }

@@ -1,12 +1,12 @@
-import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
-import { Campus } from "../campi/campus.entity";
-import { CampusAdmin } from "../campus-admin/campus-admin.entity";
-import { Course } from "../courses/course.entity";
-import { InternshipSector } from "../internship-sector/internship-sector.entity";
-import { User } from "../users/user.entity";
-import { Company } from "src/companies/company.entity";
-import { InternshipAdvisor } from "src/internship-advisors/internship-advisor.entity";
+import { Campus } from '../campi/campus.entity';
+import { CampusAdmin } from '../campus-admin/campus-admin.entity';
+import { Course } from '../courses/course.entity';
+import { InternshipSector } from '../internship-sector/internship-sector.entity';
+import { User } from '../users/user.entity';
+import { Company } from 'src/companies/company.entity';
+import { InternshipAdvisor } from 'src/internship-advisors/internship-advisor.entity';
 
 export default () => ({
   server: {
@@ -23,14 +23,22 @@ export default () => ({
     ssl: process.env.DB_SSL === 'true' ? true : false,
     synchronize: true,
     logging: true,
-    entities: [Campus, CampusAdmin, User, InternshipSector, Course, Company, InternshipAdvisor],
+    entities: [
+      Campus,
+      CampusAdmin,
+      User,
+      InternshipSector,
+      Course,
+      Company,
+      InternshipAdvisor,
+    ],
   },
   mailer: {
     transport: {
       host: process.env.MAILER_HOST ?? 'smtp.gmail.com',
       port: process.env.MAILER_PORT ?? 587,
       tls: {
-        rejectUnauthorized: false
+        rejectUnauthorized: false,
       },
       service: 'gmail',
       auth: {

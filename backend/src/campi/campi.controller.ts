@@ -1,4 +1,13 @@
-import { Controller, Get, Param, Post, Body, Put, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Put,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { Campus } from './campus.entity';
 import { CampiService } from './campi.service';
 import { CreateCampusDTO } from './dto/create-campus.dto';
@@ -16,7 +25,10 @@ export class CampiController {
   ) {}
 
   @Get()
-  async findAll(@Req() req: RequestWithQueryInfo, @Res() res: Response): Promise<[Campus[], number] | Response<any, Record<string, any>>> {
+  async findAll(
+    @Req() req: RequestWithQueryInfo,
+    @Res() res: Response,
+  ): Promise<[Campus[], number] | Response<any, Record<string, any>>> {
     // TODO: Use roles instead of this logic
     const user = await this.usersService.findUser(req.user.email);
 
@@ -39,7 +51,10 @@ export class CampiController {
   }
 
   @Put(':id')
-  updated(@Param('id') id: string, @Body() updateCampusDTO: UpdateCampusDTO): Promise<Campus> {
+  updated(
+    @Param('id') id: string,
+    @Body() updateCampusDTO: UpdateCampusDTO,
+  ): Promise<Campus> {
     return this.campiService.update(id, updateCampusDTO);
   }
 }
