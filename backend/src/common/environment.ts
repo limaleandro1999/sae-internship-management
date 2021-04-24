@@ -44,10 +44,12 @@ export default () => ({
       auth: {
         user: process.env.SMTP_EMAIL,
         pass: process.env.SMTP_PASSWORD,
-      }
+      },
     },
     template: {
-      dir: process.env.TEMPLATE_DIR ?? 'D:\\projects\\internship-management\\backend\\templates',
+      dir:
+        process.env.TEMPLATE_DIR ??
+        'D:\\projects\\internship-management\\backend\\templates',
       adapter: new HandlebarsAdapter(),
       options: {
         strict: true,

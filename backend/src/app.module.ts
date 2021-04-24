@@ -29,23 +29,22 @@ import { InternshipAdvisorsModule } from './internship-advisors/internship-advis
   imports: [
     ConfigModule.forRoot({ load: [environment] }),
     TypeOrmModule.forRoot(
-      environment().database.url ? 
-      { 
-        url: environment().database.url, 
-        entities: environment().database.entities, 
-        ssl: { 
-          rejectUnauthorized: false 
-        }, 
-        type: 'postgres' 
-      } 
-      : 
-      { 
-        ...environment().database, 
-        type: 'postgres', 
-        ssl: { 
-          rejectUnauthorized: false 
-        } 
-      }
+      environment().database.url
+        ? {
+            url: environment().database.url,
+            entities: environment().database.entities,
+            ssl: {
+              rejectUnauthorized: false,
+            },
+            type: 'postgres',
+          }
+        : {
+            ...environment().database,
+            type: 'postgres',
+            ssl: {
+              rejectUnauthorized: false,
+            },
+          },
     ),
     MailerModule.forRoot(environment().mailer),
     CampiModule,
