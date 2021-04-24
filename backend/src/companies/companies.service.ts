@@ -11,13 +11,26 @@ import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 export class CompaniesService {
   constructor(
     @InjectRepository(Company)
-    private companiesRepository: Repository<Company>
+    private companiesRepository: Repository<Company>,
   ) {}
 
-  findAll(order?, skip?: number, take?: number, filter?: BaseFilter, campusId?: number): Promise<[Company[], number]> {
+  findAll(
+    order?,
+    skip?: number,
+    take?: number,
+    filter?: BaseFilter,
+    campusId?: number,
+  ): Promise<[Company[], number]> {
     const { q } = filter;
-    const whereClause = q ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) } : null;
-    return this.companiesRepository.findAndCount({ order, skip, take, where: {  ...whereClause, campus: campusId } });
+    const whereClause = q
+      ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) }
+      : null;
+    return this.companiesRepository.findAndCount({
+      order,
+      skip,
+      take,
+      where: { ...whereClause, campus: campusId },
+    });
   }
 
   findOne(id: number | string): Promise<Company> {
@@ -29,8 +42,10 @@ export class CompaniesService {
     return this.companiesRepository.save(company);
   }
 
-
-  async update(id: number | string, company: UpdateCompanyDTO): Promise<Company> {
+  async update(
+    id: number | string,
+    company: UpdateCompanyDTO,
+  ): Promise<Company> {
     await this.companiesRepository.update(id, company);
     return this.companiesRepository.findOne(id);
   }

@@ -9,14 +9,14 @@ export class RequestParamsMiddleware implements NestMiddleware {
 
     range = range ? JSON.parse(<string>range) : null;
     sort = sort ? JSON.parse(<string>sort) : null;
-  
+
     req.queryInfo = {};
 
     req.queryInfo.skip = range ? range[0] : 0;
-    req.queryInfo.take = range ? range[1] - range[0]: null;
+    req.queryInfo.take = range ? range[1] - range[0] : null;
     req.queryInfo.order = sort ? { [sort[0]]: sort[1] } : { id: 'ASC' };
     req.queryInfo.filter = filter ? JSON.parse(<string>filter) : { q: null };
-    
+
     next();
   }
 }

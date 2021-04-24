@@ -10,28 +10,42 @@ import { InternshipSectorService } from './internship-sector.service';
 @Controller('internship-sector')
 export class InternshipSectorController {
   constructor(
-    private readonly internshipSectorService: InternshipSectorService, 
+    private readonly internshipSectorService: InternshipSectorService,
     private readonly userService: UsersService,
-    private readonly emailService: EmailsService
-  ){}
+    private readonly emailService: EmailsService,
+  ) {}
 
   @Get()
-  findAll(@Req() req: RequestWithQueryInfo): Promise<[InternshipSector[], number]> {
+  findAll(
+    @Req() req: RequestWithQueryInfo,
+  ): Promise<[InternshipSector[], number]> {
     const { order, skip, filter, take } = req.queryInfo;
-    return this.internshipSectorService.findAll(order, skip, take, filter, req.user.campusId);
+    return this.internshipSectorService.findAll(
+      order,
+      skip,
+      take,
+      filter,
+      req.user.campusId,
+    );
   }
 
   @Post()
-  async create(@Req() req: RequestWithQueryInfo, @Body() createInternshipSectorDTO: CreateInternshipSectorDTO): Promise<InternshipSector> {
-    const internshipSectorUser = await this.userService.create({ 
-      email: createInternshipSectorDTO.email, 
-      type: UserType.INTERNSHIP_SECTOR, 
-      active: false 
+  async create(
+    @Req() req: RequestWithQueryInfo,
+    @Body() createInternshipSectorDTO: CreateInternshipSectorDTO,
+  ): Promise<InternshipSector> {
+    const internshipSectorUser = await this.userService.create({
+      email: createInternshipSectorDTO.email,
+      type: UserType.INTERNSHIP_SECTOR,
+      active: false,
     });
-    const internshipSector = await this.internshipSectorService.create({ 
-      ...createInternshipSectorDTO, 
-      user: internshipSectorUser
-    }, req.user.campusId);
+    const internshipSector = await this.internshipSectorService.create(
+      {
+        ...createInternshipSectorDTO,
+        user: internshipSectorUser,
+      },
+      req.user.campusId,
+    );
 
     await this.emailService.sendConfirmationEmail({
       to: internshipSectorUser.email,

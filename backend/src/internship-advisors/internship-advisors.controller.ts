@@ -10,28 +10,42 @@ import { InternshipAdvisorsService } from './internship-advisors.service';
 @Controller('internship-advisors')
 export class InternshipAdvisorsController {
   constructor(
-    private readonly internshipAdvisorService: InternshipAdvisorsService, 
+    private readonly internshipAdvisorService: InternshipAdvisorsService,
     private readonly userService: UsersService,
-    private readonly emailService: EmailsService
-  ){}
+    private readonly emailService: EmailsService,
+  ) {}
 
   @Get()
-  findAll(@Req() req: RequestWithQueryInfo): Promise<[InternshipAdvisor[], number]> {
+  findAll(
+    @Req() req: RequestWithQueryInfo,
+  ): Promise<[InternshipAdvisor[], number]> {
     const { order, skip, filter, take } = req.queryInfo;
-    return this.internshipAdvisorService.findAll(order, skip, take, filter, req.user.campusId);
+    return this.internshipAdvisorService.findAll(
+      order,
+      skip,
+      take,
+      filter,
+      req.user.campusId,
+    );
   }
 
   @Post()
-  async create(@Req() req: RequestWithQueryInfo, @Body() createInternshipAdvisorDTO: CreateInternshipAdvisorDTO): Promise<InternshipAdvisor> {
-    const internshipAdvisorUser = await this.userService.create({ 
+  async create(
+    @Req() req: RequestWithQueryInfo,
+    @Body() createInternshipAdvisorDTO: CreateInternshipAdvisorDTO,
+  ): Promise<InternshipAdvisor> {
+    const internshipAdvisorUser = await this.userService.create({
       email: createInternshipAdvisorDTO.email,
       type: UserType.INTERNSHIP_ADVISOR,
       active: false,
     });
-    const internshipAdvisor = await this.internshipAdvisorService.create({ 
-      ...createInternshipAdvisorDTO, 
-      user: internshipAdvisorUser
-    }, req.user.campusId);
+    const internshipAdvisor = await this.internshipAdvisorService.create(
+      {
+        ...createInternshipAdvisorDTO,
+        user: internshipAdvisorUser,
+      },
+      req.user.campusId,
+    );
 
     await this.emailService.sendConfirmationEmail({
       to: internshipAdvisorUser.email,

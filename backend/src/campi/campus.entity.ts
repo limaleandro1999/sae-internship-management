@@ -25,18 +25,33 @@ export class Campus {
   @Column()
   city: string;
 
-  @OneToMany(() => CampusAdmin, campusAdmin => campusAdmin.campus)
+  @OneToMany(
+    () => CampusAdmin,
+    campusAdmin => campusAdmin.campus,
+  )
   campusAdmins: CampusAdmin[];
 
-  @OneToMany(() => InternshipSector, internshipSector => internshipSector.campus)
+  @OneToMany(
+    () => InternshipSector,
+    internshipSector => internshipSector.campus,
+  )
   internshipSectors: InternshipSector[];
 
-  @OneToMany(() => InternshipAdvisor, internshipAdvisor => internshipAdvisor.campus)
+  @OneToMany(
+    () => InternshipAdvisor,
+    internshipAdvisor => internshipAdvisor.campus,
+  )
   internshipAdvisors: InternshipAdvisor[];
 
-  @OneToMany(() => Course, course => course.campus)
+  @OneToMany(
+    () => Course,
+    course => course.campus,
+  )
   courses: Course[];
 
-  @OneToMany(() => Company, company => company.campus)
+  @OneToMany(
+    () => Company,
+    company => company.campus,
+  )
   companies: Company[];
 }

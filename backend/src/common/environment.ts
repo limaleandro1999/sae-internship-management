@@ -1,12 +1,12 @@
-import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
-import { Campus } from "../campi/campus.entity";
-import { CampusAdmin } from "../campus-admin/campus-admin.entity";
-import { Course } from "../courses/course.entity";
-import { InternshipSector } from "../internship-sector/internship-sector.entity";
-import { User } from "../users/user.entity";
-import { Company } from "src/companies/company.entity";
-import { InternshipAdvisor } from "src/internship-advisors/internship-advisor.entity";
+import { Campus } from '../campi/campus.entity';
+import { CampusAdmin } from '../campus-admin/campus-admin.entity';
+import { Course } from '../courses/course.entity';
+import { InternshipSector } from '../internship-sector/internship-sector.entity';
+import { User } from '../users/user.entity';
+import { Company } from 'src/companies/company.entity';
+import { InternshipAdvisor } from 'src/internship-advisors/internship-advisor.entity';
 
 export const environment = {
   database: {
@@ -18,19 +18,27 @@ export const environment = {
     database: 'postgres',
     synchronize: true,
     logging: true,
-    entities: [Campus, CampusAdmin, User, InternshipSector, Course, Company, InternshipAdvisor],
+    entities: [
+      Campus,
+      CampusAdmin,
+      User,
+      InternshipSector,
+      Course,
+      Company,
+      InternshipAdvisor,
+    ],
   },
   mailer: {
     transport: {
       host: 'smtp.gmail.com',
       port: 587,
       tls: {
-        rejectUnauthorized: false
+        rejectUnauthorized: false,
       },
       auth: {
         user: 'limaleandro1999@gmail.com',
-        pass: '130599Lopes@'
-      }
+        pass: '130599Lopes@',
+      },
     },
     template: {
       dir: 'D:\\projects\\internship-management\\backend\\templates',
@@ -40,4 +48,4 @@ export const environment = {
       },
     },
   },
-}
+};

@@ -10,6 +10,6 @@ import { CampusAdminService } from './campus-admin.service';
 @Module({
   imports: [TypeOrmModule.forFeature([CampusAdmin, User])],
   controllers: [CampusAdminController],
-  providers: [CampusAdminService, EmailsService, UsersService]
+  providers: [CampusAdminService, EmailsService, UsersService],
 })
 export class CampusAdminModule {}

@@ -11,13 +11,25 @@ import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 export class CampiService {
   constructor(
     @InjectRepository(Campus)
-    private campiRepository: Repository<Campus>
+    private campiRepository: Repository<Campus>,
   ) {}
 
-  findAll(order?, skip?: number, take?: number, filter?: BaseFilter): Promise<[Campus[], number]> {
+  findAll(
+    order?,
+    skip?: number,
+    take?: number,
+    filter?: BaseFilter,
+  ): Promise<[Campus[], number]> {
     const { q } = filter;
-    const whereClause = q ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) } : null;
-    return this.campiRepository.findAndCount({ order, skip, take, where: whereClause });
+    const whereClause = q
+      ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) }
+      : null;
+    return this.campiRepository.findAndCount({
+      order,
+      skip,
+      take,
+      where: whereClause,
+    });
   }
 
   findOne(id: number | string): Promise<Campus> {

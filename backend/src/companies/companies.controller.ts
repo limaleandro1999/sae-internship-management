@@ -7,14 +7,18 @@ import { RequestWithQueryInfo } from 'src/common/interfaces/request-query-info.i
 
 @Controller('companies')
 export class CompaniesController {
-  constructor(
-    private readonly companyService: CompaniesService
-  ) {}
+  constructor(private readonly companyService: CompaniesService) {}
 
   @Get()
   findAll(@Req() req: RequestWithQueryInfo): Promise<[Company[], number]> {
     const { order, skip, filter, take } = req.queryInfo;
-    return this.companyService.findAll(order, skip, take, filter, req.user.campusId);
+    return this.companyService.findAll(
+      order,
+      skip,
+      take,
+      filter,
+      req.user.campusId,
+    );
   }
 
   @Get(':id')
@@ -23,12 +27,18 @@ export class CompaniesController {
   }
 
   @Post()
-  create(@Req() req: RequestWithQueryInfo, @Body() createCompanyDTO: CreateCompanyDTO): Promise<Company> {
+  create(
+    @Req() req: RequestWithQueryInfo,
+    @Body() createCompanyDTO: CreateCompanyDTO,
+  ): Promise<Company> {
     return this.companyService.create(createCompanyDTO, req.user.campusId);
   }
 
   @Put(':id')
-  updated(@Param('id') id: string, @Body() updateCompanyDTO: UpdateCompanyDTO): Promise<Company> {
+  updated(
+    @Param('id') id: string,
+    @Body() updateCompanyDTO: UpdateCompanyDTO,
+  ): Promise<Company> {
     return this.companyService.update(id, updateCompanyDTO);
   }
 }
