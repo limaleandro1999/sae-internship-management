@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "npx nest build",
+    "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "yarn start:prod",
     "start:dev": "nest start --watch",
@@ -32,6 +32,7 @@
     "@nestjs/typeorm": "^7.1.1",
     "bcrypt": "^5.0.0",
     "handlebars": "^4.7.6",
+    "nest": "^0.1.6",
     "nodemailer": "^6.4.11",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
