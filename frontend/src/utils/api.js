@@ -1,8 +1,10 @@
 import { stringify } from 'query-string';
 import axios from 'axios';
 
+import { environment } from './environment';
+
 const api = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: environment.server.serverUrl,
 });
 
 export default {

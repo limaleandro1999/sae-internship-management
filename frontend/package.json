@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.20.0",
     "clsx": "^1.1.1",
+    "dotenv": "^8.2.0",
     "lodash": "^4.17.20",
     "react": "^16.13.1",
     "react-admin": "^3.8.2",
@@ -20,6 +21,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "yarn global add serve && serve -l $PORT -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
