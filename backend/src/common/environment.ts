@@ -52,9 +52,6 @@ export default () => ({
       },
     },
     template: {
-      dir:
-        process.env.TEMPLATE_DIR ??
-        'D:\\projects\\internship-management\\backend\\templates',
       adapter: new HandlebarsAdapter(),
       options: {
         strict: true,

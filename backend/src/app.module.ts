@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Connection } from 'typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { resolve } from 'path';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -40,7 +41,13 @@ import { InternshipAdvisorsModule } from './internship-advisors/internship-advis
             type: 'postgres',
           },
     ),
-    MailerModule.forRoot(environment().mailer),
+    MailerModule.forRoot({
+      ...environment().mailer,
+      template: {
+        dir: resolve('backend', '../templates'),
+        ...environment().mailer.template,
+      },
+    }),
     CampiModule,
     CampusAdminModule,
     UsersModule,
