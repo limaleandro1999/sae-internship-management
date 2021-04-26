@@ -34,6 +34,7 @@ import { InternshipAdvisorsModule } from './internship-advisors/internship-advis
         ? {
             url: environment().database.url,
             entities: environment().database.entities,
+            ssl: environment().database.ssl,
             type: 'postgres',
           }
         : {
