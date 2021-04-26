@@ -33,17 +33,11 @@ import { InternshipAdvisorsModule } from './internship-advisors/internship-advis
         ? {
             url: environment().database.url,
             entities: environment().database.entities,
-            ssl: {
-              rejectUnauthorized: false,
-            },
             type: 'postgres',
           }
         : {
             ...environment().database,
             type: 'postgres',
-            ssl: {
-              rejectUnauthorized: false,
-            },
           },
     ),
     MailerModule.forRoot(environment().mailer),

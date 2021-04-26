@@ -20,7 +20,12 @@ export default () => ({
     username: process.env.DB_USERNAME ?? 'postgres',
     password: process.env.DB_PASSWORD ?? 'root',
     database: process.env.DB_DATABASE ?? 'postgres',
-    ssl: process.env.DB_SSL === 'true' ? true : false,
+    ssl:
+      process.env.DB_SSL === 'true'
+        ? {
+            rejectUnauthorized: false,
+          }
+        : null,
     synchronize: true,
     logging: true,
     entities: [
