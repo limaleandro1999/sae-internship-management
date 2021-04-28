@@ -7,6 +7,8 @@ import { CreateInternshipSectorDTO } from './dto/create-internship-sector.dto';
 import { InternshipSector } from './internship-sector.entity';
 import { InternshipSectorService } from './internship-sector.service';
 
+import environment from '../common/environment';
+
 @Controller('internship-sector')
 export class InternshipSectorController {
   constructor(
@@ -50,7 +52,9 @@ export class InternshipSectorController {
     await this.emailService.sendConfirmationEmail({
       to: internshipSectorUser.email,
       name: internshipSector.firstName,
-      confirmationLink: `http://localhost:3001/account-confirmation/${internshipSectorUser.confirmationId}`,
+      confirmationLink: `${environment().links.accountConfimationPrefixLink}${
+        internshipSectorUser.confirmationId
+      }`,
     });
 
     return internshipSector;
