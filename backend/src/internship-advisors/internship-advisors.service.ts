@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 import { Raw, Repository } from 'typeorm';
 import { CreateInternshipAdvisorDTO } from './dto/create-internship-advisor.dto';
+import { UpdateInternshipAdvisorDTO } from './dto/update-internship-advisor.dto';
 import { InternshipAdvisor } from './internship-advisor.entity';
 
 @Injectable()
@@ -32,6 +33,10 @@ export class InternshipAdvisorsService {
     });
   }
 
+  findOne(id): Promise<InternshipAdvisor> {
+    return this.internshipAdvisorRepository.findOne(id);
+  }
+
   create(
     internshipAdvisor: CreateInternshipAdvisorDTO,
     campusId?: number,
@@ -41,5 +46,13 @@ export class InternshipAdvisorsService {
       ...internshipAdvisor,
     });
     return this.internshipAdvisorRepository.save(internshipAdvisorObj);
+  }
+
+  async update(
+    id: number | string,
+    internshipAdvisor: UpdateInternshipAdvisorDTO,
+  ) {
+    await this.internshipAdvisorRepository.update(id, internshipAdvisor);
+    return this.findOne(id);
   }
 }
