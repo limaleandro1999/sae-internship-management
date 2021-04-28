@@ -51,7 +51,7 @@ export class CampiController {
   }
 
   @Put(':id')
-  updated(
+  update(
     @Param('id') id: string,
     @Body() updateCampusDTO: UpdateCampusDTO,
   ): Promise<Campus> {

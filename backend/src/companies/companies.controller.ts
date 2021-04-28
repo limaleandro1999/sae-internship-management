@@ -35,7 +35,7 @@ export class CompaniesController {
   }
 
   @Put(':id')
-  updated(
+  update(
     @Param('id') id: string,
     @Body() updateCompanyDTO: UpdateCompanyDTO,
   ): Promise<Company> {

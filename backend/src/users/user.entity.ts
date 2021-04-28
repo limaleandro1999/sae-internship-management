@@ -1,5 +1,6 @@
 import { hash } from 'bcrypt';
 import { CampusAdmin } from 'src/campus-admin/campus-admin.entity';
+import { Intern } from 'src/interns/intern.entity';
 import { InternshipAdvisor } from 'src/internship-advisors/internship-advisor.entity';
 import { InternshipSector } from 'src/internship-sector/internship-sector.entity';
 import {
@@ -70,6 +71,12 @@ export class User {
     { eager: true },
   )
   internshipAdvisor: InternshipAdvisor;
+
+  @OneToOne(
+    () => Intern,
+    intern => intern.user,
+  )
+  intern: Intern;
 
   @BeforeInsert()
   @BeforeUpdate()

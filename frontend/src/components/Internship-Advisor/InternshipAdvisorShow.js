@@ -2,7 +2,7 @@ import React from 'react';
 import { Show, SimpleShowLayout, TextField } from 'react-admin';
 
 function InternshipAdvisorTitle({ record }) {
-  return <span>{record ? `${record.name}` : ''}</span>;
+  return <span>{record ? `${record.firstName} ${record.lastName}` : ''}</span>;
 };
 
 function InternshipAdvisorShow(props) {

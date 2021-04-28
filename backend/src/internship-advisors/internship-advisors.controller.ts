@@ -68,7 +68,7 @@ export class InternshipAdvisorsController {
   }
 
   @Put(':id')
-  updated(
+  update(
     @Param('id') id: string,
     @Body() updateCourseDTO: UpdateInternshipAdvisorDTO,
   ): Promise<InternshipAdvisor> {

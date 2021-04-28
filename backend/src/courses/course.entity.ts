@@ -1,5 +1,12 @@
 import { Campus } from 'src/campi/campus.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Intern } from 'src/interns/intern.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 
 @Entity()
 export class Course {
@@ -17,4 +24,10 @@ export class Course {
     campus => campus.courses,
   )
   campus: Campus | number;
+
+  @OneToMany(
+    () => Intern,
+    intern => intern.course,
+  )
+  intern: Intern | number;
 }
