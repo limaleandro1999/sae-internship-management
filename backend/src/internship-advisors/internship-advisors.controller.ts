@@ -1,11 +1,15 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Req } from '@nestjs/common';
+
 import { RequestWithQueryInfo } from 'src/common/interfaces/request-query-info.interface';
 import { EmailsService } from 'src/emails/emails.service';
 import { UserType } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { CreateInternshipAdvisorDTO } from './dto/create-internship-advisor.dto';
+import { UpdateInternshipAdvisorDTO } from './dto/update-internship-advisor.dto';
 import { InternshipAdvisor } from './internship-advisor.entity';
 import { InternshipAdvisorsService } from './internship-advisors.service';
+
+import environment from 'src/common/environment';
 
 @Controller('internship-advisors')
 export class InternshipAdvisorsController {
@@ -29,6 +33,11 @@ export class InternshipAdvisorsController {
     );
   }
 
+  @Get(':id')
+  findOne(@Param('id') id: string): Promise<InternshipAdvisor> {
+    return this.internshipAdvisorService.findOne(id);
+  }
+
   @Post()
   async create(
     @Req() req: RequestWithQueryInfo,
@@ -50,9 +59,19 @@ export class InternshipAdvisorsController {
     await this.emailService.sendConfirmationEmail({
       to: internshipAdvisorUser.email,
       name: internshipAdvisor.firstName,
-      confirmationLink: `http://localhost:3001/account-confirmation/${internshipAdvisorUser.confirmationId}`,
+      confirmationLink: `${environment().links.accountConfimationPrefixLink}${
+        internshipAdvisorUser.confirmationId
+      }`,
     });
 
     return internshipAdvisor;
+  }
+
+  @Put(':id')
+  updated(
+    @Param('id') id: string,
+    @Body() updateCourseDTO: UpdateInternshipAdvisorDTO,
+  ): Promise<InternshipAdvisor> {
+    return this.internshipAdvisorService.update(id, updateCourseDTO);
   }
 }

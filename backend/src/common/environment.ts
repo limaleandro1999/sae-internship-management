@@ -58,4 +58,9 @@ export default () => ({
       },
     },
   },
+  links: {
+    accountConfimationPrefixLink:
+      process.env.LINK_ACCOUNT_CONFIRMATION_PREFIX ??
+      'http://localhost:3001/account-confirmation/',
+  },
 });

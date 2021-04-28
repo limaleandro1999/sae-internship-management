@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Req } from '@nestjs/common';
 import { Body } from '@nestjs/common/decorators/http/route-params.decorator';
+
 import { RequestWithQueryInfo } from 'src/common/interfaces/request-query-info.interface';
 import { EmailsService } from 'src/emails/emails.service';
 import { UserType } from 'src/users/user.entity';
@@ -7,6 +8,8 @@ import { UsersService } from 'src/users/users.service';
 import { CampusAdmin } from './campus-admin.entity';
 import { CampusAdminService } from './campus-admin.service';
 import { CreateCampusAdminDTO } from './dto/create-campus-admin.dto';
+
+import environment from '../common/environment';
 
 @Controller('campus-admin')
 export class CampusAdminController {
@@ -49,7 +52,9 @@ export class CampusAdminController {
     await this.emailService.sendConfirmationEmail({
       to: campusAdminUser.email,
       name: campusAdmin.firstName,
-      confirmationLink: `http://localhost:3001/account-confirmation/${campusAdminUser.confirmationId}`,
+      confirmationLink: `${environment().links.accountConfimationPrefixLink}${
+        campusAdminUser.confirmationId
+      }`,
     });
 
     return campusAdmin;
