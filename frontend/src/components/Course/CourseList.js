@@ -1,22 +1,30 @@
 import React from 'react';
-import { List, Datagrid, TextField, TextInput, EditButton, ShowButton, Filter } from 'react-admin';
+import {
+  List,
+  Datagrid,
+  TextField,
+  TextInput,
+  EditButton,
+  ShowButton,
+  Filter,
+} from 'react-admin';
 
 function CourseFilters(props) {
   return (
     <Filter {...props}>
-      <TextInput label='Pesquisa' source='q' alwaysOn/>
+      <TextInput label="Pesquisa" source="q" alwaysOn />
     </Filter>
   );
 }
 
 function CourseList(props) {
   return (
-    <List {...props} title='Course' filters={<CourseFilters/>}>
+    <List {...props} title="Course" filters={<CourseFilters />}>
       <Datagrid>
-        <TextField source='name' label='Nome'/>
-        <TextField source='code' label='Código'/>
-                <ShowButton label='Mostrar'/>
-        <EditButton label='Editar'/>
+        <TextField source="name" label="Nome" />
+        <TextField source="code" label="Código" />
+        <ShowButton label="Mostrar" />
+        <EditButton label="Editar" />
       </Datagrid>
     </List>
   );

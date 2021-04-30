@@ -35,7 +35,7 @@ export class CoursesController {
   }
 
   @Put(':id')
-  updated(
+  update(
     @Param('id') id: string,
     @Body() updateCourseDTO: UpdateCourseDTO,
   ): Promise<Course> {

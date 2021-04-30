@@ -7,9 +7,10 @@ import {
   EditButton,
   ShowButton,
   Filter,
+  BooleanField,
 } from 'react-admin';
 
-function CompanyFilters(props) {
+function InternFilters(props) {
   return (
     <Filter {...props}>
       <TextInput label="Pesquisa" source="q" alwaysOn />
@@ -17,14 +18,15 @@ function CompanyFilters(props) {
   );
 }
 
-function CompanyList(props) {
+function InternList(props) {
   return (
-    <List {...props} title="Empresa" filters={<CompanyFilters />}>
+    <List {...props} title="Estagiários" filters={<InternFilters />}>
       <Datagrid>
         <TextField source="name" label="Nome" />
-        <TextField source="cnpj" label="CNPJ" />
-        <TextField source="email" label="E-mail" />
-        <TextField source="phone" label="Telefone" />
+        <TextField source="phoneNumber" label="Telefone" />
+        <TextField source="user.email" label="Email" />
+        <TextField source="course.name" label="Curso" />
+        <BooleanField source="user.active" label="Ativo?" />
         <ShowButton label="Mostrar" />
         <EditButton label="Editar" />
       </Datagrid>
@@ -32,4 +34,4 @@ function CompanyList(props) {
   );
 }
 
-export default CompanyList;
+export default InternList;

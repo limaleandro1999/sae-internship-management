@@ -1,6 +1,7 @@
 import { CampusAdmin } from 'src/campus-admin/campus-admin.entity';
 import { Company } from 'src/companies/company.entity';
 import { Course } from 'src/courses/course.entity';
+import { Intern } from 'src/interns/intern.entity';
 import { InternshipAdvisor } from 'src/internship-advisors/internship-advisor.entity';
 import { InternshipSector } from 'src/internship-sector/internship-sector.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
@@ -54,4 +55,10 @@ export class Campus {
     company => company.campus,
   )
   companies: Company[];
+
+  @OneToMany(
+    () => Intern,
+    intern => intern.campus,
+  )
+  intern: Intern[];
 }

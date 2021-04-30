@@ -7,6 +7,7 @@ import { InternshipSector } from '../internship-sector/internship-sector.entity'
 import { User } from '../users/user.entity';
 import { Company } from 'src/companies/company.entity';
 import { InternshipAdvisor } from 'src/internship-advisors/internship-advisor.entity';
+import { Intern } from 'src/interns/intern.entity';
 
 export default () => ({
   server: {
@@ -36,6 +37,7 @@ export default () => ({
       Course,
       Company,
       InternshipAdvisor,
+      Intern,
     ],
   },
   mailer: {
