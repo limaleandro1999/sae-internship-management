@@ -6,10 +6,20 @@ const validateCourse = required('O campo curso é obrigatório');
 
 function CourseEdit(props) {
   return (
-    <Edit {...props} title='Novo Curso'>
+    <Edit {...props} title="Novo Curso">
       <SimpleForm>
-        <TextInput source='name' label='Nome' fullWidth={true} validate={validateName}/>
-        <TextInput source='code' label='Código' fullWidth={true} validate={validateCourse}/>
+        <TextInput
+          source="name"
+          label="Nome"
+          fullWidth={true}
+          validate={validateName}
+        />
+        <TextInput
+          source="code"
+          label="Código"
+          fullWidth={true}
+          validate={validateCourse}
+        />
       </SimpleForm>
     </Edit>
   );

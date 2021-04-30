@@ -15,7 +15,7 @@ const useStyle = makeStyles((theme) => ({
   },
   button: {
     margin: '10px',
-  }
+  },
 }));
 
 const Main = styled.div`
@@ -44,7 +44,7 @@ const ErrorMessage = styled.p`
 
 const errorsByStatusCode = {
   403: 'O email informado não foi cadastrado',
-}
+};
 
 function CampusAdminConfirmation() {
   const { confirmationId } = useParams();
@@ -55,14 +55,18 @@ function CampusAdminConfirmation() {
 
   useEffect(() => {
     async function isUserConfirmed() {
-      const { data: {confirmed} } = await axios.get(`http://localhost:3000/users/is-confirmed/${confirmationId}`);
+      const {
+        data: { confirmed },
+      } = await axios.get(
+        `http://localhost:3000/users/is-confirmed/${confirmationId}`
+      );
       setIsConfirmed(confirmed);
     }
 
     isUserConfirmed();
   }, [confirmationId]);
 
-  const handleInputChange = event => {
+  const handleInputChange = (event) => {
     setUser({ ...user, [event.target.name]: event.target.value });
   };
 
@@ -77,22 +81,47 @@ function CampusAdminConfirmation() {
 
   return (
     <div>
-      {
-        isConfirmed ?
-          <Main>
-            <MainTitle>Olá! Seu cadastro já foi confirmado</MainTitle>  
-            <Description>Por favor, dirija se a página de login para logar-se ao sistema!</Description>
-          </Main>
-        : 
-          <Main>
-            <MainTitle>Olá! Seja bem-vindo!</MainTitle>
-            <Description>Por favor complete seu cadastro utilizando o email que foi cadastrado e escolha uma senha para sua conta.</Description>
-            {errors.map((error, idx) => (<ErrorMessage key={idx}>{error}</ErrorMessage>))}
-            <TextField className={clsx(classes.textField)} label='Email' name='email' value={user.email} onChange={handleInputChange}/>
-            <TextField className={clsx(classes.textField)} label='Senha' name='password' type='password' value={user.password} onChange={handleInputChange}/>
-            <Button color="primary" className={clsx(classes.button)} onClick={handleSubmit}>Concluir</Button>
-          </Main>
-      }
+      {isConfirmed ? (
+        <Main>
+          <MainTitle>Olá! Seu cadastro já foi confirmado</MainTitle>
+          <Description>
+            Por favor, dirija se a página de login para logar-se ao sistema!
+          </Description>
+        </Main>
+      ) : (
+        <Main>
+          <MainTitle>Olá! Seja bem-vindo!</MainTitle>
+          <Description>
+            Por favor complete seu cadastro utilizando o email que foi
+            cadastrado e escolha uma senha para sua conta.
+          </Description>
+          {errors.map((error, idx) => (
+            <ErrorMessage key={idx}>{error}</ErrorMessage>
+          ))}
+          <TextField
+            className={clsx(classes.textField)}
+            label="Email"
+            name="email"
+            value={user.email}
+            onChange={handleInputChange}
+          />
+          <TextField
+            className={clsx(classes.textField)}
+            label="Senha"
+            name="password"
+            type="password"
+            value={user.password}
+            onChange={handleInputChange}
+          />
+          <Button
+            color="primary"
+            className={clsx(classes.button)}
+            onClick={handleSubmit}
+          >
+            Concluir
+          </Button>
+        </Main>
+      )}
     </div>
   );
 }

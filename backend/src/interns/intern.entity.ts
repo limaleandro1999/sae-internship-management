@@ -10,13 +10,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-export enum ShiftOption {
-  MORNING = 'Manha',
-  AFTERNOON = 'Vespertino',
-  NIGHT = 'Noite',
-  INTEGRAL = 'Integral',
-}
-
 @Entity()
 export class Intern {
   @PrimaryGeneratedColumn()
@@ -51,12 +44,6 @@ export class Intern {
 
   @Column()
   phoneNumber: string;
-
-  @Column({
-    type: 'enum',
-    enum: ShiftOption,
-  })
-  shift: string;
 
   @Column()
   registrationNumber: string;

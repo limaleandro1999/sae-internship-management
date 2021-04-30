@@ -3,9 +3,4 @@ import CampiList from './CampiList';
 import CampiEdit from './CampiEdit';
 import CampiShow from './CampiShow';
 
-export {
-  CampiCreate,
-  CampiList,
-  CampiEdit,
-  CampiShow,
-};
+export { CampiCreate, CampiList, CampiEdit, CampiShow };

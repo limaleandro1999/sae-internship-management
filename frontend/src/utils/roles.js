@@ -4,4 +4,4 @@ export const ROLES = {
   INTERNSHIP_SECTOR: 'Internship_Sector',
   INTERNSHIP_TUTOR: 'Internship_Tutor',
   INTERN: 'Intern',
-}
+};
