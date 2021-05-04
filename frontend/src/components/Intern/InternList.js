@@ -23,6 +23,7 @@ function InternList(props) {
     <List {...props} title="Estagiários" filters={<InternFilters />}>
       <Datagrid>
         <TextField source="name" label="Nome" />
+        <TextField source="registrationNumber" label="Matrícula" />
         <TextField source="phoneNumber" label="Telefone" />
         <TextField source="user.email" label="Email" />
         <TextField source="course.name" label="Curso" />

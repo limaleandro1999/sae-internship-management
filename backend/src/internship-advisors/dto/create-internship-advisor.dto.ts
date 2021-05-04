@@ -1,8 +1,7 @@
 import { User } from 'src/users/user.entity';
 
 export class CreateInternshipAdvisorDTO {
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   phone: string;
   campus?: number;

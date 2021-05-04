@@ -51,7 +51,7 @@ export class InternshipSectorController {
 
     await this.emailService.sendConfirmationEmail({
       to: internshipSectorUser.email,
-      name: internshipSector.firstName,
+      name: internshipSector.name,
       confirmationLink: `${environment().links.accountConfimationPrefixLink}${
         internshipSectorUser.confirmationId
       }`,

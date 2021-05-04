@@ -15,10 +15,7 @@ export class InternshipAdvisor {
   id?: number;
 
   @Column()
-  firstName: string;
-
-  @Column()
-  lastName: string;
+  name: string;
 
   @Column()
   phone: string;
