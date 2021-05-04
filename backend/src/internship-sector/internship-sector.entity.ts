@@ -20,9 +20,6 @@ export class InternshipSector {
   @Column()
   lastName: string;
 
-  @Column()
-  registrationNumber: string;
-
   @ManyToOne(
     () => Campus,
     campus => campus.campusAdmins,

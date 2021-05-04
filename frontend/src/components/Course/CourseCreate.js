@@ -10,7 +10,6 @@ import {
 import { ROLES } from '../../utils/roles';
 
 const validateName = required('O campo nome é obrigatório');
-const validateCourse = required('O campo curso é obrigatório');
 
 function CourseCreate(props) {
   const userType = localStorage.getItem('role');
@@ -23,12 +22,6 @@ function CourseCreate(props) {
           label="Nome"
           fullWidth={true}
           validate={validateName}
-        />
-        <TextInput
-          source="code"
-          label="Código"
-          fullWidth={true}
-          validate={validateCourse}
         />
         {userType === ROLES.ADMIN ? (
           <ReferenceInput source="campus" label="Campus" reference="campi">

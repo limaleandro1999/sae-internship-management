@@ -10,7 +10,6 @@ function CourseShow(props) {
     <Show {...props} title={<CourseTitle />}>
       <SimpleShowLayout>
         <TextField source="name" label="Nome" />
-        <TextField source="code" label="Código" />
       </SimpleShowLayout>
     </Show>
   );

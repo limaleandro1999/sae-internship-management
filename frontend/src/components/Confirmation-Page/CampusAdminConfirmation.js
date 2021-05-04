@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { TextField, Button } from '@material-ui/core';
 
-import axios from 'axios';
+import { api } from '../../utils/api';
 
 const useStyle = makeStyles((theme) => ({
   textField: {
@@ -57,9 +57,7 @@ function CampusAdminConfirmation() {
     async function isUserConfirmed() {
       const {
         data: { confirmed },
-      } = await axios.get(
-        `http://localhost:3000/users/is-confirmed/${confirmationId}`
-      );
+      } = await api.get(`/users/is-confirmed/${confirmationId}`);
       setIsConfirmed(confirmed);
     }
 
@@ -72,7 +70,7 @@ function CampusAdminConfirmation() {
 
   const handleSubmit = async () => {
     try {
-      await axios.post('http://localhost:3000/users/confirm', user);
+      await api.post('/users/confirm', user);
       setErrors([]);
     } catch (error) {
       setErrors([errorsByStatusCode[error.response.status]]);

@@ -22,7 +22,6 @@ function CourseList(props) {
     <List {...props} title="Course" filters={<CourseFilters />}>
       <Datagrid>
         <TextField source="name" label="Nome" />
-        <TextField source="code" label="Código" />
         <ShowButton label="Mostrar" />
         <EditButton label="Editar" />
       </Datagrid>

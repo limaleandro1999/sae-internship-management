@@ -4,8 +4,8 @@ import {
   Datagrid,
   TextField,
   TextInput,
-  EditButton,
-  ShowButton,
+  // EditButton,
+  // ShowButton,
   Filter,
   BooleanField,
 } from 'react-admin';
@@ -26,8 +26,8 @@ function InternshipSectorList(props) {
         <TextField source="lastName" label="Sobrenome" />
         <TextField source="user.email" label="Email" />
         <BooleanField source="user.active" label="Ativo?" />
-        <ShowButton label="Mostrar" />
-        <EditButton label="Editar" />
+        {/* <ShowButton label="Mostrar" />
+        <EditButton label="Editar" /> */}
       </Datagrid>
     </List>
   );

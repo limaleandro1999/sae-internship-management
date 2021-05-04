@@ -3,5 +3,4 @@ export class CreateInternshipSectorDTO {
   lastName: string;
   email: string;
   campus: number;
-  registrationNumber: string;
 }
