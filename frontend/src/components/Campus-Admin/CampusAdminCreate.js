@@ -23,14 +23,8 @@ function CampusAdminCreate(props) {
     <Create {...props} title="Novo Campus">
       <SimpleForm>
         <TextInput
-          source="firstName"
+          source="name"
           label="Nome"
-          fullWidth={true}
-          validate={validateName}
-        />
-        <TextInput
-          source="lastName"
-          label="Sobrenome"
           fullWidth={true}
           validate={validateName}
         />

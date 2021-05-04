@@ -9,8 +9,7 @@ function InternshipSectorShow(props) {
   return (
     <Show {...props} title={<InternshipSectorTitle />}>
       <SimpleShowLayout>
-        <TextField source="firstName" label="Nome" />
-        <TextField source="lastName" label="Sobrenome" />
+        <TextField source="name" label="Nome" />
         <TextField source="user.email" label="Email" />
       </SimpleShowLayout>
     </Show>

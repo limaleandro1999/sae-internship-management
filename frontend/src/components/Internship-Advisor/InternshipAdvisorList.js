@@ -26,8 +26,7 @@ function InternshipAdvisorList(props) {
       filters={<InternshipAdvisorFilters />}
     >
       <Datagrid>
-        <TextField source="firstName" label="Nome" />
-        <TextField source="lastName" label="Sobrenome" />
+        <TextField source="name" label="Nome" />
         <TextField source="phone" label="Telefone" />
         <TextField source="user.email" label="Email" />
         <BooleanField source="user.active" label="Ativo?" />

@@ -23,14 +23,8 @@ function InternshipAdvisorCreate(props) {
     <Create {...props} title="Novo Orientador de Estágio">
       <SimpleForm>
         <TextInput
-          source="firstName"
+          source="name"
           label="Nome"
-          fullWidth={true}
-          validate={validateName}
-        />
-        <TextInput
-          source="lastName"
-          label="Sobrenome"
           fullWidth={true}
           validate={validateName}
         />

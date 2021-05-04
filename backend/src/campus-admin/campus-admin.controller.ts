@@ -51,7 +51,7 @@ export class CampusAdminController {
 
     await this.emailService.sendConfirmationEmail({
       to: campusAdminUser.email,
-      name: campusAdmin.firstName,
+      name: campusAdmin.name,
       confirmationLink: `${environment().links.accountConfimationPrefixLink}${
         campusAdminUser.confirmationId
       }`,

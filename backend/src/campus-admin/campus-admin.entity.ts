@@ -16,10 +16,7 @@ export class CampusAdmin {
   id?: number;
 
   @Column()
-  firstName: string;
-
-  @Column()
-  lastName: string;
+  name: string;
 
   @ManyToOne(
     () => Campus,
