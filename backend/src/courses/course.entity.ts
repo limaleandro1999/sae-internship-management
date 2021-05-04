@@ -16,9 +16,6 @@ export class Course {
   @Column()
   name: string;
 
-  @Column()
-  code: string;
-
   @ManyToOne(
     () => Campus,
     campus => campus.courses,

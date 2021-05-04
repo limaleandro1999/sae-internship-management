@@ -49,6 +49,7 @@ import {
   InternList,
   InternShow,
 } from './components/Intern';
+import { Home } from './pages/Home';
 
 import CampusAdminConfirmation from './components/Confirmation-Page/CampusAdminConfirmation';
 
@@ -85,94 +86,97 @@ function App() {
         <Route path="/account-confirmation/:confirmationId">
           <CampusAdminConfirmation />
         </Route>
+        <Route path="/admin">
+          <Admin theme={theme} dataProvider={api} authProvider={authProvider}>
+            {(permissions) => [
+              ['Admin'].includes(permissions) ? (
+                <Resource
+                  name="campi"
+                  list={CampiList}
+                  create={CampiCreate}
+                  edit={CampiEdit}
+                  show={CampiShow}
+                  options={{ label: 'Campi' }}
+                />
+              ) : null,
+              ['Admin', 'Campus_Admin'].includes(permissions) ? (
+                <Resource
+                  name="campus-admin"
+                  icon={AdminIcon}
+                  list={CampusAdminList}
+                  create={CampusAdminCreate}
+                  edit={CampusAdminEdit}
+                  show={CampusAdminShow}
+                  options={{ label: 'Adm. de Campus' }}
+                />
+              ) : null,
+              ['Admin', 'Campus_Admin'].includes(permissions) ? (
+                <Resource
+                  name="internship-sector"
+                  list={InternshipSectorList}
+                  create={InternshipSectorCreate}
+                  edit={InternshipSectorEdit}
+                  show={InternshipSectorShow}
+                  options={{ label: 'Setor de Estágio' }}
+                />
+              ) : null,
+              ['Admin', 'Campus_Admin', 'Internship-Sector'].includes(
+                permissions
+              ) ? (
+                <Resource
+                  name="courses"
+                  icon={MenuBookIcon}
+                  list={CourseList}
+                  create={CourseCreate}
+                  edit={CourseEdit}
+                  show={CourseShow}
+                  options={{ label: 'Cursos' }}
+                />
+              ) : null,
+              ['Admin', 'Campus_Admin', 'Internship-Sector'].includes(
+                permissions
+              ) ? (
+                <Resource
+                  name="companies"
+                  icon={BusinessIcon}
+                  list={CompanyList}
+                  create={CompanyCreate}
+                  edit={CompanyEdit}
+                  show={CompanyShow}
+                  options={{ label: 'Empresas' }}
+                />
+              ) : null,
+              ['Admin', 'Campus_Admin', 'Internship-Sector'].includes(
+                permissions
+              ) ? (
+                <Resource
+                  name="internship-advisors"
+                  list={InternshipAdvisorList}
+                  create={InternshipAdvisorCreate}
+                  edit={InternshipAdvisorEdit}
+                  show={InternshipAdvisorShow}
+                  options={{ label: 'Orientadores de Estágio' }}
+                />
+              ) : null,
+              ['Admin', 'Campus_Admin', 'Internship-Sector'].includes(
+                permissions
+              ) ? (
+                <Resource
+                  name="interns"
+                  list={InternList}
+                  create={InternCreate}
+                  edit={InternEdit}
+                  show={InternShow}
+                  options={{ label: 'Estagiários' }}
+                />
+              ) : null,
+            ]}
+          </Admin>
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
       </Switch>
-      <Route path="/admin">
-        <Admin theme={theme} dataProvider={api} authProvider={authProvider}>
-          {(permissions) => [
-            ['Admin'].includes(permissions) ? (
-              <Resource
-                name="campi"
-                list={CampiList}
-                create={CampiCreate}
-                edit={CampiEdit}
-                show={CampiShow}
-                options={{ label: 'Campi' }}
-              />
-            ) : null,
-            ['Admin', 'Campus_Admin'].includes(permissions) ? (
-              <Resource
-                name="campus-admin"
-                icon={AdminIcon}
-                list={CampusAdminList}
-                create={CampusAdminCreate}
-                edit={CampusAdminEdit}
-                show={CampusAdminShow}
-                options={{ label: 'Adm. de Campus' }}
-              />
-            ) : null,
-            ['Admin', 'Campus_Admin'].includes(permissions) ? (
-              <Resource
-                name="internship-sector"
-                list={InternshipSectorList}
-                create={InternshipSectorCreate}
-                edit={InternshipSectorEdit}
-                show={InternshipSectorShow}
-                options={{ label: 'Setor de Estágio' }}
-              />
-            ) : null,
-            ['Admin', 'Campus_Admin', 'Internship-Sector'].includes(
-              permissions
-            ) ? (
-              <Resource
-                name="courses"
-                icon={MenuBookIcon}
-                list={CourseList}
-                create={CourseCreate}
-                edit={CourseEdit}
-                show={CourseShow}
-                options={{ label: 'Cursos' }}
-              />
-            ) : null,
-            ['Admin', 'Campus_Admin', 'Internship-Sector'].includes(
-              permissions
-            ) ? (
-              <Resource
-                name="companies"
-                icon={BusinessIcon}
-                list={CompanyList}
-                create={CompanyCreate}
-                edit={CompanyEdit}
-                show={CompanyShow}
-                options={{ label: 'Empresas' }}
-              />
-            ) : null,
-            ['Admin', 'Campus_Admin', 'Internship-Sector'].includes(
-              permissions
-            ) ? (
-              <Resource
-                name="internship-advisors"
-                list={InternshipAdvisorList}
-                create={InternshipAdvisorCreate}
-                edit={InternshipAdvisorEdit}
-                show={InternshipAdvisorShow}
-                options={{ label: 'Orientadores de Estágio' }}
-              />
-            ) : null,
-            ['Admin', 'Campus_Admin', 'Internship-Sector'].includes(
-              permissions
-            ) ? (
-              <Resource
-                name="interns"
-                list={InternList}
-                create={InternCreate}
-                edit={InternEdit}
-                show={InternShow}
-                options={{ label: 'Estagiários' }}
-              />
-            ) : null,
-          ]}
-        </Admin>
-      </Route>
     </Router>
   );
 }
