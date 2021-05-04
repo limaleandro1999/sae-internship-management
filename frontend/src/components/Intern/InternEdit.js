@@ -10,7 +10,7 @@ function InternTitle({ record }) {
 function InternEdit(props) {
   return (
     <Edit {...props} title={<InternTitle />}>
-      <InternForm />
+      <InternForm isCreateForm={false} />
     </Edit>
   );
 }
