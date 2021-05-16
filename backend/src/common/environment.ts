@@ -27,7 +27,7 @@ export default () => ({
             rejectUnauthorized: false,
           }
         : null,
-    synchronize: true,
+    synchronize: process.env.NODE_ENV === 'production' ? false : true,
     logging: true,
     entities: [
       Campus,

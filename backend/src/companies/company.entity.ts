@@ -57,6 +57,21 @@ export class Company {
   @Column()
   representativePhone: string;
 
+  @Column({ default: false })
+  institutionAgreement: boolean;
+
+  @Column({
+    type: 'date',
+    nullable: true,
+  })
+  institutionAgreementStartDate: Date;
+
+  @Column({
+    type: 'date',
+    nullable: true,
+  })
+  institutionAgreementFinishDate: Date;
+
   @ManyToOne(
     () => Campus,
     campus => campus.companies,

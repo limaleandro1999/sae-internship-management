@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   FormWithRedirect,
   TextInput,
@@ -6,6 +6,8 @@ import {
   SelectInput,
   SaveButton,
   DeleteButton,
+  BooleanInput,
+  DateInput,
   required,
   email,
 } from 'react-admin';
@@ -15,6 +17,7 @@ import { ROLES } from '../../utils/roles';
 
 function CompanyForm(props) {
   const userType = localStorage.getItem('role');
+  const [hasAgreement, setHasAgreement] = useState(false);
 
   return (
     <FormWithRedirect
@@ -188,6 +191,33 @@ function CompanyForm(props) {
                     />
                   </Box>
                 </Box>
+                <Typography variant="h6" gutterBottom>
+                  Convênio
+                </Typography>
+                <BooleanInput
+                  source="institutionAgreement"
+                  label="Convênio?"
+                  fullWidth={true}
+                  onChange={(value) => setHasAgreement(value)}
+                />
+                {hasAgreement ? (
+                  <>
+                    <Box display="flex">
+                      <Box>
+                        <DateInput
+                          label="Data de início"
+                          source="institutionAgreementStartDate"
+                        />
+                      </Box>
+                      <Box ml="0.5em">
+                        <DateInput
+                          label="Data de término"
+                          source="institutionAgreementFinishDate"
+                        />
+                      </Box>
+                    </Box>
+                  </>
+                ) : null}
                 {userType === ROLES.ADMIN ? (
                   <ReferenceInput
                     source="campus"
