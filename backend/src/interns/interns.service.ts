@@ -22,17 +22,19 @@ export class InternsService {
   ): Promise<[Intern[], number]> {
     const { q } = filter;
     const whereClause: FindConditions<Intern>[] = q
-      ? 
-      [
-        { name: Raw(alias => `${alias} ILIKE '%${q}%'`), campus: campusId }, 
-        { registrationNumber: Raw(alias => `${alias} ILIKE '%${q}%'`), campus: campusId} 
-      ]
+      ? [
+          { name: Raw(alias => `${alias} ILIKE '%${q}%'`), campus: campusId },
+          {
+            registrationNumber: Raw(alias => `${alias} ILIKE '%${q}%'`),
+            campus: campusId,
+          },
+        ]
       : [{ campus: campusId }];
     return this.internRepository.findAndCount({
       order,
       skip,
       take,
-      where: [ ...whereClause ],
+      where: [...whereClause],
       relations: ['user'],
     });
   }
