@@ -31,22 +31,12 @@ function CompanyForm(props) {
                   Dados da empresa
                 </Typography>
                 <Box display="flex">
-                  <Box flex={1} mr="0.5em">
-                    <TextInput
-                      source="name"
-                      label="Nome"
-                      fullWidth={true}
-                      validate={required('Campo obrigatório')}
-                    />
-                  </Box>
-                  <Box flex={1} mr="0.5em">
-                    <TextInput
-                      source="directorName"
-                      label="Nome do diretor"
-                      fullWidth={true}
-                      validate={required('Campo obrigatório')}
-                    />
-                  </Box>
+                  <TextInput
+                    source="name"
+                    label="Nome"
+                    fullWidth={true}
+                    validate={required('Campo obrigatório')}
+                  />
                 </Box>
                 <Box display="flex">
                   <Box flex={1} mr="0.5em">
@@ -201,22 +191,20 @@ function CompanyForm(props) {
                   onChange={(value) => setHasAgreement(value)}
                 />
                 {hasAgreement ? (
-                  <>
-                    <Box display="flex">
-                      <Box>
-                        <DateInput
-                          label="Data de início"
-                          source="institutionAgreementStartDate"
-                        />
-                      </Box>
-                      <Box ml="0.5em">
-                        <DateInput
-                          label="Data de término"
-                          source="institutionAgreementFinishDate"
-                        />
-                      </Box>
+                  <Box display="flex">
+                    <Box>
+                      <DateInput
+                        label="Data de início"
+                        source="institutionAgreementStartDate"
+                      />
                     </Box>
-                  </>
+                    <Box ml="0.5em">
+                      <DateInput
+                        label="Data de término"
+                        source="institutionAgreementFinishDate"
+                      />
+                    </Box>
+                  </Box>
                 ) : null}
                 {userType === ROLES.ADMIN ? (
                   <ReferenceInput

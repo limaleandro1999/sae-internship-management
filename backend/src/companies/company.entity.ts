@@ -10,9 +10,6 @@ export class Company {
   name: string;
 
   @Column()
-  directorName: string;
-
-  @Column()
   cnpj: string;
 
   @Column()
