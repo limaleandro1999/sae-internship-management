@@ -25,12 +25,12 @@ function CompanyForm(props) {
       render={(formProps) => (
         <form>
           <Box p="1em">
-            <Box display="flex">
+            <Box display="flex" flexWrap="wrap">
               <Box flex={2} mr="1em">
                 <Typography variant="h6" gutterBottom>
                   Dados da empresa
                 </Typography>
-                <Box display="flex">
+                <Box display="flex" flexWrap="wrap">
                   <TextInput
                     source="name"
                     label="Nome"
@@ -38,7 +38,7 @@ function CompanyForm(props) {
                     validate={required('Campo obrigatório')}
                   />
                 </Box>
-                <Box display="flex">
+                <Box display="flex" flexWrap="wrap">
                   <Box flex={1} mr="0.5em">
                     <TextInput
                       source="cnpj"
@@ -56,7 +56,7 @@ function CompanyForm(props) {
                     />
                   </Box>
                 </Box>
-                <Box display="flex">
+                <Box display="flex" flexWrap="wrap" flexWrap="wrap">
                   <Box flex={1} mr="0.5em">
                     <TextInput
                       source="address"
@@ -66,6 +66,9 @@ function CompanyForm(props) {
                     />
                   </Box>
                   <Box mr="0.5em">
+                    <TextInput source="complement" label="Complemento" />
+                  </Box>
+                  <Box mr="0.5em">
                     <TextInput
                       source="district"
                       label="Bairro"
@@ -73,6 +76,8 @@ function CompanyForm(props) {
                       validate={required('Campo obrigatório')}
                     />
                   </Box>
+                </Box>
+                <Box display="flex" flexWrap="wrap">
                   <Box mr="0.5em">
                     <TextInput
                       source="cep"
@@ -102,7 +107,7 @@ function CompanyForm(props) {
                 <Typography variant="h6" gutterBottom>
                   Contato
                 </Typography>
-                <Box display="flex">
+                <Box display="flex" flexWrap="wrap">
                   <Box flex={1} mr="0.5em">
                     <TextInput
                       source="email"
@@ -127,7 +132,7 @@ function CompanyForm(props) {
                 <Typography variant="h6" gutterBottom>
                   Ramo de Atividade
                 </Typography>
-                <Box display="flex">
+                <Box display="flex" flexWrap="wrap">
                   <Box flex={1} mr="0.5em">
                     <TextInput
                       source="industry"
@@ -155,7 +160,7 @@ function CompanyForm(props) {
                   fullWidth={true}
                   validate={required('Campo obrigatório')}
                 />
-                <Box display="flex">
+                <Box display="flex" flexWrap="wrap">
                   <Box flex={1} mr="0.5em">
                     <TextInput
                       source="office"
@@ -191,7 +196,7 @@ function CompanyForm(props) {
                   onChange={(value) => setHasAgreement(value)}
                 />
                 {hasAgreement ? (
-                  <Box display="flex">
+                  <Box display="flex" flexWrap="wrap">
                     <Box>
                       <DateInput
                         label="Data de início"
@@ -219,7 +224,12 @@ function CompanyForm(props) {
             </Box>
           </Box>
           <Toolbar>
-            <Box display="flex" justifyContent="space-between" width="100%">
+            <Box
+              display="flex"
+              flexWrap="wrap"
+              justifyContent="space-between"
+              width="100%"
+            >
               <SaveButton
                 saving={formProps.saving}
                 handleSubmitWithRedirect={formProps.handleSubmitWithRedirect}
