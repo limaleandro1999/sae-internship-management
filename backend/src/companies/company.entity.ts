@@ -18,6 +18,11 @@ export class Company {
   @Column()
   address: string;
 
+  @Column({
+    nullable: true,
+  })
+  complement: string;
+
   @Column()
   district: string;
 
