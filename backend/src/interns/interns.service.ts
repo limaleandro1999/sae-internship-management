@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
-import { Raw, Repository } from 'typeorm';
+import { FindConditions, Raw, Repository } from 'typeorm';
 import { CreateInternDTO } from './dto/create-intern.dto';
 import { UpdateInternDTO } from './dto/update-intern.dto';
 import { Intern } from './intern.entity';
@@ -21,14 +21,18 @@ export class InternsService {
     campusId?: number,
   ): Promise<[Intern[], number]> {
     const { q } = filter;
-    const whereClause = q
-      ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) }
-      : null;
+    const whereClause: FindConditions<Intern>[] = q
+      ? 
+      [
+        { name: Raw(alias => `${alias} ILIKE '%${q}%'`), campus: campusId }, 
+        { registrationNumber: Raw(alias => `${alias} ILIKE '%${q}%'`), campus: campusId} 
+      ]
+      : [{ campus: campusId }];
     return this.internRepository.findAndCount({
       order,
       skip,
       take,
-      where: { ...whereClause, campus: campusId },
+      where: [ ...whereClause ],
       relations: ['user'],
     });
   }
