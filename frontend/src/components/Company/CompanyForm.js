@@ -56,7 +56,7 @@ function CompanyForm(props) {
                     />
                   </Box>
                 </Box>
-                <Box display="flex" flexWrap="wrap" flexWrap="wrap">
+                <Box display="flex" flexWrap="wrap">
                   <Box flex={1} mr="0.5em">
                     <TextInput
                       source="address"
