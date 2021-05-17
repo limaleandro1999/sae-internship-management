@@ -36,11 +36,11 @@ export default (type, params) => {
   }
 
   if (type === AUTH_ERROR) {
-    const status = params.status;
+    const status = params.response.status;
 
     if (status === 401 || status === 403) {
       localStorage.removeItem('token');
-      return Promise.reject();
+      return Promise.reject({ redirectTo: '/no-access' });
     }
 
     return Promise.resolve();
