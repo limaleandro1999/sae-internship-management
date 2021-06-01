@@ -3,6 +3,7 @@ import { Company } from 'src/companies/company.entity';
 import { Course } from 'src/courses/course.entity';
 import { Intern } from 'src/interns/intern.entity';
 import { InternshipAdvisor } from 'src/internship-advisors/internship-advisor.entity';
+import { InternshipProcess } from 'src/internship-processes/internship-process.entity';
 import { InternshipSector } from 'src/internship-sector/internship-sector.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
@@ -61,4 +62,10 @@ export class Campus {
     intern => intern.campus,
   )
   intern: Intern[];
+
+  @OneToMany(
+    () => InternshipProcess,
+    internshipProcess => internshipProcess.campus,
+  )
+  internshipProcesses: InternshipProcess[];
 }

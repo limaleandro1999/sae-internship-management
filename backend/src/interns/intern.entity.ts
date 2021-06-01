@@ -1,11 +1,13 @@
 import { Campus } from 'src/campi/campus.entity';
 import { Course } from 'src/courses/course.entity';
+import { InternshipProcess } from 'src/internship-processes/internship-process.entity';
 import { User } from 'src/users/user.entity';
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -77,4 +79,10 @@ export class Intern {
     { eager: true },
   )
   course: Course | number;
+
+  @OneToMany(
+    () => InternshipProcess,
+    internshipProcess => internshipProcess.intern,
+  )
+  internshipProcesses: InternshipProcess[];
 }

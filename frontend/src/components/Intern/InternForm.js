@@ -142,7 +142,7 @@ function InternForm(props) {
                   Curso
                 </Typography>
                 <Box display="flex">
-                  {formProps.saving ? (
+                  {isCreateForm ? (
                     <Box flex={1} mr="0.5em">
                       <ReferenceInput
                         source="course"

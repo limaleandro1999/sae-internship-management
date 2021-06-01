@@ -1,5 +1,5 @@
 import React from 'react';
-import { Admin, Resource, defaultTheme } from 'react-admin';
+import { Admin, Resource, defaultTheme, ListGuesser } from 'react-admin';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { merge } from 'lodash';
 import SvgIcon from '@material-ui/core/SvgIcon';
@@ -55,6 +55,7 @@ import CampusAdminConfirmation from './components/Confirmation-Page/CampusAdminC
 
 import api from './utils/api';
 import authProvider from './utils/authService';
+import { InternshipProcessCreate } from './components/Internship-Process';
 
 function AdminIcon(props) {
   return (
@@ -170,6 +171,12 @@ function App() {
                   options={{ label: 'Estagiários' }}
                 />
               ) : null,
+              <Resource
+                name="internship-processes"
+                list={ListGuesser}
+                create={InternshipProcessCreate}
+                options={{ label: 'Processo de Estágio' }}
+              />,
             ]}
           </Admin>
         </Route>
