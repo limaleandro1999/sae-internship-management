@@ -1,3 +1,3 @@
 export interface OrderClause {
-  [key: string]: "ASC" | "DESC"
+  [key: string]: 'ASC' | 'DESC';
 }

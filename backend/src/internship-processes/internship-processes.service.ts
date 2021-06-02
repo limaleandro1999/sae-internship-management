@@ -31,8 +31,8 @@ export class InternshipProcessesService {
     // TO-DO: Find a better way to do that
     const orderByClause = {
       column: `internship.${Object.keys(order)[0]}`,
-      order: Object.values(order)[0]
-    }
+      order: Object.values(order)[0],
+    };
     const whereClause = q
       ? {
           where:

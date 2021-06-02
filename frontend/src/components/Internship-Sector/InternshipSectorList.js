@@ -20,7 +20,11 @@ function InternshipSectorFilters(props) {
 
 function InternshipSectorList(props) {
   return (
-    <List {...props} title="Campus Admin" filters={<InternshipSectorFilters />}>
+    <List
+      {...props}
+      title="Setor de Estágio"
+      filters={<InternshipSectorFilters />}
+    >
       <Datagrid>
         <TextField source="name" label="Nome" />
         <TextField source="user.email" label="Email" />

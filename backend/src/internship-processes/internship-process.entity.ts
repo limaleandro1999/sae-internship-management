@@ -5,6 +5,10 @@ import { InternshipAdvisor } from 'src/internship-advisors/internship-advisor.en
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { WeeklySchedule } from './interfaces/weekly-schedule.interface';
 
+export enum InternshipProcessStatus {
+  ACTIVE = 'ACTIVE',
+  FINISHED = 'FINISHED',
+}
 @Entity()
 export class InternshipProcess {
   @PrimaryGeneratedColumn()
@@ -39,6 +43,13 @@ export class InternshipProcess {
 
   @Column()
   supervisorPosition: string;
+
+  @Column({
+    type: 'enum',
+    enum: InternshipProcessStatus,
+    default: InternshipProcessStatus.ACTIVE,
+  })
+  status: InternshipProcessStatus;
 
   @ManyToOne(
     () => Company,
