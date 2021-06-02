@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
+import { OrderClause } from 'src/common/interfaces/order-clause.interface';
 import { CompaniesService } from 'src/companies/companies.service';
 import { Company } from 'src/companies/company.entity';
 import { Intern } from 'src/interns/intern.entity';
@@ -19,13 +20,19 @@ export class InternshipProcessesService {
   ) {}
 
   async findAll(
-    order?,
+    order?: OrderClause,
     skip?: number,
     take?: number,
     filter?: BaseFilter,
     campusId?: number,
   ): Promise<[InternshipProcess[], number]> {
     const { q } = filter;
+
+    // TO-DO: Find a better way to do that
+    const orderByClause = {
+      column: `internship.${Object.keys(order)[0]}`,
+      order: Object.values(order)[0]
+    }
     const whereClause = q
       ? {
           where:
@@ -40,11 +47,12 @@ export class InternshipProcessesService {
     return await this.internshipProcessesRepository
       .createQueryBuilder('internship')
       .innerJoinAndSelect('internship.intern', 'intern')
+      .innerJoinAndSelect('internship.company', 'company')
+      .innerJoinAndSelect('internship.internshipAdvisor', 'internshipAdvisor')
       .where(whereClause.where, whereClause.parameters)
-      .orderBy('internship.id', 'ASC')
+      .orderBy(orderByClause.column, orderByClause.order)
       .skip(skip)
       .take(take)
-      .loadAllRelationIds()
       .getManyAndCount();
   }
 
