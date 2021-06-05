@@ -5,7 +5,7 @@ import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 import { EmailsService } from 'src/emails/emails.service';
 import { UserType } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
-import { FindConditions, Raw, Repository } from 'typeorm';
+import { FindConditions, In, Raw, Repository } from 'typeorm';
 import { CreateInternDTO } from './dto/create-intern.dto';
 import { UpdateInternDTO } from './dto/update-intern.dto';
 import { Intern } from './intern.entity';
@@ -26,16 +26,25 @@ export class InternsService {
     filter?: BaseFilter,
     campusId?: number,
   ): Promise<[Intern[], number]> {
-    const { q } = filter;
-    const whereClause: FindConditions<Intern>[] = q
-      ? [
-          { name: Raw(alias => `${alias} ILIKE '%${q}%'`), campus: campusId },
-          {
-            registrationNumber: Raw(alias => `${alias} ILIKE '%${q}%'`),
-            campus: campusId,
-          },
-        ]
-      : [{ campus: campusId }];
+    const { q, id } = filter;
+    let whereClause: FindConditions<Intern>[] = [{ campus: campusId }];
+
+    if (q) {
+      whereClause = [
+        { name: Raw(alias => `${alias} ILIKE '%${q}%'`), campus: campusId },
+        {
+          registrationNumber: Raw(alias => `${alias} ILIKE '%${q}%'`),
+          campus: campusId,
+        },
+      ];
+    }
+
+    if (id) {
+      whereClause = [
+        { id: In(id) },
+      ];
+    }
+
     return this.internRepository.findAndCount({
       order,
       skip,

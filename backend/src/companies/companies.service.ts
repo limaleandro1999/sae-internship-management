@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Raw } from 'typeorm';
+import { Repository, Raw, In } from 'typeorm';
 
 import { Company } from './company.entity';
 import { CreateCompanyDTO } from './dto/create-company.dto';
@@ -21,10 +21,16 @@ export class CompaniesService {
     filter?: BaseFilter,
     campusId?: number,
   ): Promise<[Company[], number]> {
-    const { q } = filter;
-    const whereClause = q
-      ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) }
-      : null;
+    const { q, id } = filter;
+    let whereClause = null;
+
+    if (q) {
+      whereClause = { name: Raw(alias => `${alias} ILIKE '%${q}%'`) };
+    }
+
+    if (id) {
+      whereClause = { id: In(id) };
+    }
     return this.companiesRepository.findAndCount({
       order,
       skip,

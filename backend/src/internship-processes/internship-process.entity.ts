@@ -51,6 +51,9 @@ export class InternshipProcess {
   })
   status: InternshipProcessStatus;
 
+  @Column({ default: false })
+  mandatory: boolean;
+
   @ManyToOne(
     () => Company,
     company => company.internshipProcesses,

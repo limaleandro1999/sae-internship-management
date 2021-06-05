@@ -1,3 +1,4 @@
 export interface BaseFilter {
-  q: string;
+  q?: string;
+  id?: number[];
 }
