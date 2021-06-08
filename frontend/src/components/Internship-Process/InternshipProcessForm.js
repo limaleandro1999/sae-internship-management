@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TabbedForm,
   FormTab,
@@ -8,21 +8,60 @@ import {
   BooleanInput,
   ReferenceInput,
   AutocompleteInput,
+  Button,
 } from 'react-admin';
 import { Typography, Box } from '@material-ui/core';
+import { InternFormFields } from '../Intern/InternForm';
 
 function InternshipProcessForm(props) {
+  const [showCreateIntern, setShowCreateIntern] = useState(false);
+
   return (
     <TabbedForm {...props}>
       <FormTab label="Estagiário">
-        <ReferenceInput
-          label="Estagiário"
-          source="intern"
-          reference="interns"
-          perPage={10}
-        >
-          <AutocompleteInput optionText="name" optionValue="id" />
-        </ReferenceInput>
+        {!showCreateIntern ? (
+          <Box display="flex" alignItems="center">
+            <ReferenceInput
+              label="Estagiário"
+              source="intern"
+              reference="interns"
+              perPage={10}
+            >
+              <AutocompleteInput
+                optionText={(intern) =>
+                  `${intern.name} - ${intern.registrationNumber}`
+                }
+                optionValue="id"
+              />
+            </ReferenceInput>
+            <Box mb="1em" ml="3em">
+              <Button
+                color="primary"
+                size="small"
+                variant="contained"
+                onClick={() => setShowCreateIntern(!showCreateIntern)}
+              >
+                <Typography variant="button" gutterBottom>
+                  Novo
+                </Typography>
+              </Button>
+            </Box>
+          </Box>
+        ) : (
+          <Box p="1em" width="100%">
+            <Button
+              color="primary"
+              size="small"
+              variant="contained"
+              onClick={() => setShowCreateIntern(!showCreateIntern)}
+            >
+              <Typography variant="button" gutterBottom>
+                Pesquisar
+              </Typography>
+            </Button>
+            <InternFormFields sourcePrefix="intern" isCreateForm={true} />
+          </Box>
+        )}
       </FormTab>
       <FormTab label="Empresa">
         <ReferenceInput
@@ -31,7 +70,10 @@ function InternshipProcessForm(props) {
           reference="companies"
           perPage={10}
         >
-          <AutocompleteInput optionText="name" optionValue="id" />
+          <AutocompleteInput
+            optionText={(company) => `${company.name} - ${company.cnpj}`}
+            optionValue="id"
+          />
         </ReferenceInput>
       </FormTab>
       <FormTab label="Contrato">
