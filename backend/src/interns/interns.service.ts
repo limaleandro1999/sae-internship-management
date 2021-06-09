@@ -40,9 +40,7 @@ export class InternsService {
     }
 
     if (id) {
-      whereClause = [
-        { id: In(id) },
-      ];
+      whereClause = [{ id: In(id) }];
     }
 
     return this.internRepository.findAndCount({

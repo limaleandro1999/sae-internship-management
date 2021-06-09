@@ -11,6 +11,10 @@ import { Intern } from 'src/interns/intern.entity';
 import { InternshipProcess } from 'src/internship-processes/internship-process.entity';
 
 export default () => ({
+  jwt: {
+    secret: process.env.JWT_SECRET ?? 'secretKey',
+    expiresIn: process.env.JWT_EXPIRES_IN ?? '1d',
+  },
   server: {
     port: process.env.PORT ?? 3000,
   },

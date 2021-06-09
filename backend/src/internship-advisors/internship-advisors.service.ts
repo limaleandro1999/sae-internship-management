@@ -21,10 +21,14 @@ export class InternshipAdvisorsService {
     campusId?: number,
   ): Promise<[InternshipAdvisor[], number]> {
     const { q, id } = filter;
-    let whereClause: FindConditions<InternshipAdvisor>[] = [{ campus: campusId }];
+    let whereClause: FindConditions<InternshipAdvisor>[] = [
+      { campus: campusId },
+    ];
 
     if (q) {
-      whereClause = [{ name: Raw(alias => `${alias} ILIKE '%${q}%'`), campus: campusId }];
+      whereClause = [
+        { name: Raw(alias => `${alias} ILIKE '%${q}%'`), campus: campusId },
+      ];
     }
 
     if (id) {

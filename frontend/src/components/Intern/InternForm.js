@@ -14,28 +14,6 @@ import { Typography, Box, Toolbar } from '@material-ui/core';
 
 import { ROLES } from '../../utils/roles';
 
-function InternForm(props) {
-  return (
-    <FormWithRedirect
-      {...props}
-      render={(formProps) => (
-        <form>
-          <InternFormFields isCreateForm={true} />
-          <Toolbar>
-            <Box display="flex" justifyContent="space-between" width="100%">
-              <SaveButton
-                saving={formProps.saving}
-                handleSubmitWithRedirect={formProps.handleSubmitWithRedirect}
-              />
-              <DeleteButton record={formProps.record} />
-            </Box>
-          </Toolbar>
-        </form>
-      )}
-    />
-  );
-}
-
 export function InternFormFields(props) {
   const userType = localStorage.getItem('role');
   const { isCreateForm = true, sourcePrefix = '' } = props;
@@ -205,6 +183,28 @@ export function InternFormFields(props) {
         </Box>
       </Box>
     </Box>
+  );
+}
+
+function InternForm(props) {
+  return (
+    <FormWithRedirect
+      {...props}
+      render={(formProps) => (
+        <form>
+          <InternFormFields isCreateForm={true} />
+          <Toolbar>
+            <Box display="flex" justifyContent="space-between" width="100%">
+              <SaveButton
+                saving={formProps.saving}
+                handleSubmitWithRedirect={formProps.handleSubmitWithRedirect}
+              />
+              <DeleteButton record={formProps.record} />
+            </Box>
+          </Toolbar>
+        </form>
+      )}
+    />
   );
 }
 

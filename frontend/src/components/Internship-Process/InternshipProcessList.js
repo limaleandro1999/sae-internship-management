@@ -6,6 +6,7 @@ import {
   TextInput,
   // EditButton,
   // ShowButton,
+  FunctionField,
   Filter,
 } from 'react-admin';
 
@@ -24,7 +25,12 @@ function InternshipProcessList(props) {
         <TextField source="intern.name" label="Nome" />
         <TextField source="intern.registrationNumber" label="Matrícula" />
         <TextField source="company.name" label="Empresa" />
-        <TextField source="status" label="Estado" />
+        <FunctionField
+          label="Estado"
+          render={({ status }) =>
+            status === 'ACTIVE' ? 'Em andamento' : 'Finalizado'
+          }
+        />
         {/* <ShowButton label="Mostrar" />
         <EditButton label="Editar" /> */}
       </Datagrid>
