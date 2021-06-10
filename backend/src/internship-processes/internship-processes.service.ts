@@ -19,7 +19,7 @@ export class InternshipProcessesService {
     private readonly internsService: InternsService,
   ) {}
 
-  async findAll(
+  findAll(
     order?: OrderClause,
     skip?: number,
     take?: number,
@@ -37,14 +37,14 @@ export class InternshipProcessesService {
       ? {
           where:
             '(intern.name ILIKE :name OR intern.registrationNumber ILIKE :registraionNumber) AND internship.campusId = :campusId',
-          parameters: { name: q, registraionNumber: q, campusId },
+          parameters: { name: `${q}%`, registraionNumber: `${q}%`, campusId },
         }
       : {
           where: 'internship.campusId = :campusId',
           parameters: { campusId },
         };
 
-    return await this.internshipProcessesRepository
+    return this.internshipProcessesRepository
       .createQueryBuilder('internship')
       .innerJoinAndSelect('internship.intern', 'intern')
       .innerJoinAndSelect('internship.company', 'company')
@@ -54,6 +54,16 @@ export class InternshipProcessesService {
       .skip(skip)
       .take(take)
       .getManyAndCount();
+  }
+
+  findOne(id: number | string): Promise<InternshipProcess> {
+    return this.internshipProcessesRepository
+      .createQueryBuilder('internship')
+      .innerJoinAndSelect('internship.intern', 'intern')
+      .innerJoinAndSelect('internship.company', 'company')
+      .innerJoinAndSelect('internship.internshipAdvisor', 'internshipAdvisor')
+      .where('internship.id = :id', { id })
+      .getOne();
   }
 
   async create(

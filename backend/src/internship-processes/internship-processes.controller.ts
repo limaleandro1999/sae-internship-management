@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { RequestWithQueryInfo } from 'src/common/interfaces/request-query-info.interface';
 import { CreateInternshipProcessDTO } from './dto/create-interniship-process.dto';
 import { InternshipProcess } from './internship-process.entity';
@@ -23,8 +23,13 @@ export class InternshipProcessesController {
     );
   }
 
+  @Get(':id')
+  findOne(@Param('id') id: string): Promise<InternshipProcess> {
+    return this.internshipProcessesService.findOne(id);
+  }
+
   @Post()
-  async create(
+  create(
     @Req() req,
     @Body() createInternshipProcessDTO: CreateInternshipProcessDTO,
   ) {
