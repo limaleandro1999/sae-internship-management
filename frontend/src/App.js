@@ -58,6 +58,7 @@ import authProvider from './utils/authService';
 import {
   InternshipProcessCreate,
   InternshipProcessList,
+  InternshipProcessShow,
 } from './components/Internship-Process';
 
 function AdminIcon(props) {
@@ -178,6 +179,7 @@ function App() {
                 name="internship-processes"
                 list={InternshipProcessList}
                 create={InternshipProcessCreate}
+                show={InternshipProcessShow}
                 options={{ label: 'Processo de Estágio' }}
               />,
             ]}

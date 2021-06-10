@@ -4,10 +4,11 @@ import {
   Datagrid,
   TextField,
   TextInput,
-  // EditButton,
-  // ShowButton,
   FunctionField,
   Filter,
+  BooleanField,
+  EditButton,
+  ShowButton,
 } from 'react-admin';
 
 function InternshipProcessFilters(props) {
@@ -25,14 +26,15 @@ function InternshipProcessList(props) {
         <TextField source="intern.name" label="Nome" />
         <TextField source="intern.registrationNumber" label="Matrícula" />
         <TextField source="company.name" label="Empresa" />
+        <BooleanField source="mandatory" label="Obrigatório" />
         <FunctionField
           label="Estado"
           render={({ status }) =>
             status === 'ACTIVE' ? 'Em andamento' : 'Finalizado'
           }
         />
-        {/* <ShowButton label="Mostrar" />
-        <EditButton label="Editar" /> */}
+        <ShowButton label="Mostrar" />
+        <EditButton label="Editar" />
       </Datagrid>
     </List>
   );

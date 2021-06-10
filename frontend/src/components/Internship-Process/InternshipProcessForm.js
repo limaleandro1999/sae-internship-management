@@ -23,7 +23,7 @@ function InternTabForm() {
         label="Estagiário"
         source="intern"
         reference="interns"
-        perPage={10}
+        perPage={5}
         fullWidth={true}
       >
         <AutocompleteInput
@@ -72,7 +72,7 @@ function CompanyTabFrom() {
         label="Empresa"
         source="company"
         reference="companies"
-        perPage={10}
+        perPage={5}
         fullWidth={true}
       >
         <AutocompleteInput
