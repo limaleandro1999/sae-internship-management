@@ -10,6 +10,14 @@ import {
 } from 'react-admin';
 import { Typography, Box } from '@material-ui/core';
 
+function InternshipProcessTitle({ record }) {
+  return (
+    <span>
+      {record ? `${record.intern?.name} - ${record.company?.name}` : ''}
+    </span>
+  );
+}
+
 function DailySchedule(props) {
   const { label, day } = props;
 
@@ -32,7 +40,7 @@ function DailySchedule(props) {
 
 function InternshipProcessShow(props) {
   return (
-    <Show {...props}>
+    <Show {...props} title={<InternshipProcessTitle />}>
       <TabbedShowLayout>
         <Tab label="Estágio">
           <Typography variant="h6" gutterBottom>

@@ -59,6 +59,7 @@ import {
   InternshipProcessCreate,
   InternshipProcessList,
   InternshipProcessShow,
+  InternshipProcessEdit,
 } from './components/Internship-Process';
 
 function AdminIcon(props) {
@@ -180,6 +181,7 @@ function App() {
                 list={InternshipProcessList}
                 create={InternshipProcessCreate}
                 show={InternshipProcessShow}
+                edit={InternshipProcessEdit}
                 options={{ label: 'Processo de Estágio' }}
               />,
             ]}

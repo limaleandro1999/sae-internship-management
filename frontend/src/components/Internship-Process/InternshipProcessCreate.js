@@ -5,7 +5,7 @@ import InternshipProcessForm from './InternshipProcessForm';
 function InternshipProcessCreate(props) {
   return (
     <Create {...props} title="Novo Processo de Estágio">
-      <InternshipProcessForm />
+      <InternshipProcessForm isCreateForm={true} />
     </Create>
   );
 }

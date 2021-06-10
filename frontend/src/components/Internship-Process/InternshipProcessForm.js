@@ -14,7 +14,7 @@ import { Typography, Box } from '@material-ui/core';
 import { InternFormFields } from '../Intern/InternForm';
 import { CompanyFormFields } from '../Company/CompanyForm';
 
-function InternTabForm() {
+function InternTabForm(props) {
   const [showCreateIntern, setShowCreateIntern] = useState(false);
 
   return !showCreateIntern ? (
@@ -110,14 +110,16 @@ function CompanyTabFrom() {
   );
 }
 
-function ContractTabForm() {
+function ContractTabForm(props) {
+  const { isCreateForm = false } = props;
+
   return (
     <Box p="1em" width="100%">
-      <Typography variant="h6" gutterBottom>
-        Professor Orientador
-      </Typography>
-      <Box display="flex">
-        <Box flex={2} mr="1em">
+      {isCreateForm ? (
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            Professor Orientador
+          </Typography>
           <ReferenceInput
             label="Professor Orientador"
             source="internshipAdvisor"
@@ -127,6 +129,11 @@ function ContractTabForm() {
           >
             <AutocompleteInput optionText="name" optionValue="id" />
           </ReferenceInput>
+        </Box>
+      ) : null}
+
+      <Box display="flex">
+        <Box flex={2} mr="1em">
           <Typography variant="h6" gutterBottom>
             Período de Estágio
           </Typography>
@@ -304,17 +311,26 @@ function ContractTabForm() {
 }
 
 function InternshipProcessForm(props) {
+  const { isCreateForm = false } = props;
+
   return (
+    /**
+     * Yeah, I don't like it either, but it worked
+     */
     <TabbedForm {...props}>
-      <FormTab label="Estagiário">
-        <InternTabForm />
-      </FormTab>
-      <FormTab label="Empresa">
-        <CompanyTabFrom />
-      </FormTab>
-      <FormTab label="Contrato">
-        <ContractTabForm />
-      </FormTab>
+      {[
+        <FormTab label="Estagiário">
+          <InternTabForm />
+        </FormTab>,
+        <FormTab label="Empresa">
+          <CompanyTabFrom />
+        </FormTab>,
+        <FormTab label="Contrato">
+          <ContractTabForm isCreateForm={isCreateForm} />
+        </FormTab>,
+      ].filter((item, index) =>
+        !(!isCreateForm && index !== 2) ? item : null
+      )}
     </TabbedForm>
   );
 }
