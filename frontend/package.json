@@ -18,7 +18,9 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "serve": "^11.3.2",
-    "styled-components": "^5.2.0"
+    "styled-components": "^5.2.0",
+    "sweetalert2": "^11.0.16",
+    "sweetalert2-react-content": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

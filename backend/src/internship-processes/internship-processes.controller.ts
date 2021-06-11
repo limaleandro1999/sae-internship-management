@@ -38,4 +38,9 @@ export class InternshipProcessesController {
       req.user.campusId,
     );
   }
+
+  @Post(':id/finish')
+  async finishInternshipProcess(@Param('id') id: string) {
+    return this.internshipProcessesService.finishInternshipProcess(id);
+  }
 }

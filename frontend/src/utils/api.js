@@ -83,7 +83,7 @@ export default {
   },
 };
 
-function getAuthHeaders() {
+export function getAuthHeaders() {
   return {
     authorization: `Bearer ${localStorage.getItem('token')}`,
   };

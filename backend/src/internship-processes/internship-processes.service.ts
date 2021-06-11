@@ -8,7 +8,10 @@ import { Intern } from 'src/interns/intern.entity';
 import { InternsService } from 'src/interns/interns.service';
 import { Repository } from 'typeorm';
 import { CreateInternshipProcessDTO } from './dto/create-interniship-process.dto';
-import { InternshipProcess } from './internship-process.entity';
+import {
+  InternshipProcess,
+  InternshipProcessStatus,
+} from './internship-process.entity';
 
 @Injectable()
 export class InternshipProcessesService {
@@ -95,5 +98,20 @@ export class InternshipProcessesService {
     });
 
     return this.internshipProcessesRepository.save(internshipProcessObj);
+  }
+
+  // TO-DO: Add checks for tasks and reports
+  async finishInternshipProcess(
+    id: number | string,
+  ): Promise<InternshipProcess> {
+    const result = await this.internshipProcessesRepository.update(id, {
+      status: InternshipProcessStatus.FINISHED,
+    });
+
+    if (result.affected) {
+      return this.internshipProcessesRepository.findOne(id);
+    }
+
+    return null;
   }
 }
