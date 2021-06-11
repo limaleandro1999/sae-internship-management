@@ -27,6 +27,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { CompaniesModule } from './companies/companies.module';
 import { InternshipAdvisorsModule } from './internship-advisors/internship-advisors.module';
 import { InternsModule } from './interns/interns.module';
+import { InternshipProcessesModule } from './internship-processes/internship-processes.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ load: [environment] }),
@@ -59,6 +60,7 @@ import { InternsModule } from './interns/interns.module';
     CompaniesModule,
     InternshipAdvisorsModule,
     InternsModule,
+    InternshipProcessesModule,
   ],
   controllers: [AppController],
   providers: [

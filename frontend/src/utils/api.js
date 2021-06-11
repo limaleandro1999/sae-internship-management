@@ -24,14 +24,15 @@ export default {
   },
   getOne: (resource, params) =>
     api.get(`/${resource}/${params.id}`, { headers: { ...getAuthHeaders() } }),
-  getMany: (resource, params) => {
+  getMany: async (resource, params) => {
     const query = {
       filter: JSON.stringify({ id: params.ids }),
     };
-
-    return api.get(`/${resource}?${stringify(query)}`, {
+    const { data } = await api.get(`/${resource}?${stringify(query)}`, {
       headers: { ...getAuthHeaders() },
     });
+
+    return { data: data[0] };
   },
 
   getManyReference: async (resource, params) => {
@@ -82,7 +83,7 @@ export default {
   },
 };
 
-function getAuthHeaders() {
+export function getAuthHeaders() {
   return {
     authorization: `Bearer ${localStorage.getItem('token')}`,
   };

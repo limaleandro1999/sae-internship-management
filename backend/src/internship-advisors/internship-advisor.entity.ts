@@ -3,11 +3,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Campus } from 'src/campi/campus.entity';
 import { User } from 'src/users/user.entity';
+import { InternshipProcess } from 'src/internship-processes/internship-process.entity';
 
 @Entity()
 export class InternshipAdvisor {
@@ -33,4 +35,10 @@ export class InternshipAdvisor {
   )
   @JoinColumn()
   user: User | number;
+
+  @OneToMany(
+    () => InternshipProcess,
+    internshipProcess => internshipProcess.internshipAdvisor,
+  )
+  internshipProcesses: InternshipProcess[];
 }

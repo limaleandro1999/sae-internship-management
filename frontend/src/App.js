@@ -55,6 +55,12 @@ import CampusAdminConfirmation from './components/Confirmation-Page/CampusAdminC
 
 import api from './utils/api';
 import authProvider from './utils/authService';
+import {
+  InternshipProcessCreate,
+  InternshipProcessList,
+  InternshipProcessShow,
+  InternshipProcessEdit,
+} from './components/Internship-Process';
 
 function AdminIcon(props) {
   return (
@@ -170,6 +176,14 @@ function App() {
                   options={{ label: 'Estagiários' }}
                 />
               ) : null,
+              <Resource
+                name="internship-processes"
+                list={InternshipProcessList}
+                create={InternshipProcessCreate}
+                show={InternshipProcessShow}
+                edit={InternshipProcessEdit}
+                options={{ label: 'Processo de Estágio' }}
+              />,
             ]}
           </Admin>
         </Route>

@@ -8,8 +8,13 @@ import { User } from '../users/user.entity';
 import { Company } from 'src/companies/company.entity';
 import { InternshipAdvisor } from 'src/internship-advisors/internship-advisor.entity';
 import { Intern } from 'src/interns/intern.entity';
+import { InternshipProcess } from 'src/internship-processes/internship-process.entity';
 
 export default () => ({
+  jwt: {
+    secret: process.env.JWT_SECRET ?? 'secretKey',
+    expiresIn: process.env.JWT_EXPIRES_IN ?? '1d',
+  },
   server: {
     port: process.env.PORT ?? 3000,
   },
@@ -38,6 +43,7 @@ export default () => ({
       Company,
       InternshipAdvisor,
       Intern,
+      InternshipProcess,
     ],
   },
   mailer: {

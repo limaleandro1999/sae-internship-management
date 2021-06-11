@@ -19,7 +19,7 @@ function CourseFilters(props) {
 
 function CourseList(props) {
   return (
-    <List {...props} title="Course" filters={<CourseFilters />}>
+    <List {...props} title="Curso" filters={<CourseFilters />}>
       <Datagrid>
         <TextField source="name" label="Nome" />
         <ShowButton label="Mostrar" />
