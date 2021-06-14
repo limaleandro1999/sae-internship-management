@@ -59,7 +59,7 @@ export class InternsService {
   async create(intern: CreateInternDTO, campusId?: number): Promise<Intern> {
     const internUser = await this.userService.create({
       email: intern.email,
-      type: UserType.INTERNSHIP_ADVISOR,
+      type: UserType.INTERN,
       active: false,
     });
 

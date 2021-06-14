@@ -41,7 +41,7 @@ function Home() {
         </Typography>
         <LinkList>
           <li>
-            <Link to="/admin">
+            <Link to="/internship-sector/admin">
               <Typography variant="body1">Setor de estágio</Typography>
             </Link>
           </li>
@@ -51,7 +51,7 @@ function Home() {
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/interns/admin">
               <Typography variant="body1">Estagiário</Typography>
             </Link>
           </li>

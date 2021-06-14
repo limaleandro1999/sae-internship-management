@@ -52,6 +52,8 @@ import {
   InternshipProcessShow,
   InternshipProcessEdit,
 } from '../../components/Internship-Process';
+import { CLIENT_ALLOWED_ROLES } from '../../utils/roles';
+import { useHistory } from 'react-router-dom';
 
 function AdminIcon(props) {
   return (
@@ -65,6 +67,20 @@ function AdminIcon(props) {
 }
 
 function InternshipSectorModule({ theme, dataProvider, authProvider }) {
+  const userRole = localStorage.getItem('role');
+  const currentClient = window.location.pathname.split('/')[1];
+  const history = useHistory();
+
+  if (!CLIENT_ALLOWED_ROLES[currentClient].includes(userRole)) {
+    const clientIndex = Object.values(
+      CLIENT_ALLOWED_ROLES
+    ).findIndex((allowedRoles) => allowedRoles.includes(userRole));
+    const clientArray = Object.keys(CLIENT_ALLOWED_ROLES);
+    const userClient = clientArray[clientIndex];
+
+    history.push(`/${userClient}/admin`);
+  }
+
   return (
     <Admin
       theme={theme}
