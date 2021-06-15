@@ -71,7 +71,7 @@ function InternshipSectorModule({ theme, dataProvider, authProvider }) {
   const currentClient = window.location.pathname.split('/')[1];
   const history = useHistory();
 
-  if (!CLIENT_ALLOWED_ROLES[currentClient].includes(userRole)) {
+  if (userRole && !CLIENT_ALLOWED_ROLES[currentClient].includes(userRole)) {
     const clientIndex = Object.values(
       CLIENT_ALLOWED_ROLES
     ).findIndex((allowedRoles) => allowedRoles.includes(userRole));

@@ -5,7 +5,9 @@ import { Company } from 'src/companies/company.entity';
 import { EmailsService } from 'src/emails/emails.service';
 import { Intern } from 'src/interns/intern.entity';
 import { InternsService } from 'src/interns/interns.service';
+import { ReportsService } from 'src/reports/reports.service';
 import { SemesterReport } from 'src/reports/semester-report.entity';
+import { Task } from 'src/tasks/task.entity';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { InternshipProcess } from './internship-process.entity';
@@ -20,6 +22,7 @@ import { InternshipProcessesService } from './internship-processes.service';
       Company,
       User,
       SemesterReport,
+      Task,
     ]),
   ],
   controllers: [InternshipProcessesController],
@@ -29,6 +32,7 @@ import { InternshipProcessesService } from './internship-processes.service';
     CompaniesService,
     UsersService,
     EmailsService,
+    ReportsService,
   ],
 })
 export class InternshipProcessesModule {}

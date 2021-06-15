@@ -7,8 +7,12 @@ import {
   BooleanField,
   DateField,
   ReferenceField,
+  ArrayField,
+  Datagrid,
+  useRecordContext,
 } from 'react-admin';
 import { Typography, Box } from '@material-ui/core';
+import moment from 'moment';
 
 function InternshipProcessTitle({ record }) {
   return (
@@ -36,6 +40,26 @@ function DailySchedule(props) {
       </Box>
     </>
   );
+}
+
+function ReportStatus(props) {
+  const { delivered, deadline } = useRecordContext();
+  const parsedDeadline = moment(deadline);
+  const todayDate = moment();
+  const todayDeadlineDiff = parsedDeadline.diff(todayDate, 'days');
+  const status = delivered
+    ? 'Entregue'
+    : todayDeadlineDiff > 0
+    ? 'Pendente'
+    : 'Atrasado';
+  const statusColor =
+    status === 'Entregue'
+      ? '#189108'
+      : status === 'Pendente'
+      ? '#EB8D00'
+      : '#EB0037';
+
+  return <Typography style={{ color: statusColor }}>{status}</Typography>;
 }
 
 function InternshipProcessShow(props) {
@@ -96,7 +120,22 @@ function InternshipProcessShow(props) {
           <DailySchedule label="Quinta" day="thursday" />
           <DailySchedule label="Sexta" day="friday" />
         </Tab>
-        <Tab label="Relatórios"></Tab>
+        <Tab label="Relatórios">
+          <ArrayField source="semesterReports" label="Relatórios Semestrais">
+            <Datagrid>
+              <DateField source="deadline" label="Prazo de entrega" />
+              <DateField
+                source="startDate"
+                label="Início do período avaliativo"
+              />
+              <DateField
+                source="finishDate"
+                label="Fim do período avaliativo"
+              />
+              <ReportStatus />
+            </Datagrid>
+          </ArrayField>
+        </Tab>
         <Tab label="Tarefas"></Tab>
       </TabbedShowLayout>
     </Show>

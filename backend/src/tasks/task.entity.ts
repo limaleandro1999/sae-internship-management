@@ -1,3 +1,4 @@
+import { InternshipProcess } from 'src/internship-processes/internship-process.entity';
 import { MonthlyReport } from 'src/reports/monthly-report.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -26,7 +27,13 @@ export class Task {
 
   @ManyToOne(
     () => MonthlyReport,
-    internshipProcess => internshipProcess.tasks,
+    monthlyReport => monthlyReport.tasks,
   )
   monthlyReport: MonthlyReport;
+
+  @ManyToOne(
+    () => InternshipProcess,
+    internshipProcess => internshipProcess.tasks,
+  )
+  internshipProcess: InternshipProcess;
 }

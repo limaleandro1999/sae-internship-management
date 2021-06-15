@@ -102,6 +102,10 @@ export class InternsService {
         'internshipAdvisor',
       )
       .innerJoinAndSelect('internshipAdvisor.user', 'internshipAdvisorUser')
+      .innerJoinAndSelect(
+        'internshipProcesses.semesterReports',
+        'semesterReports',
+      )
       .where('internshipProcesses.status = :status AND intern.id = :id', {
         status: InternshipProcessStatus.ACTIVE,
         id: user?.intern?.id,

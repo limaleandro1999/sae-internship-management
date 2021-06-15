@@ -1,18 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as dayjs from 'dayjs';
 import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 import { OrderClause } from 'src/common/interfaces/order-clause.interface';
 import { CompaniesService } from 'src/companies/companies.service';
 import { Company } from 'src/companies/company.entity';
 import { Intern } from 'src/interns/intern.entity';
 import { InternsService } from 'src/interns/interns.service';
+import { ReportsService } from 'src/reports/reports.service';
+import { SemesterReport } from 'src/reports/semester-report.entity';
 import { Repository } from 'typeorm';
 import { CreateInternshipProcessDTO } from './dto/create-interniship-process.dto';
 import {
   InternshipProcess,
   InternshipProcessStatus,
 } from './internship-process.entity';
-
 @Injectable()
 export class InternshipProcessesService {
   constructor(
@@ -20,6 +22,7 @@ export class InternshipProcessesService {
     private internshipProcessesRepository: Repository<InternshipProcess>,
     private readonly companiesService: CompaniesService,
     private readonly internsService: InternsService,
+    private readonly reportsService: ReportsService,
   ) {}
 
   findAll(
@@ -65,8 +68,49 @@ export class InternshipProcessesService {
       .innerJoinAndSelect('internship.intern', 'intern')
       .innerJoinAndSelect('internship.company', 'company')
       .innerJoinAndSelect('internship.internshipAdvisor', 'internshipAdvisor')
+      .innerJoinAndSelect('internship.semesterReports', 'semesterReports')
       .where('internship.id = :id', { id })
       .getOne();
+  }
+
+  async createSemesterReports(internshipProcess: InternshipProcess) {
+    const { startDate, finishDate } = internshipProcess;
+    const parsedStartDate = dayjs(startDate);
+    const parsedFinishtDate = dayjs(finishDate);
+    const monthDiff = dayjs(parsedFinishtDate).diff(parsedStartDate, 'months');
+    const numberOfReports = Math.floor(monthDiff / 6);
+    const generatedReports: SemesterReport[] = [];
+
+    let lastStartDate = parsedStartDate;
+    let lastFinishDate = dayjs(lastStartDate)
+      .add(6, 'months')
+      .subtract(1, 'day');
+
+    async function* asyncGenerator() {
+      let i = 0;
+      while (i < numberOfReports) {
+        yield i++;
+      }
+    }
+
+    for await (const _num of asyncGenerator()) {
+      const report = await this.reportsService.create({
+        deadline: lastFinishDate.toDate(),
+        finishDate: lastFinishDate.toDate(),
+        startDate: lastStartDate.toDate(),
+        delivered: false,
+        internshipProcess: internshipProcess.id,
+      });
+
+      generatedReports.push(report);
+
+      lastStartDate = dayjs(lastFinishDate).add(1, 'day');
+      lastFinishDate = dayjs(lastStartDate)
+        .add(6, 'months')
+        .subtract(1, 'day');
+    }
+
+    return generatedReports;
   }
 
   async create(
@@ -97,7 +141,14 @@ export class InternshipProcessesService {
       campus: campusId,
     });
 
-    return this.internshipProcessesRepository.save(internshipProcessObj);
+    const createdInternshipProcess = await this.internshipProcessesRepository.save(
+      internshipProcessObj,
+    );
+    const generatedReports = await this.createSemesterReports(
+      createdInternshipProcess,
+    );
+
+    return { ...createdInternshipProcess, semesterReports: generatedReports };
   }
 
   // TO-DO: Add checks for tasks and reports

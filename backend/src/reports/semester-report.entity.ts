@@ -10,11 +10,11 @@ export class SemesterReport {
   @Column({ type: 'date' })
   deadline: Date;
 
-  @Column()
+  @Column({ default: false })
   delivered: boolean;
 
-  @Column()
-  delivereDate: Date;
+  @Column({ nullable: true })
+  deliveredDate?: Date;
 
   @Column()
   startDate: Date;
@@ -22,18 +22,18 @@ export class SemesterReport {
   @Column()
   finishDate: Date;
 
-  @Column()
-  activities: string;
+  @Column({ nullable: true })
+  activities?: string;
 
-  @Column()
-  comments: string;
+  @Column({ nullable: true })
+  comments?: string;
 
-  @Column({ type: 'json' })
-  evaluation: EvaluationTopics;
+  @Column({ type: 'json', nullable: true })
+  evaluation?: EvaluationTopics;
 
   @ManyToOne(
     () => InternshipProcess,
     internshipProcess => internshipProcess.semesterReports,
   )
-  internshipProcess: InternshipProcess;
+  internshipProcess: number | InternshipProcess;
 }

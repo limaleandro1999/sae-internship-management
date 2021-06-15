@@ -18,15 +18,31 @@ function TasksTable({ data = [] }) {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Data</TableCell>
+            <TableCell>Prazo de entrega</TableCell>
+            <TableCell>Início do período avaliativo</TableCell>
+            <TableCell>Fim do período avaliativo</TableCell>
             <TableCell align="right">Estado</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map(({ date, status, id }) => (
+          {data.map(({ deadline, startDate, finishDate, status, id }) => (
             <TableRow key={id}>
-              <TableCell>{date}</TableCell>
-              <TableCell align="right">{status}</TableCell>
+              <TableCell>{moment(deadline).format('DD/MM/YYY')}</TableCell>
+              <TableCell>{moment(startDate).format('DD/MM/YYY')}</TableCell>
+              <TableCell>{moment(finishDate).format('DD/MM/YYY')}</TableCell>
+              <TableCell
+                align="right"
+                style={{
+                  color:
+                    status === 'Entregue'
+                      ? '#189108'
+                      : status === 'Pendente'
+                      ? '#EB8D00'
+                      : '#EB0037',
+                }}
+              >
+                {status}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -89,18 +105,46 @@ function InternCard({ intern }) {
 
 function InternDashboard(props) {
   const [internInfo, setInternInfo] = useState(null);
+  const [reports, setReports] = useState([]);
 
-  useEffect(async () => {
-    const { data } = await api.get('interns/me', { headers: getAuthHeaders() });
-    setInternInfo(data);
+  useEffect(() => {
+    async function getInternData() {
+      const { data } = await api.get('interns/me', {
+        headers: getAuthHeaders(),
+      });
+      setInternInfo(data);
+    }
+
+    getInternData();
   }, []);
 
-  console.log(internInfo);
-  const reports = [
-    { id: 1, date: '04/04/2020', status: 'Entregue' },
-    { id: 2, date: '04/10/2020', status: 'Atraso' },
-    { id: 3, date: '04/04/2021', status: 'Pendente' },
-  ];
+  useEffect(() => {
+    const semesterReports = internInfo?.internshipProcesses[0]?.semesterReports;
+    const reportsArray = semesterReports
+      ? semesterReports.map(
+          ({ deadline, startDate, finishDate, delivered, id }) => {
+            const parsedDeadline = moment(deadline);
+            const todayDate = moment();
+            const todayDeadlineDiff = parsedDeadline.diff(todayDate, 'days');
+            const status = delivered
+              ? 'Entregue'
+              : todayDeadlineDiff > 0
+              ? 'Pendente'
+              : 'Atrasado';
+
+            return {
+              deadline,
+              startDate,
+              finishDate,
+              status,
+              id,
+            };
+          }
+        )
+      : [];
+
+    setReports(reportsArray);
+  }, [internInfo]);
 
   return (
     <Box display="flex" flexDirection="column" padding="50px">
@@ -124,18 +168,20 @@ function InternDashboard(props) {
           <Typography variant="h5">Seus Relatórios</Typography>
           <TasksTable data={reports} />
         </Box>
-        <Box
-          mt="100px"
-          width="500px"
-          style={{
-            'box-shadow':
-              '0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)',
-            padding: '10px',
-          }}
-        >
-          <Typography variant="h5">Suas Tarefas</Typography>
-          <TasksTable data={reports} />
-        </Box>
+        {internInfo?.internshipProcesses[0]?.mandatory ? (
+          <Box
+            mt="100px"
+            width="500px"
+            style={{
+              'box-shadow':
+                '0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)',
+              padding: '10px',
+            }}
+          >
+            <Typography variant="h5">Suas Tarefas</Typography>
+            <TasksTable data={reports} />
+          </Box>
+        ) : null}
       </Box>
     </Box>
   );
