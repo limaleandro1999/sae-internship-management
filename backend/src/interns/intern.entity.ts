@@ -68,7 +68,7 @@ export class Intern {
   @OneToOne(
     () => User,
     user => user.intern,
-    { eager: true },
+    // { eager: true },
   )
   @JoinColumn()
   user: User | number;

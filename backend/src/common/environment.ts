@@ -9,6 +9,9 @@ import { Company } from 'src/companies/company.entity';
 import { InternshipAdvisor } from 'src/internship-advisors/internship-advisor.entity';
 import { Intern } from 'src/interns/intern.entity';
 import { InternshipProcess } from 'src/internship-processes/internship-process.entity';
+import { SemesterReport } from 'src/reports/semester-report.entity';
+import { MonthlyReport } from 'src/reports/monthly-report.entity';
+import { Task } from 'src/tasks/task.entity';
 
 export default () => ({
   jwt: {
@@ -44,6 +47,9 @@ export default () => ({
       InternshipAdvisor,
       Intern,
       InternshipProcess,
+      SemesterReport,
+      MonthlyReport,
+      Task,
     ],
   },
   mailer: {

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import environment from 'src/common/environment';
 import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 import { EmailsService } from 'src/emails/emails.service';
+import { InternshipProcessStatus } from 'src/internship-processes/internship-process.entity';
 import { UserType } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { FindConditions, In, Raw, Repository } from 'typeorm';
@@ -87,5 +88,24 @@ export class InternsService {
   async update(id: number | string, internshipAdvisor: UpdateInternDTO) {
     await this.internRepository.update(id, internshipAdvisor);
     return this.findOne(id);
+  }
+
+  async getInternInfo(email: string) {
+    const user = await this.userService.findUser(email);
+
+    return this.internRepository
+      .createQueryBuilder('intern')
+      .innerJoinAndSelect('intern.internshipProcesses', 'internshipProcesses')
+      .innerJoinAndSelect('internshipProcesses.company', 'company')
+      .innerJoinAndSelect(
+        'internshipProcesses.internshipAdvisor',
+        'internshipAdvisor',
+      )
+      .innerJoinAndSelect('internshipAdvisor.user', 'internshipAdvisorUser')
+      .where('internshipProcesses.status = :status AND intern.id = :id', {
+        status: InternshipProcessStatus.ACTIVE,
+        id: user?.intern?.id,
+      })
+      .getOne();
   }
 }

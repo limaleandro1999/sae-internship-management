@@ -21,6 +21,11 @@ export class InternsController {
     );
   }
 
+  @Get('/me')
+  getSignedInInternInfo(@Req() req: RequestWithQueryInfo) {
+    return this.internsService.getInternInfo(req.user.email);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Intern> {
     return this.internsService.findOne(id);
