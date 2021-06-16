@@ -93,7 +93,8 @@ export class InternshipProcessesService {
       }
     }
 
-    for await (const _num of asyncGenerator()) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    for await (const _ of asyncGenerator()) {
       const report = await this.reportsService.create({
         deadline: lastFinishDate.toDate(),
         finishDate: lastFinishDate.toDate(),

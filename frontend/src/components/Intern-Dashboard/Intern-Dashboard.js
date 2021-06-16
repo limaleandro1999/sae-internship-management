@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import moment from 'moment';
 import { api, getAuthHeaders } from '../../utils/api';
+import { useHistory } from 'react-router-dom';
 
 function TasksTable({ data = [] }) {
   return (
@@ -106,17 +107,26 @@ function InternCard({ intern }) {
 function InternDashboard(props) {
   const [internInfo, setInternInfo] = useState(null);
   const [reports, setReports] = useState([]);
+  const history = useHistory();
 
   useEffect(() => {
     async function getInternData() {
-      const { data } = await api.get('interns/me', {
+      const { data, status } = await api.get('interns/me', {
         headers: getAuthHeaders(),
-      });
+        validateStatus: false,
+      });  
+
+      if (status === 401 || status === 403) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        return history.push('/no-access');
+      }
+
       setInternInfo(data);
     }
 
     getInternData();
-  }, []);
+  }, [history]);
 
   useEffect(() => {
     const semesterReports = internInfo?.internshipProcesses[0]?.semesterReports;
@@ -147,14 +157,14 @@ function InternDashboard(props) {
   }, [internInfo]);
 
   return (
-    <Box display="flex" flexDirection="column" padding="50px">
-      <Box display="flex" width="100%">
+    <Box padding="50px">
+      <Box display="flex" flexWrap="wrap">
         <InternCard intern={internInfo} />
         <InternshipTutorCard
           internshipProcess={internInfo?.internshipProcesses[0]}
         />
       </Box>
-      <Box display="flex">
+      <Box display="flex" flexWrap="wrap">
         <Box
           mt="100px"
           mr="40px"
@@ -162,7 +172,7 @@ function InternDashboard(props) {
           style={{
             'box-shadow':
               '0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)',
-            padding: '10px',
+            padding: '20px',
           }}
         >
           <Typography variant="h5">Seus Relatórios</Typography>
@@ -175,7 +185,7 @@ function InternDashboard(props) {
             style={{
               'box-shadow':
                 '0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)',
-              padding: '10px',
+              padding: '20px',
             }}
           >
             <Typography variant="h5">Suas Tarefas</Typography>

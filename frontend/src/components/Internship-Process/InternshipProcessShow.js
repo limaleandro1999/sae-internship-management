@@ -42,7 +42,7 @@ function DailySchedule(props) {
   );
 }
 
-function ReportStatus(props) {
+export function ReportStatus(props) {
   const { delivered, deadline } = useRecordContext();
   const parsedDeadline = moment(deadline);
   const todayDate = moment();

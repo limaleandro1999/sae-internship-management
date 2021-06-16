@@ -26,7 +26,7 @@ export default async (type, params) => {
     }
 
     const { access_token, type } = await response.json();
-    console.log(currentClient, type);
+     
     if (!CLIENT_ALLOWED_ROLES[currentClient].includes(type)) {
       throw new Error('User not allowed');
     }
