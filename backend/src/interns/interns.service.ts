@@ -112,4 +112,13 @@ export class InternsService {
       })
       .getOne();
   }
+
+  async getInternClasses(email: string) {
+    const user = await this.userService.findUser(email);
+    const intern = await this.internRepository.findOne(user?.intern?.id, {
+      select: ['id', 'classesSchedule'],
+    });
+
+    return intern.classesSchedule;
+  }
 }

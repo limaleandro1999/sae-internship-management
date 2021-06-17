@@ -36,6 +36,14 @@ export class InternsController {
     return this.reportsService.getInternReports(req.user.email, skip, take);
   }
 
+  @Get('/classes')
+  async getInternClassesSchedule(@Req() req: RequestWithQueryInfo) {
+    const classes = Object.values(
+      await this.internsService.getInternClasses(req.user.email),
+    ).map((classDay, index) => ({ ...classDay, id: index }));
+    return [Object.values(classes), 5];
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Intern> {
     return this.internsService.findOne(id);
