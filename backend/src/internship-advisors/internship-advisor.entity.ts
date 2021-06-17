@@ -22,6 +22,11 @@ export class InternshipAdvisor {
   @Column()
   phone: string;
 
+  @Column({
+    nullable: true,
+  })
+  siape: string;
+
   @ManyToOne(
     () => Campus,
     campus => campus.internshipAdvisors,

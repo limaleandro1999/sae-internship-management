@@ -62,7 +62,9 @@ function ClassesGrid(props) {
           <TableRow>
             <TableCell>{times[index]}</TableCell>
             {time.map((dayTime, index) => (
-              <TableCell key={index}>{dayTime ? <Check /> : <Close />}</TableCell>
+              <TableCell key={index}>
+                {dayTime ? <Check /> : <Close />}
+              </TableCell>
             ))}
           </TableRow>
         </TableBody>

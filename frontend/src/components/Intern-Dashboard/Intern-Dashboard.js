@@ -28,9 +28,9 @@ function TasksTable({ data = [] }) {
         <TableBody>
           {data.map(({ deadline, startDate, finishDate, status, id }) => (
             <TableRow key={id}>
-              <TableCell>{moment(deadline).format('DD/MM/YYY')}</TableCell>
-              <TableCell>{moment(startDate).format('DD/MM/YYY')}</TableCell>
-              <TableCell>{moment(finishDate).format('DD/MM/YYY')}</TableCell>
+              <TableCell>{moment(deadline).format('DD/MM/YYYY')}</TableCell>
+              <TableCell>{moment(startDate).format('DD/MM/YYYY')}</TableCell>
+              <TableCell>{moment(finishDate).format('DD/MM/YYYY')}</TableCell>
               <TableCell
                 align="right"
                 style={{
