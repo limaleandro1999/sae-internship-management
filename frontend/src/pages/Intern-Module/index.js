@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { CLIENT_ALLOWED_ROLES } from '../../utils/roles';
 import { InternDashboard } from '../../components/Intern-Dashboard';
 import { ReportList } from '../../components/Reports';
+import { InternClassesScheduleList } from '../../components/Intern-Classes-Schedule';
 
 function InternModule({ theme, dataProvider, authProvider }) {
   const userRole = localStorage.getItem('role');
@@ -16,7 +17,7 @@ function InternModule({ theme, dataProvider, authProvider }) {
     ).findIndex((allowedRoles) => allowedRoles.includes(userRole));
     const clientArray = Object.keys(CLIENT_ALLOWED_ROLES);
     const userClient = clientArray[clientIndex];
-    
+
     history.push(`/${userClient}/admin`);
   }
 
@@ -35,6 +36,11 @@ function InternModule({ theme, dataProvider, authProvider }) {
         name="interns/reports"
         options={{ label: 'Relatórios' }}
         list={ReportList}
+      />
+      <Resource
+        name="interns/classes"
+        options={{ label: 'Horários de aula' }}
+        list={InternClassesScheduleList}
       />
     </Admin>
   );

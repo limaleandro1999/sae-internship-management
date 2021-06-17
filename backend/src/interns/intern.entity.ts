@@ -11,6 +11,50 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { ClassesSchedule } from './interfaces/classes-schedule.interface';
+
+const classesScheduleDefaultValue: ClassesSchedule = {
+  monday: {
+    morningAB: false,
+    morningCD: false,
+    afternoonAB: false,
+    afternoonCD: false,
+    nightAB: false,
+    nightCD: false,
+  },
+  tuesday: {
+    morningAB: false,
+    morningCD: false,
+    afternoonAB: false,
+    afternoonCD: false,
+    nightAB: false,
+    nightCD: false,
+  },
+  wednesday: {
+    morningAB: false,
+    morningCD: false,
+    afternoonAB: false,
+    afternoonCD: false,
+    nightAB: false,
+    nightCD: false,
+  },
+  thursday: {
+    morningAB: false,
+    morningCD: false,
+    afternoonAB: false,
+    afternoonCD: false,
+    nightAB: false,
+    nightCD: false,
+  },
+  friday: {
+    morningAB: false,
+    morningCD: false,
+    afternoonAB: false,
+    afternoonCD: false,
+    nightAB: false,
+    nightCD: false,
+  },
+};
 
 @Entity()
 export class Intern {
@@ -57,6 +101,13 @@ export class Intern {
     nullable: true,
   })
   responsible?: string;
+
+  @Column({
+    type: 'json',
+    default: classesScheduleDefaultValue,
+    nullable: true,
+  })
+  classesSchedule?: ClassesSchedule;
 
   @ManyToOne(
     () => Campus,

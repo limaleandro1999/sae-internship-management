@@ -114,7 +114,7 @@ function InternDashboard(props) {
       const { data, status } = await api.get('interns/me', {
         headers: getAuthHeaders(),
         validateStatus: false,
-      });  
+      });
 
       if (status === 401 || status === 403) {
         localStorage.removeItem('token');
