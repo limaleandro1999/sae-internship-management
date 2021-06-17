@@ -85,8 +85,8 @@ export class InternsService {
     return createdIntern;
   }
 
-  async update(id: number | string, internshipAdvisor: UpdateInternDTO) {
-    await this.internRepository.update(id, internshipAdvisor);
+  async update(id: number | string, intern: UpdateInternDTO) {
+    await this.internRepository.update(id, intern);
     return this.findOne(id);
   }
 

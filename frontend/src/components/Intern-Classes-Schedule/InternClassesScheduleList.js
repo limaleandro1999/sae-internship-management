@@ -1,13 +1,15 @@
 import React from 'react';
-import { List, useListContext } from 'react-admin';
+import { List, Button, useListContext } from 'react-admin';
 import {
   Table,
   TableHead,
   TableRow,
   TableCell,
   TableBody,
+  Box,
 } from '@material-ui/core';
-import { Check, Close } from '@material-ui/icons';
+import { Check, Close, Edit } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
 
 function ClassesGrid(props) {
   const { ids, data } = useListContext();
@@ -74,8 +76,24 @@ function ClassesGrid(props) {
 }
 
 function InternClassesScheduleList(props) {
+  const history = useHistory();
+
   return (
-    <List {...props} title="Horário das aulas" pagination={null}>
+    <List
+      {...props}
+      title="Horário das aulas"
+      pagination={null}
+      actions={
+        <Box>
+          <Button
+            onClick={() => history.push('/interns/classes/1')}
+            label="Editar Horário"
+          >
+            <Edit />
+          </Button>
+        </Box>
+      }
+    >
       <ClassesGrid />
     </List>
   );
