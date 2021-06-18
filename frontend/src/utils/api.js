@@ -34,6 +34,8 @@ export default {
 
     return { data: data[0] };
   },
+  getGeneric: (resource, params) =>
+    api.get(`/${resource}`, { headers: { ...getAuthHeaders() } }),
 
   getManyReference: async (resource, params) => {
     const { page, perPage } = params.pagination;

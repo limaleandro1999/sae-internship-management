@@ -8,6 +8,7 @@ import {
   InternClassesScheduleList,
   InternClassesScheduleEdit,
 } from '../../components/Intern-Classes-Schedule';
+import { InternInternshipScheduleList } from '../../components/Intern-Internship-Schedule';
 
 function InternModule({ theme, dataProvider, authProvider }) {
   const userRole = localStorage.getItem('role');
@@ -45,6 +46,11 @@ function InternModule({ theme, dataProvider, authProvider }) {
         options={{ label: 'Horários de aula' }}
         list={InternClassesScheduleList}
         edit={InternClassesScheduleEdit}
+      />
+      <Resource
+        name="interns/internship-schedule"
+        options={{ label: 'Horários de estágio' }}
+        list={InternInternshipScheduleList}
       />
     </Admin>
   );
