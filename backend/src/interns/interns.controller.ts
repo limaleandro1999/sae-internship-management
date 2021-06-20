@@ -47,6 +47,17 @@ export class InternsController {
     return [Object.values(classes), 5];
   }
 
+  @Get('/tasks')
+  getTasks(@Req() req: RequestWithQueryInfo) {
+    const { skip, filter, take } = req.queryInfo;
+    return this.internsService.getInternTasks(
+      req.user.email,
+      skip,
+      take,
+      filter,
+    );
+  }
+
   /**
    * It's a hack so react admin can fetch the classes schedule
    * Sorry for that, I was in a hurry to finish TCC

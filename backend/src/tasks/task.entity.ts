@@ -13,8 +13,8 @@ export class Task {
   @Column()
   activity: string;
 
-  @Column()
-  observation: string;
+  @Column({ nullable: true })
+  observation?: string;
 
   @Column({ type: 'integer' })
   workedHoursAmount: number;
@@ -22,8 +22,11 @@ export class Task {
   @Column()
   delivered: boolean;
 
-  @Column()
-  delivereDate: Date;
+  @Column({
+    type: 'date',
+    nullable: true,
+  })
+  deliveredDate?: Date;
 
   @ManyToOne(
     () => MonthlyReport,
@@ -34,6 +37,7 @@ export class Task {
   @ManyToOne(
     () => InternshipProcess,
     internshipProcess => internshipProcess.tasks,
+    { nullable: true },
   )
   internshipProcess: InternshipProcess;
 }

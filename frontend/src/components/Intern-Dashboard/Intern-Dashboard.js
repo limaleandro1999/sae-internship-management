@@ -175,7 +175,7 @@ function InternDashboard(props) {
             padding: '20px',
           }}
         >
-          <Typography variant="h5">Seus Relatórios</Typography>
+          <Typography variant="h5">Seus relatórios</Typography>
           <TasksTable data={reports} />
         </Box>
         {internInfo?.internshipProcesses[0]?.mandatory ? (
@@ -188,7 +188,7 @@ function InternDashboard(props) {
               padding: '20px',
             }}
           >
-            <Typography variant="h5">Suas Tarefas</Typography>
+            <Typography variant="h5">Suas atividades deste mês</Typography>
             <TasksTable data={reports} />
           </Box>
         ) : null}

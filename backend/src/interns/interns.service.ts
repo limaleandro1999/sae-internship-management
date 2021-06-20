@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as dayjs from 'dayjs';
+import dayjsBusinessDays from 'dayjs-business-days';
 import environment from 'src/common/environment';
 import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 import { EmailsService } from 'src/emails/emails.service';
@@ -10,6 +12,8 @@ import { FindConditions, In, Raw, Repository } from 'typeorm';
 import { CreateInternDTO } from './dto/create-intern.dto';
 import { UpdateInternDTO } from './dto/update-intern.dto';
 import { Intern } from './intern.entity';
+
+dayjs.extend(dayjsBusinessDays);
 
 @Injectable()
 export class InternsService {
@@ -135,5 +139,48 @@ export class InternsService {
     });
 
     return intern.classesSchedule;
+  }
+
+  async getInternTasks(
+    email: string,
+    skip?: number,
+    take?: number,
+    filter?: BaseFilter,
+  ) {
+    const user = await this.userService.findUser(email);
+    const {
+      internshipProcesses: [{ tasks }],
+    } = await this.internRepository
+      .createQueryBuilder('intern')
+      .innerJoinAndSelect('intern.internshipProcesses', 'internshipProcesses')
+      .leftJoinAndSelect('internshipProcesses.tasks', 'tasks')
+      .where('internshipProcesses.status = :status AND intern.id = :id', {
+        status: InternshipProcessStatus.ACTIVE,
+        id: user?.intern?.id,
+      })
+      .getOne();
+
+    const month = filter?.date ?? dayjs();
+    const businessDaysInCurrentMonth: dayjs.Dayjs[] = dayjs(
+      month,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+    ).businessDaysInMonth();
+    const startIndex = skip;
+    const endIndex = startIndex + take;
+
+    return [
+      businessDaysInCurrentMonth
+        .map((date, index) => ({
+          id: index,
+          delivered: tasks.some(
+            ({ date: taskDate, delivered }) =>
+              delivered && dayjs(taskDate).diff(date, 'days') === 0,
+          ),
+          date,
+        }))
+        .slice(startIndex, endIndex),
+      businessDaysInCurrentMonth.length,
+    ];
   }
 }

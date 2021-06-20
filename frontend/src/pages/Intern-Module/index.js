@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Admin, Resource } from 'react-admin';
 import { useHistory } from 'react-router-dom';
 import { CLIENT_ALLOWED_ROLES } from '../../utils/roles';
@@ -9,6 +9,8 @@ import {
   InternClassesScheduleEdit,
 } from '../../components/Intern-Classes-Schedule';
 import { InternInternshipScheduleList } from '../../components/Intern-Internship-Schedule';
+import { api, getAuthHeaders } from '../../utils/api';
+import { InternTasksList } from '../../components/Intern-Tasks';
 
 function InternModule({ theme, dataProvider, authProvider }) {
   const userRole = localStorage.getItem('role');
@@ -25,6 +27,27 @@ function InternModule({ theme, dataProvider, authProvider }) {
     history.push(`/${userClient}/admin`);
   }
 
+  const [internInfo, setInternInfo] = useState(null);
+
+  useEffect(() => {
+    async function getInternData() {
+      const { data, status } = await api.get('interns/me', {
+        headers: getAuthHeaders(),
+        validateStatus: false,
+      });
+
+      if (status === 401 || status === 403) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        return history.push('/no-access');
+      }
+
+      setInternInfo(data);
+    }
+
+    getInternData();
+  }, [history]);
+
   return (
     <Admin
       theme={theme}
@@ -40,6 +63,13 @@ function InternModule({ theme, dataProvider, authProvider }) {
         name="interns/reports"
         options={{ label: 'Relatórios' }}
         list={ReportList}
+      />
+      <Resource
+        name="interns/tasks"
+        options={{ label: 'Atividades' }}
+        list={
+          internInfo?.internshipProcesses[0]?.mandatory ? InternTasksList : null
+        }
       />
       <Resource
         name="interns/classes"
