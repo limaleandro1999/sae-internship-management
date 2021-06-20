@@ -33,7 +33,7 @@ export function TaskStatus(props) {
 function TasksFilters(props) {
   return (
     <Filter {...props}>
-      <TextInput type="month" label="Data" source="date" alwaysOn />
+      <TextInput type="month" label="" source="date" alwaysOn />
     </Filter>
   );
 }

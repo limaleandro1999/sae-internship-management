@@ -149,7 +149,7 @@ export class InternsService {
   ) {
     const user = await this.userService.findUser(email);
     const {
-      internshipProcesses: [{ tasks }],
+      internshipProcesses: [{ tasks, startDate, finishDate }],
     } = await this.internRepository
       .createQueryBuilder('intern')
       .innerJoinAndSelect('intern.internshipProcesses', 'internshipProcesses')
@@ -160,12 +160,18 @@ export class InternsService {
       })
       .getOne();
 
+    const internshipStartDate = dayjs(startDate);
+    const internshipFinishDate = dayjs(finishDate);
     const month = filter?.date ?? dayjs();
-    const businessDaysInCurrentMonth: dayjs.Dayjs[] = dayjs(
-      month,
+    const businessDaysInCurrentMonth: dayjs.Dayjs[] = dayjs(month)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
-    ).businessDaysInMonth();
+      .businessDaysInMonth()
+      .filter(
+        (dayOfMonth: dayjs.Dayjs) =>
+          dayOfMonth >= internshipStartDate &&
+          dayOfMonth <= internshipFinishDate,
+      );
     const startIndex = skip;
     const endIndex = startIndex + take;
 
