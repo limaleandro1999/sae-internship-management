@@ -121,16 +121,24 @@ export class InternshipProcessesService {
     let company: Company;
     let intern: Intern;
 
-    if (typeof internshipProcess.company !== 'number') {
-      company = await this.companiesService.create(
-        internshipProcess.company,
-        campusId,
-      );
-    }
-
     if (typeof internshipProcess.intern !== 'number') {
       intern = await this.internsService.create(
         internshipProcess.intern,
+        campusId,
+      );
+    } else {
+      const hasActiveInternshipProcess = await this.internsService.hasActiveInternshipProcess(
+        internshipProcess.intern,
+      );
+
+      if (hasActiveInternshipProcess) {
+        throw new Error('Intern has active Internship');
+      }
+    }
+
+    if (typeof internshipProcess.company !== 'number') {
+      company = await this.companiesService.create(
+        internshipProcess.company,
         campusId,
       );
     }

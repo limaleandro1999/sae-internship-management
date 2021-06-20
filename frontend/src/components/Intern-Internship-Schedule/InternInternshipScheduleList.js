@@ -1,9 +1,6 @@
 import React from 'react';
 import { useQuery, Loading, Error } from 'react-admin';
 import {
-  Typography,
-  Box,
-  TableContainer,
   Table,
   TableHead,
   TableRow,

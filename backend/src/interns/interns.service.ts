@@ -57,6 +57,21 @@ export class InternsService {
     return this.internRepository.findOne(id);
   }
 
+  async hasActiveInternshipProcess(
+    internId: number | string,
+  ): Promise<boolean> {
+    const intern = await this.internRepository
+      .createQueryBuilder('intern')
+      .innerJoinAndSelect('intern.internshipProcesses', 'internshipProcesses')
+      .where('intern.id = :id', { id: internId })
+      .getOne();
+
+    return intern.internshipProcesses.some(
+      internshipProcess =>
+        internshipProcess.status === InternshipProcessStatus.ACTIVE,
+    );
+  }
+
   async create(intern: CreateInternDTO, campusId?: number): Promise<Intern> {
     const internUser = await this.userService.create({
       email: intern.email,
