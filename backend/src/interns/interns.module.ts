@@ -8,10 +8,18 @@ import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/user.entity';
 import { ReportsService } from 'src/reports/reports.service';
 import { SemesterReport } from 'src/reports/semester-report.entity';
+import { Task } from 'src/tasks/task.entity';
+import { TasksService } from 'src/tasks/tasks.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Intern, User, SemesterReport])],
-  providers: [InternsService, EmailsService, UsersService, ReportsService],
+  imports: [TypeOrmModule.forFeature([Intern, User, SemesterReport, Task])],
+  providers: [
+    InternsService,
+    EmailsService,
+    UsersService,
+    ReportsService,
+    TasksService,
+  ],
   controllers: [InternsController],
 })
 export class InternsModule {}

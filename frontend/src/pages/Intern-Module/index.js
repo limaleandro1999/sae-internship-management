@@ -10,7 +10,11 @@ import {
 } from '../../components/Intern-Classes-Schedule';
 import { InternInternshipScheduleList } from '../../components/Intern-Internship-Schedule';
 import { api, getAuthHeaders } from '../../utils/api';
-import { InternTasksList } from '../../components/Intern-Tasks';
+import {
+  InternTasksList,
+  InternTasksCreate,
+  InternTasksShow,
+} from '../../components/Intern-Tasks';
 
 function InternModule({ theme, dataProvider, authProvider }) {
   const userRole = localStorage.getItem('role');
@@ -39,7 +43,7 @@ function InternModule({ theme, dataProvider, authProvider }) {
       if (status === 401 || status === 403) {
         localStorage.removeItem('token');
         localStorage.removeItem('role');
-        return history.push('/no-access');
+        return;
       }
 
       setInternInfo(data);
@@ -70,6 +74,8 @@ function InternModule({ theme, dataProvider, authProvider }) {
         list={
           internInfo?.internshipProcesses[0]?.mandatory ? InternTasksList : null
         }
+        show={InternTasksShow}
+        edit={InternTasksCreate}
       />
       <Resource
         name="interns/classes"

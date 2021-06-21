@@ -177,14 +177,31 @@ export class InternsService {
 
     return [
       businessDaysInCurrentMonth
-        .map((date, index) => ({
-          id: index,
-          delivered: tasks.some(
+        .map((date, index) => {
+          const [task] = tasks.filter(
             ({ date: taskDate, delivered }) =>
               delivered && dayjs(taskDate).diff(date, 'days') === 0,
-          ),
-          date,
-        }))
+          );
+
+          /**
+           * Need to send the index as id to "solve" a bug with react admin
+           */
+          if (task) {
+            return {
+              ...task,
+              date: dayjs(task.date),
+              deliveredDate: dayjs(task.deliveredDate),
+              id: index,
+              realId: task.id,
+            };
+          }
+
+          return {
+            id: index,
+            delivered: false,
+            date,
+          };
+        })
         .slice(startIndex, endIndex),
       businessDaysInCurrentMonth.length,
     ];

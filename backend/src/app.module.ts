@@ -29,7 +29,6 @@ import { InternshipAdvisorsModule } from './internship-advisors/internship-advis
 import { InternsModule } from './interns/interns.module';
 import { InternshipProcessesModule } from './internship-processes/internship-processes.module';
 import { ReportsModule } from './reports/reports.module';
-import { TasksService } from './tasks/tasks.service';
 import { TasksModule } from './tasks/tasks.module';
 @Module({
   imports: [
@@ -75,7 +74,6 @@ import { TasksModule } from './tasks/tasks.module';
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
-    TasksService,
   ],
 })
 export class AppModule implements NestModule {
