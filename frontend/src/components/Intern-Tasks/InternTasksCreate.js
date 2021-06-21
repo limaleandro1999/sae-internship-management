@@ -1,7 +1,7 @@
 import React from 'react';
 import { Edit, SimpleForm, NumberInput } from 'react-admin';
 import RichTextInput from 'ra-input-rich-text';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 function InternTasksCreate(props) {
   const { id: date } = props;
@@ -9,7 +9,7 @@ function InternTasksCreate(props) {
   return (
     <Edit
       {...props}
-      title={`Atividade do dia ${moment(date).format('DD/MM/YYYY')}`}
+      title={`Atividade do dia ${dayjs(date).format('DD/MM/YYYY')}`}
     >
       <SimpleForm>
         <RichTextInput source="activity" label="Descrição da atividade" />

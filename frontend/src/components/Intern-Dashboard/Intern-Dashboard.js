@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useQuery, Loading, Error, Button } from 'react-admin';
 import {
   Typography,
   Box,
@@ -9,11 +10,13 @@ import {
   TableCell,
   TableBody,
 } from '@material-ui/core';
-import moment from 'moment';
-import { api, getAuthHeaders } from '../../utils/api';
+import dayjs from 'dayjs';
+import dayjsBusinessDays from 'dayjs-business-days';
 import { useHistory } from 'react-router-dom';
 
-function TasksTable({ data = [] }) {
+dayjs.extend(dayjsBusinessDays);
+
+function ReportsTable({ data = [] }) {
   return (
     <TableContainer>
       <Table>
@@ -28,9 +31,44 @@ function TasksTable({ data = [] }) {
         <TableBody>
           {data.map(({ deadline, startDate, finishDate, status, id }) => (
             <TableRow key={id}>
-              <TableCell>{moment(deadline).format('DD/MM/YYYY')}</TableCell>
-              <TableCell>{moment(startDate).format('DD/MM/YYYY')}</TableCell>
-              <TableCell>{moment(finishDate).format('DD/MM/YYYY')}</TableCell>
+              <TableCell>{dayjs(deadline).format('DD/MM/YYYY')}</TableCell>
+              <TableCell>{dayjs(startDate).format('DD/MM/YYYY')}</TableCell>
+              <TableCell>{dayjs(finishDate).format('DD/MM/YYYY')}</TableCell>
+              <TableCell
+                align="right"
+                style={{
+                  color:
+                    status === 'Entregue'
+                      ? '#189108'
+                      : status === 'Pendente'
+                      ? '#EB8D00'
+                      : '#EB0037',
+                }}
+              >
+                {status}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+
+function TasksTable({ data = [] }) {
+  return (
+    <TableContainer>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Prazo de entrega</TableCell>
+            <TableCell align="right">Estado</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map(({ date, status, id }) => (
+            <TableRow key={id}>
+              <TableCell>{dayjs(date).format('DD/MM/YYYY')}</TableCell>
               <TableCell
                 align="right"
                 style={{
@@ -93,8 +131,8 @@ function InternCard({ intern }) {
         {internshipProcess?.company?.name}
       </Typography>
       <Typography variant="body1">
-        Período: {moment(internshipProcess?.startDate).format('DD/MM/YYYY')} -{' '}
-        {moment(internshipProcess?.finishDate).format('DD/MM/YYYY')}
+        Período: {dayjs(internshipProcess?.startDate).format('DD/MM/YYYY')} -{' '}
+        {dayjs(internshipProcess?.finishDate).format('DD/MM/YYYY')}
       </Typography>
       <Typography variant="body1">
         Estágio{' '}
@@ -107,34 +145,21 @@ function InternCard({ intern }) {
 function InternDashboard(props) {
   const [internInfo, setInternInfo] = useState(null);
   const [reports, setReports] = useState([]);
+  const [tasks, setTasks] = useState([]);
   const history = useHistory();
-
-  useEffect(() => {
-    async function getInternData() {
-      const { data, status } = await api.get('interns/me', {
-        headers: getAuthHeaders(),
-        validateStatus: false,
-      });
-
-      if (status === 401 || status === 403) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('role');
-        return history.push('/no-access');
-      }
-
-      setInternInfo(data);
-    }
-
-    getInternData();
-  }, [history]);
+  const { data, loading, error } = useQuery({
+    type: 'getGeneric',
+    resource: 'interns/me',
+  });
 
   useEffect(() => {
     const semesterReports = internInfo?.internshipProcesses[0]?.semesterReports;
+    const internshipTasks = internInfo?.internshipProcesses[0]?.tasks ?? [];
     const reportsArray = semesterReports
       ? semesterReports.map(
           ({ deadline, startDate, finishDate, delivered, id }) => {
-            const parsedDeadline = moment(deadline);
-            const todayDate = moment();
+            const parsedDeadline = dayjs(deadline);
+            const todayDate = dayjs();
             const todayDeadlineDiff = parsedDeadline.diff(todayDate, 'days');
             const status = delivered
               ? 'Entregue'
@@ -152,9 +177,54 @@ function InternDashboard(props) {
           }
         )
       : [];
+    const todayOrLastBussinessDay = dayjs().isBusinessDay()
+      ? dayjs()
+      : dayjs().prevBusinessDay();
+    const tasksArray = [
+      todayOrLastBussinessDay,
+      todayOrLastBussinessDay.businessDaysSubtract(1),
+      todayOrLastBussinessDay.businessDaysSubtract(2),
+      todayOrLastBussinessDay.businessDaysSubtract(3),
+    ].map((date, index) => {
+      const [task] = internshipTasks.filter(
+        ({ date: taskDate, delivered }) =>
+          delivered && dayjs(taskDate).diff(date, 'days') === 0
+      );
+
+      if (task) {
+        return {
+          ...task,
+          date: dayjs(task.date),
+          deliveredDate: dayjs(task.deliveredDate),
+          id: index,
+          realId: task.id,
+          status: 'Entregue',
+        };
+      }
+
+      const todayDate = dayjs();
+      const todayDeadlineDiff = date.diff(todayDate, 'days');
+
+      return {
+        id: index,
+        delivered: false,
+        date,
+        status: todayDeadlineDiff > 0 ? 'Pendente' : 'Atrasado',
+      };
+    });
+    console.log(tasksArray);
 
     setReports(reportsArray);
+    setTasks(tasksArray);
   }, [internInfo]);
+
+  if (loading) return <Loading />;
+  if (error) return <Error />;
+  if (!data) {
+    return null;
+  } else if (!internInfo) {
+    setInternInfo(data);
+  }
 
   return (
     <Box padding="50px">
@@ -175,8 +245,14 @@ function InternDashboard(props) {
             padding: '20px',
           }}
         >
-          <Typography variant="h5">Seus relatórios</Typography>
-          <TasksTable data={reports} />
+          <Box display="flex" justifyContent="space-between">
+            <Typography variant="h5">Seus relatórios</Typography>
+            <Button
+              label="Ver mais"
+              onClick={() => history.push('/interns/reports')}
+            />
+          </Box>
+          <ReportsTable data={reports} />
         </Box>
         {internInfo?.internshipProcesses[0]?.mandatory ? (
           <Box
@@ -188,8 +264,14 @@ function InternDashboard(props) {
               padding: '20px',
             }}
           >
-            <Typography variant="h5">Suas atividades deste mês</Typography>
-            <TasksTable data={reports} />
+            <Box display="flex" justifyContent="space-between">
+              <Typography variant="h5">Suas atividades deste mês</Typography>
+              <Button
+                label="Ver mais"
+                onClick={() => history.push('/interns/tasks')}
+              />
+            </Box>
+            <TasksTable data={tasks} />
           </Box>
         ) : null}
       </Box>

@@ -12,7 +12,7 @@ import {
   useRecordContext,
 } from 'react-admin';
 import { Typography, Box } from '@material-ui/core';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 function InternshipProcessTitle({ record }) {
   return (
@@ -44,8 +44,8 @@ function DailySchedule(props) {
 
 export function ReportStatus(props) {
   const { delivered, deadline } = useRecordContext();
-  const parsedDeadline = moment(deadline);
-  const todayDate = moment();
+  const parsedDeadline = dayjs(deadline);
+  const todayDate = dayjs();
   const todayDeadlineDiff = parsedDeadline.diff(todayDate, 'days');
   const status = delivered
     ? 'Entregue'

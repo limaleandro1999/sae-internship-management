@@ -6,7 +6,7 @@ import {
   SimpleShowLayout,
   DateField,
 } from 'react-admin';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 function InternTasksShow(props) {
   const { id: date } = props;
@@ -14,7 +14,7 @@ function InternTasksShow(props) {
   return (
     <Show
       {...props}
-      title={`Atividade do dia ${moment(date).format('DD/MM/YYYY')}`}
+      title={`Atividade do dia ${dayjs(date).format('DD/MM/YYYY')}`}
       actions={null}
     >
       <SimpleShowLayout>

@@ -10,13 +10,13 @@ import {
 } from 'react-admin';
 import { Typography, Box } from '@material-ui/core';
 import { Create, Description } from '@material-ui/icons';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { useHistory } from 'react-router-dom';
 
 export function TaskStatus({ label }) {
   const { delivered, date } = useRecordContext();
-  const parsedDeadline = moment(date);
-  const todayDate = moment();
+  const parsedDeadline = dayjs(date);
+  const todayDate = dayjs();
   const todayDeadlineDiff = parsedDeadline.diff(todayDate, 'days');
   const status = delivered
     ? 'Entregue'
@@ -57,7 +57,7 @@ function FillTaskButton(props) {
       label="Preencher"
       disabled={delivered}
       onClick={() =>
-        history.push(`/interns/tasks/${moment(date).format('YYYY-MM-DD')}`)
+        history.push(`/interns/tasks/${dayjs(date).format('YYYY-MM-DD')}`)
       }
     >
       <Create />
