@@ -19,8 +19,11 @@ export class MonthlyReport {
   @Column({ type: 'date' })
   finishDate: Date;
 
+  @Column({ 
+    nullable: true,
+  })
   @Column()
-  notes: string;
+  notes?: string;
 
   @ManyToOne(
     () => InternshipProcess,

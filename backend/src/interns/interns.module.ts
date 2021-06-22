@@ -10,9 +10,18 @@ import { ReportsService } from 'src/reports/reports.service';
 import { SemesterReport } from 'src/reports/semester-report.entity';
 import { Task } from 'src/tasks/task.entity';
 import { TasksService } from 'src/tasks/tasks.service';
+import { MonthlyReport } from 'src/reports/monthly-report.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Intern, User, SemesterReport, Task])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Intern,
+      User,
+      SemesterReport,
+      Task,
+      MonthlyReport,
+    ]),
+  ],
   providers: [
     InternsService,
     EmailsService,

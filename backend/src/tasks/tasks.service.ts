@@ -24,4 +24,22 @@ export class TasksService {
   findOne(id: string | number) {
     return this.taskRepository.findOne(id);
   }
+
+  async getTasksByDateRangeAndEmail(
+    internshipProcessId: number | string,
+    startDate: Date,
+    finishDate: Date,
+  ) {
+    return this.taskRepository
+      .createQueryBuilder('task')
+      .where(
+        'task.internshipProcessId = :internshipProcessId AND (task.date BETWEEN :startDate AND :finishDate)',
+        {
+          startDate: dayjs(startDate).format('YYYY-MM-DD'),
+          finishDate: dayjs(finishDate).format('YYYY-MM-DD'),
+          internshipProcessId,
+        },
+      )
+      .getMany();
+  }
 }
