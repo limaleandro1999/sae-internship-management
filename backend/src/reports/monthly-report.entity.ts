@@ -22,7 +22,6 @@ export class MonthlyReport {
   @Column({ 
     nullable: true,
   })
-  @Column()
   notes?: string;
 
   @ManyToOne(
