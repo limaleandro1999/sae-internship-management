@@ -45,22 +45,18 @@ export class InternshipAdvisorsService {
 
     return this.internshipAdvisorRepository
       .createQueryBuilder('internshipAdvisor')
+      .innerJoinAndSelect('internshipAdvisor.user', 'user')
       .where(whereClause.where, whereClause.parameters)
       .orderBy(orderByClause.column, orderByClause.order)
       .skip(skip)
       .take(take)
       .getManyAndCount();
-    // return this.internshipAdvisorRepository.findAndCount({
-    //   order,
-    //   skip,
-    //   take,
-    //   where: [...whereClause],
-    //   relations: ['user'],
-    // });
   }
 
   findOne(id): Promise<InternshipAdvisor> {
-    return this.internshipAdvisorRepository.findOne(id);
+    return this.internshipAdvisorRepository.findOne(id, {
+      relations: ['user'],
+    });
   }
 
   create(

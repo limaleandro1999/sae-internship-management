@@ -10,6 +10,8 @@ function InternshipAdvisorShow(props) {
     <Show {...props} title={<InternshipAdvisorTitle />}>
       <SimpleShowLayout>
         <TextField source="name" label="Nome" />
+        <TextField source="phone" label="Telefone" />
+        <TextField source="siape" label="SIAPE" />
         <TextField source="user.email" label="Email" />
       </SimpleShowLayout>
     </Show>

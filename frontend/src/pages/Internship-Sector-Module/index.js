@@ -119,7 +119,7 @@ function InternshipSectorModule({ theme, dataProvider, authProvider }) {
             options={{ label: 'Setor de Estágio' }}
           />
         ) : null,
-        ['Admin', 'Campus_Admin', 'Internship-Sector'].includes(permissions) ? (
+        ['Admin', 'Campus_Admin', 'Internship_Sector'].includes(permissions) ? (
           <Resource
             name="courses"
             icon={MenuBookIcon}
@@ -130,7 +130,7 @@ function InternshipSectorModule({ theme, dataProvider, authProvider }) {
             options={{ label: 'Cursos' }}
           />
         ) : null,
-        ['Admin', 'Campus_Admin', 'Internship-Sector'].includes(permissions) ? (
+        ['Admin', 'Campus_Admin', 'Internship_Sector'].includes(permissions) ? (
           <Resource
             name="companies"
             icon={BusinessIcon}
@@ -141,7 +141,7 @@ function InternshipSectorModule({ theme, dataProvider, authProvider }) {
             options={{ label: 'Empresas' }}
           />
         ) : null,
-        ['Admin', 'Campus_Admin', 'Internship-Sector'].includes(permissions) ? (
+        ['Admin', 'Campus_Admin', 'Internship_Sector'].includes(permissions) ? (
           <Resource
             name="internship-advisors"
             list={InternshipAdvisorList}
@@ -151,7 +151,7 @@ function InternshipSectorModule({ theme, dataProvider, authProvider }) {
             options={{ label: 'Orientadores de Estágio' }}
           />
         ) : null,
-        ['Admin', 'Campus_Admin', 'Internship-Sector'].includes(permissions) ? (
+        ['Admin', 'Campus_Admin', 'Internship_Sector'].includes(permissions) ? (
           <Resource
             name="interns"
             list={InternList}

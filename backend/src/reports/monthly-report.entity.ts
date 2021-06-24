@@ -19,7 +19,7 @@ export class MonthlyReport {
   @Column({ type: 'date' })
   finishDate: Date;
 
-  @Column({ 
+  @Column({
     nullable: true,
   })
   notes?: string;

@@ -40,6 +40,12 @@ function InternshipAdvisorCreate(props) {
           fullWidth={true}
           validate={required('Campo é obrigatório')}
         />
+        <TextInput
+          source="siape"
+          label="SIAPE"
+          fullWidth={true}
+          validate={required('Campo obrigatório')}
+        />
         {userType === ROLES.ADMIN ? (
           <ReferenceInput source="campus" label="Campus" reference="campi">
             <SelectInput optionText="name" />
