@@ -125,7 +125,7 @@ export class InternsService {
         'internshipProcesses.semesterReports',
         'semesterReports',
       )
-      .innerJoinAndSelect('internshipProcesses.tasks', 'tasks')
+      .leftJoinAndSelect('internshipProcesses.tasks', 'tasks')
       .where('internshipProcesses.status = :status AND intern.id = :id', {
         status: InternshipProcessStatus.ACTIVE,
         id: user?.intern?.id,

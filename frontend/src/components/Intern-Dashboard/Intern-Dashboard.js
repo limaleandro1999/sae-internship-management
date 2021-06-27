@@ -212,7 +212,6 @@ function InternDashboard(props) {
         status: todayDeadlineDiff > 0 ? 'Pendente' : 'Atrasado',
       };
     });
-    console.log(tasksArray);
 
     setReports(reportsArray);
     setTasks(tasksArray);
