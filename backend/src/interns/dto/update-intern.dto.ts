@@ -1,3 +1,5 @@
+import { ClassesSchedule } from '../interfaces/classes-schedule.interface';
+
 export class UpdateInternDTO {
   name?: string;
   cpf?: string;
@@ -14,4 +16,5 @@ export class UpdateInternDTO {
   coursePeriod?: string;
   email?: string;
   responsible?: string;
+  classesSchedule?: ClassesSchedule;
 }

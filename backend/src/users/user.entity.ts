@@ -75,6 +75,7 @@ export class User {
   @OneToOne(
     () => Intern,
     intern => intern.user,
+    { eager: true },
   )
   intern: Intern;
 

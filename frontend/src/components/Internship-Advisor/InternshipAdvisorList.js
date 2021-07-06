@@ -27,6 +27,7 @@ function InternshipAdvisorList(props) {
     >
       <Datagrid>
         <TextField source="name" label="Nome" />
+        <TextField source="siape" label="SIAPE" />
         <TextField source="phone" label="Telefone" />
         <TextField source="user.email" label="Email" />
         <BooleanField source="user.active" label="Ativo?" />

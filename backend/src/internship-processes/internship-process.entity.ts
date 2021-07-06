@@ -2,7 +2,16 @@ import { Campus } from 'src/campi/campus.entity';
 import { Company } from 'src/companies/company.entity';
 import { Intern } from 'src/interns/intern.entity';
 import { InternshipAdvisor } from 'src/internship-advisors/internship-advisor.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { MonthlyReport } from 'src/reports/monthly-report.entity';
+import { SemesterReport } from 'src/reports/semester-report.entity';
+import { Task } from 'src/tasks/task.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { WeeklySchedule } from './interfaces/weekly-schedule.interface';
 
 export enum InternshipProcessStatus {
@@ -78,4 +87,22 @@ export class InternshipProcess {
     { eager: true },
   )
   campus: Campus | number;
+
+  @OneToMany(
+    () => SemesterReport,
+    internshipProcess => internshipProcess.internshipProcess,
+  )
+  semesterReports: SemesterReport[];
+
+  @OneToMany(
+    () => MonthlyReport,
+    monthlyReport => monthlyReport.internshipProcess,
+  )
+  monthlyReports: MonthlyReport[];
+
+  @OneToMany(
+    () => Task,
+    task => task.internshipProcess,
+  )
+  tasks: Task[];
 }

@@ -127,7 +127,12 @@ function ContractTabForm(props) {
             perPage={10}
             fullWidth={true}
           >
-            <AutocompleteInput optionText="name" optionValue="id" />
+            <AutocompleteInput
+              optionText={(internshipAdvisor) =>
+                `${internshipAdvisor.name} - ${internshipAdvisor.siape}`
+              }
+              optionValue="id"
+            />
           </ReferenceInput>
         </Box>
       ) : null}

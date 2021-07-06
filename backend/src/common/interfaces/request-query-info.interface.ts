@@ -6,6 +6,7 @@ type QueryInfo = { order?; filter?: BaseFilter; skip?: number; take?: number };
 interface User extends Express.User {
   campusId: number;
   email: string;
+  id: number;
 }
 export interface RequestWithQueryInfo extends Request {
   queryInfo: QueryInfo;

@@ -7,9 +7,11 @@ import {
 } from 'react-admin';
 
 import { environment } from './environment';
+import { CLIENT_ALLOWED_ROLES } from './roles';
 
-export default (type, params) => {
+export default async (type, params) => {
   if (type === AUTH_LOGIN) {
+    const currentClient = window.location.pathname.split('/')[1];
     const { username: email, password } = params;
     const request = new Request(`${environment.server.serverUrl}/auth/login`, {
       method: 'POST',
@@ -17,21 +19,27 @@ export default (type, params) => {
       headers: new Headers({ 'Content-Type': 'application/json' }),
     });
 
-    return fetch(request)
-      .then((response) => {
-        if (response.status < 200 || response.status >= 300) {
-          throw new Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then(({ access_token, type }) => {
-        localStorage.setItem('token', access_token);
-        localStorage.setItem('role', type);
-      });
+    const response = await fetch(request);
+
+    if (response.status < 200 || response.status >= 300) {
+      throw new Error(response.statusText);
+    }
+
+    const { access_token, type } = await response.json();
+
+    if (!CLIENT_ALLOWED_ROLES[currentClient].includes(type)) {
+      throw new Error('User not allowed');
+    }
+
+    localStorage.setItem('token', access_token);
+    localStorage.setItem('role', type);
+
+    return;
   }
 
   if (type === AUTH_LOGOUT) {
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
     return Promise.resolve();
   }
 

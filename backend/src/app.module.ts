@@ -28,6 +28,8 @@ import { CompaniesModule } from './companies/companies.module';
 import { InternshipAdvisorsModule } from './internship-advisors/internship-advisors.module';
 import { InternsModule } from './interns/interns.module';
 import { InternshipProcessesModule } from './internship-processes/internship-processes.module';
+import { ReportsModule } from './reports/reports.module';
+import { TasksModule } from './tasks/tasks.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ load: [environment] }),
@@ -61,6 +63,8 @@ import { InternshipProcessesModule } from './internship-processes/internship-pro
     InternshipAdvisorsModule,
     InternsModule,
     InternshipProcessesModule,
+    ReportsModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [

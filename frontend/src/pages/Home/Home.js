@@ -41,17 +41,17 @@ function Home() {
         </Typography>
         <LinkList>
           <li>
-            <Link to="/admin">
+            <Link to="/internship-sector/admin">
               <Typography variant="body1">Setor de estágio</Typography>
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/internship-advisors/admin">
               <Typography variant="body1">Orientador de estágio</Typography>
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/interns/admin">
               <Typography variant="body1">Estagiário</Typography>
             </Link>
           </li>

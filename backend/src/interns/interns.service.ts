@@ -1,14 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as dayjs from 'dayjs';
+import dayjsBusinessDays from 'dayjs-business-days';
 import environment from 'src/common/environment';
 import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 import { EmailsService } from 'src/emails/emails.service';
+import { InternshipProcessStatus } from 'src/internship-processes/internship-process.entity';
+import { TasksService } from 'src/tasks/tasks.service';
 import { UserType } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { FindConditions, In, Raw, Repository } from 'typeorm';
 import { CreateInternDTO } from './dto/create-intern.dto';
 import { UpdateInternDTO } from './dto/update-intern.dto';
 import { Intern } from './intern.entity';
+
+dayjs.extend(dayjsBusinessDays);
 
 @Injectable()
 export class InternsService {
@@ -17,6 +23,7 @@ export class InternsService {
     private internRepository: Repository<Intern>,
     private readonly userService: UsersService,
     private readonly emailService: EmailsService,
+    private readonly tasksService: TasksService,
   ) {}
 
   findAll(
@@ -56,10 +63,25 @@ export class InternsService {
     return this.internRepository.findOne(id);
   }
 
+  async hasActiveInternshipProcess(
+    internId: number | string,
+  ): Promise<boolean> {
+    const intern = await this.internRepository
+      .createQueryBuilder('intern')
+      .leftJoinAndSelect('intern.internshipProcesses', 'internshipProcesses')
+      .where('intern.id = :id', { id: internId })
+      .getOne();
+
+    return intern?.internshipProcesses.some(
+      internshipProcess =>
+        internshipProcess.status === InternshipProcessStatus.ACTIVE,
+    );
+  }
+
   async create(intern: CreateInternDTO, campusId?: number): Promise<Intern> {
     const internUser = await this.userService.create({
       email: intern.email,
-      type: UserType.INTERNSHIP_ADVISOR,
+      type: UserType.INTERN,
       active: false,
     });
 
@@ -84,8 +106,70 @@ export class InternsService {
     return createdIntern;
   }
 
-  async update(id: number | string, internshipAdvisor: UpdateInternDTO) {
-    await this.internRepository.update(id, internshipAdvisor);
+  async update(id: number | string, intern: UpdateInternDTO) {
+    await this.internRepository.update(id, intern);
     return this.findOne(id);
+  }
+
+  async getInternInfo(email: string) {
+    const user = await this.userService.findUser(email);
+
+    return this.internRepository
+      .createQueryBuilder('intern')
+      .innerJoinAndSelect('intern.internshipProcesses', 'internshipProcesses')
+      .innerJoinAndSelect('internshipProcesses.company', 'company')
+      .innerJoinAndSelect(
+        'internshipProcesses.internshipAdvisor',
+        'internshipAdvisor',
+      )
+      .innerJoinAndSelect('internshipAdvisor.user', 'internshipAdvisorUser')
+      .innerJoinAndSelect(
+        'internshipProcesses.semesterReports',
+        'semesterReports',
+      )
+      .leftJoinAndSelect('internshipProcesses.tasks', 'tasks')
+      .where('internshipProcesses.status = :status AND intern.id = :id', {
+        status: InternshipProcessStatus.ACTIVE,
+        id: user?.intern?.id,
+      })
+      .getOne();
+  }
+
+  async getInternClasses(email: string) {
+    const user = await this.userService.findUser(email);
+    const intern = await this.internRepository.findOne(user?.intern?.id, {
+      select: ['id', 'classesSchedule'],
+    });
+
+    return intern.classesSchedule;
+  }
+
+  async getInternTasks(
+    email: string,
+    skip?: number,
+    take?: number,
+    filter?: BaseFilter,
+  ) {
+    const user = await this.userService.findUser(email);
+    const {
+      internshipProcesses: [{ tasks, startDate, finishDate }],
+    } = await this.internRepository
+      .createQueryBuilder('intern')
+      .innerJoinAndSelect('intern.internshipProcesses', 'internshipProcesses')
+      .leftJoinAndSelect('internshipProcesses.tasks', 'tasks')
+      .where('internshipProcesses.status = :status AND intern.id = :id', {
+        status: InternshipProcessStatus.ACTIVE,
+        id: user?.intern?.id,
+      })
+      .getOne();
+
+    return this.tasksService.formatTasks(
+      tasks,
+      startDate,
+      finishDate,
+      skip,
+      take,
+      filter,
+    );
   }
 }

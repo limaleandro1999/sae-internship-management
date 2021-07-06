@@ -192,7 +192,7 @@ function InternForm(props) {
       {...props}
       render={(formProps) => (
         <form>
-          <InternFormFields isCreateForm={true} />
+          <InternFormFields isCreateForm={props.isCreateForm} />
           <Toolbar>
             <Box display="flex" justifyContent="space-between" width="100%">
               <SaveButton

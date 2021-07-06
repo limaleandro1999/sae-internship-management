@@ -23,6 +23,12 @@ function InternshipAdvisorEdit(props) {
           fullWidth={true}
           validate={required('Campo obrigatório')}
         />
+        <TextInput
+          source="siape"
+          label="SIAPE"
+          fullWidth={true}
+          validate={required('Campo obrigatório')}
+        />
       </SimpleForm>
     </Edit>
   );
