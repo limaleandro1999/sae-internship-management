@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Show,
   TabbedShowLayout,
@@ -10,8 +10,23 @@ import {
   ArrayField,
   Datagrid,
   useRecordContext,
+  useDataProvider,
+  Loading,
+  Button,
+  SimpleForm,
+  TextInput,
 } from 'react-admin';
-import { Typography, Box } from '@material-ui/core';
+import {
+  Typography,
+  Box,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from '@material-ui/core';
+import { Create } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 function InternshipProcessTitle({ record }) {
@@ -19,6 +34,40 @@ function InternshipProcessTitle({ record }) {
     <span>
       {record ? `${record.intern?.name} - ${record.company?.name}` : ''}
     </span>
+  );
+}
+
+function TaskStatus({ date, delivered }) {
+  const parsedDeadline = dayjs(date);
+  const todayDate = dayjs();
+  const todayDeadlineDiff = parsedDeadline.diff(todayDate, 'days');
+  const status = delivered
+    ? 'Entregue'
+    : todayDeadlineDiff > 0
+    ? 'Pendente'
+    : 'Atrasado';
+  const statusColor =
+    status === 'Entregue'
+      ? '#189108'
+      : status === 'Pendente'
+      ? '#EB8D00'
+      : '#EB0037';
+
+  return <Typography style={{ color: statusColor }}>{status}</Typography>;
+}
+
+function ShowTaskInfo({ realId, delivered }) {
+  const history = useHistory();
+
+  return (
+    <Button
+      title="Mostrar"
+      label="Mostrar"
+      disabled={!delivered}
+      onClick={() => history.push(`/interns/tasks/${realId}/show`)}
+    >
+      <Create />
+    </Button>
   );
 }
 
@@ -60,6 +109,92 @@ export function ReportStatus(props) {
       : '#EB0037';
 
   return <Typography style={{ color: statusColor }}>{status}</Typography>;
+}
+
+function SemesterReportsTab(props) {
+  const { semesterReports } = useRecordContext();
+
+  return semesterReports?.length ? (
+    <ArrayField source="semesterReports" label="Relatórios Semestrais">
+      <Datagrid>
+        <DateField source="deadline" label="Prazo de entrega" />
+        <DateField source="startDate" label="Início do período avaliativo" />
+        <DateField source="finishDate" label="Fim do período avaliativo" />
+        <ReportStatus />
+      </Datagrid>
+    </ArrayField>
+  ) : (
+    <Typography variant="h6">
+      Não há relatórios semestrais para esse estagiário
+    </Typography>
+  );
+}
+
+function TasksTab(props) {
+  const { id, mandatory } = useRecordContext();
+  const dataProvider = useDataProvider();
+  const [tasks, setTasks] = useState([]);
+  const [filterDate, setFilterDate] = useState(dayjs().format('YYYY-MM'));
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
+  useEffect(() => {
+    dataProvider
+      .getList(`internship-advisors/internship-processes/${id}/tasks`, {
+        pagination: { page: 1, perPage: 31 },
+        filter: { date: filterDate },
+        sort: { field: 'id', order: 'ASC' },
+      })
+      .then(({ data }) => {
+        setTasks(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
+  }, [filterDate]);
+
+  if (loading) return <Loading />;
+  if (error) return <p>ERROR</p>;
+
+  return mandatory ? (
+    <>
+      <SimpleForm toolbar={null}>
+        <TextInput
+          type="month"
+          label=""
+          source="date"
+          alwaysOn
+          onChange={(event) => setFilterDate(event?.target?.value)}
+        />
+      </SimpleForm>
+
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Data</TableCell>
+            <TableCell>Situação</TableCell>
+            <TableCell>Mostrar</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {tasks.map(({ date, delivered, realId }, index) => (
+            <TableRow key={index}>
+              <TableCell>{dayjs(date).format('DD/MM/YYYY')}</TableCell>
+              <TableCell>
+                <TaskStatus date={date} delivered={delivered} />
+              </TableCell>
+              <TableCell>
+                <ShowTaskInfo realId={realId} delivered={delivered} />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </>
+  ) : (
+    <Typography variant="h6">Não há atividades para esse estagiário</Typography>
+  );
 }
 
 function InternshipProcessShow(props) {
@@ -121,22 +256,11 @@ function InternshipProcessShow(props) {
           <DailySchedule label="Sexta" day="friday" />
         </Tab>
         <Tab label="Relatórios">
-          <ArrayField source="semesterReports" label="Relatórios Semestrais">
-            <Datagrid>
-              <DateField source="deadline" label="Prazo de entrega" />
-              <DateField
-                source="startDate"
-                label="Início do período avaliativo"
-              />
-              <DateField
-                source="finishDate"
-                label="Fim do período avaliativo"
-              />
-              <ReportStatus />
-            </Datagrid>
-          </ArrayField>
+          <SemesterReportsTab />
         </Tab>
-        <Tab label="Tarefas"></Tab>
+        <Tab label="Tarefas">
+          <TasksTab {...props} />
+        </Tab>
       </TabbedShowLayout>
     </Show>
   );

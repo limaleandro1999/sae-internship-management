@@ -6,6 +6,7 @@ import environment from 'src/common/environment';
 import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 import { EmailsService } from 'src/emails/emails.service';
 import { InternshipProcessStatus } from 'src/internship-processes/internship-process.entity';
+import { TasksService } from 'src/tasks/tasks.service';
 import { UserType } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { FindConditions, In, Raw, Repository } from 'typeorm';
@@ -22,6 +23,7 @@ export class InternsService {
     private internRepository: Repository<Intern>,
     private readonly userService: UsersService,
     private readonly emailService: EmailsService,
+    private readonly tasksService: TasksService,
   ) {}
 
   findAll(
@@ -66,11 +68,11 @@ export class InternsService {
   ): Promise<boolean> {
     const intern = await this.internRepository
       .createQueryBuilder('intern')
-      .innerJoinAndSelect('intern.internshipProcesses', 'internshipProcesses')
+      .leftJoinAndSelect('intern.internshipProcesses', 'internshipProcesses')
       .where('intern.id = :id', { id: internId })
       .getOne();
 
-    return intern.internshipProcesses.some(
+    return intern?.internshipProcesses.some(
       internshipProcess =>
         internshipProcess.status === InternshipProcessStatus.ACTIVE,
     );
@@ -161,50 +163,13 @@ export class InternsService {
       })
       .getOne();
 
-    const internshipStartDate = dayjs(startDate);
-    const internshipFinishDate = dayjs(finishDate);
-    const month = filter?.date ?? dayjs();
-    const businessDaysInCurrentMonth: dayjs.Dayjs[] = dayjs(month)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      .businessDaysInMonth()
-      .filter(
-        (dayOfMonth: dayjs.Dayjs) =>
-          dayOfMonth >= internshipStartDate &&
-          dayOfMonth <= internshipFinishDate,
-      );
-    const startIndex = skip;
-    const endIndex = startIndex + take;
-
-    return [
-      businessDaysInCurrentMonth
-        .map((date, index) => {
-          const [task] = tasks.filter(
-            ({ date: taskDate, delivered }) =>
-              delivered && dayjs(taskDate).diff(date, 'days') === 0,
-          );
-
-          /**
-           * Need to send the index as id to "solve" a bug with react admin
-           */
-          if (task) {
-            return {
-              ...task,
-              date: dayjs(task.date),
-              deliveredDate: dayjs(task.deliveredDate),
-              id: index,
-              realId: task.id,
-            };
-          }
-
-          return {
-            id: index,
-            delivered: false,
-            date,
-          };
-        })
-        .slice(startIndex, endIndex),
-      businessDaysInCurrentMonth.length,
-    ];
+    return this.tasksService.formatTasks(
+      tasks,
+      startDate,
+      finishDate,
+      skip,
+      take,
+      filter,
+    );
   }
 }

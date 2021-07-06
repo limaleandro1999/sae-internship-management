@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 import { OrderClause } from 'src/common/interfaces/order-clause.interface';
+import { InternshipProcessesService } from 'src/internship-processes/internship-processes.service';
+import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateInternshipAdvisorDTO } from './dto/create-internship-advisor.dto';
 import { UpdateInternshipAdvisorDTO } from './dto/update-internship-advisor.dto';
@@ -12,6 +14,8 @@ export class InternshipAdvisorsService {
   constructor(
     @InjectRepository(InternshipAdvisor)
     private internshipAdvisorRepository: Repository<InternshipAdvisor>,
+    private readonly userService: UsersService,
+    private readonly internshipProcessesService: InternshipProcessesService,
   ) {}
 
   findAll(
@@ -76,5 +80,22 @@ export class InternshipAdvisorsService {
   ) {
     await this.internshipAdvisorRepository.update(id, internshipAdvisor);
     return this.findOne(id);
+  }
+
+  async getInternshipProcesses(
+    email: string,
+    order?: OrderClause,
+    skip?: number,
+    take?: number,
+    filter?: BaseFilter,
+  ) {
+    const user = await this.userService.findUser(email);
+    return this.internshipProcessesService.getInternshipProcessesByInternshipAdvisorId(
+      user?.internshipAdvisor?.id,
+      order,
+      skip,
+      take,
+      filter,
+    );
   }
 }

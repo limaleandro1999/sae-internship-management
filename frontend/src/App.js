@@ -7,6 +7,7 @@ import { Home } from './pages/Home';
 
 import InternshipSectorModule from './pages/Internship-Sector-Module';
 import InternModule from './pages/Intern-Module';
+import InternshipAdvisorModule from './pages/Internship-Advisor-Module';
 import CampusAdminConfirmation from './pages/Confirmation-Page/CampusAdminConfirmation';
 
 import api from './utils/api';
@@ -40,6 +41,13 @@ function App() {
         </Route>
         <Route path="/interns/admin">
           <InternModule
+            theme={theme}
+            dataProvider={api}
+            authProvider={authProvider}
+          />
+        </Route>
+        <Route path="/internship-advisors/admin">
+          <InternshipAdvisorModule
             theme={theme}
             dataProvider={api}
             authProvider={authProvider}

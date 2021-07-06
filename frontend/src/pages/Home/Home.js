@@ -46,7 +46,7 @@ function Home() {
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/internship-advisors/admin">
               <Typography variant="body1">Orientador de estágio</Typography>
             </Link>
           </li>

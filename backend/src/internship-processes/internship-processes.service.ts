@@ -66,9 +66,10 @@ export class InternshipProcessesService {
     return this.internshipProcessesRepository
       .createQueryBuilder('internship')
       .innerJoinAndSelect('internship.intern', 'intern')
+      .innerJoinAndSelect('intern.user', 'user')
       .innerJoinAndSelect('internship.company', 'company')
       .innerJoinAndSelect('internship.internshipAdvisor', 'internshipAdvisor')
-      .innerJoinAndSelect('internship.semesterReports', 'semesterReports')
+      .leftJoinAndSelect('internship.semesterReports', 'semesterReports')
       .where('internship.id = :id', { id })
       .getOne();
   }
@@ -173,5 +174,27 @@ export class InternshipProcessesService {
     }
 
     return null;
+  }
+
+  getInternshipProcessesByInternshipAdvisorId(
+    id: string | number,
+    _order?: OrderClause,
+    skip?: number,
+    take?: number,
+    _filter?: BaseFilter,
+  ) {
+    return this.internshipProcessesRepository
+      .createQueryBuilder('internship')
+      .innerJoinAndSelect('internship.intern', 'intern')
+      .innerJoinAndSelect('intern.user', 'user')
+      .innerJoinAndSelect('internship.company', 'company')
+      .innerJoinAndSelect('internship.internshipAdvisor', 'internshipAdvisor')
+      .where('internshipAdvisor.id = :id AND internship.status = :status', {
+        id,
+        status: InternshipProcessStatus.ACTIVE,
+      })
+      .skip(skip)
+      .take(take)
+      .getManyAndCount();
   }
 }
