@@ -152,7 +152,7 @@ function TasksTab(props) {
         setError(error);
         setLoading(false);
       });
-  }, [filterDate]);
+  }, [filterDate, dataProvider, id]);
 
   if (loading) return <Loading />;
   if (error) return <p>ERROR</p>;

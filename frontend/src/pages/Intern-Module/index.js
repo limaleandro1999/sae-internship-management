@@ -3,7 +3,10 @@ import { Admin, Resource } from 'react-admin';
 import { useHistory } from 'react-router-dom';
 import { CLIENT_ALLOWED_ROLES } from '../../utils/roles';
 import { InternDashboard } from '../../components/Intern-Dashboard';
-import { ReportList } from '../../components/Reports';
+import {
+  MonthlyReportsList,
+  SemesterReportsList,
+} from '../../components/Reports';
 import {
   InternClassesScheduleList,
   InternClassesScheduleEdit,
@@ -64,11 +67,6 @@ function InternModule({ theme, dataProvider, authProvider }) {
         list={InternDashboard}
       />
       <Resource
-        name="interns/reports"
-        options={{ label: 'Relatórios' }}
-        list={ReportList}
-      />
-      <Resource
         name="interns/tasks"
         options={{ label: 'Atividades' }}
         list={
@@ -76,6 +74,20 @@ function InternModule({ theme, dataProvider, authProvider }) {
         }
         show={InternTasksShow}
         edit={InternTasksCreate}
+      />
+      <Resource
+        name="interns/semester-reports"
+        options={{ label: 'Relatórios Semestrais' }}
+        list={SemesterReportsList}
+      />
+      <Resource
+        name="interns/monthly-reports"
+        options={{ label: 'Relatórios Mensais' }}
+        list={
+          internInfo?.internshipProcesses[0]?.mandatory
+            ? MonthlyReportsList
+            : null
+        }
       />
       <Resource
         name="interns/classes"

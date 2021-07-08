@@ -13,6 +13,8 @@ import environment from 'src/common/environment';
 import { InternshipProcess } from 'src/internship-processes/internship-process.entity';
 import { InternshipProcessesService } from 'src/internship-processes/internship-processes.service';
 import { InternsService } from 'src/interns/interns.service';
+import { SemesterReport } from 'src/reports/semester-report.entity';
+import { MonthlyReport } from 'src/reports/monthly-report.entity';
 
 @Controller('internship-advisors')
 export class InternshipAdvisorsController {
@@ -49,6 +51,32 @@ export class InternshipAdvisorsController {
       skip,
       take,
       filter,
+    );
+  }
+
+  @Get('/semester-reports')
+  getSemesterReports(
+    @Req() req: RequestWithQueryInfo,
+  ): Promise<[SemesterReport[], number]> {
+    const { order, skip, take } = req.queryInfo;
+    return this.internshipAdvisorService.getSemesterReports(
+      req.user.email,
+      order,
+      skip,
+      take,
+    );
+  }
+
+  @Get('/monthly-reports')
+  getMonthlyReports(
+    @Req() req: RequestWithQueryInfo,
+  ): Promise<[MonthlyReport[], number]> {
+    const { order, skip, take } = req.queryInfo;
+    return this.internshipAdvisorService.getMonthlyReports(
+      req.user.email,
+      order,
+      skip,
+      take,
     );
   }
 

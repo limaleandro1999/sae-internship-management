@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { OrderClause } from 'src/common/interfaces/order-clause.interface';
 import { InternsService } from 'src/interns/interns.service';
 import { TasksService } from 'src/tasks/tasks.service';
 import { UsersService } from 'src/users/users.service';
@@ -48,7 +49,7 @@ export class ReportsService {
     });
   }
 
-  async getInternReports(
+  async getInternSemesterReports(
     email: string,
     skip?: number,
     take?: number,
@@ -62,7 +63,77 @@ export class ReportsService {
         'internshipProcess',
       )
       .innerJoinAndSelect('internshipProcess.intern', 'intern')
-      .where('intern.id = :userId', { userId: user?.intern?.id })
+      .where('intern.id = :internId', { internId: user?.intern?.id })
+      .skip(skip)
+      .take(take)
+      .getManyAndCount();
+  }
+
+  async getInternMonthlyReports(
+    email: string,
+    skip?: number,
+    take?: number,
+  ): Promise<[MonthlyReport[], number]> {
+    const user = await this.userService.findUser(email);
+
+    return this.monthlyReportRepository
+      .createQueryBuilder('monthlyReport')
+      .innerJoinAndSelect(
+        'monthlyReport.internshipProcess',
+        'internshipProcess',
+      )
+      .innerJoinAndSelect('internshipProcess.intern', 'intern')
+      .where('intern.id = :internId', { internId: user?.intern?.id })
+      .skip(skip)
+      .take(take)
+      .getManyAndCount();
+  }
+
+  async getSemesterReportsByInternshipAdvisorId(
+    internshipAdvisorId: string | number,
+    _order?: OrderClause,
+    skip?: number,
+    take?: number,
+  ) {
+    return this.semesterReportRepository
+      .createQueryBuilder('semesterReport')
+      .innerJoinAndSelect(
+        'semesterReport.internshipProcess',
+        'internshipProcess',
+      )
+      .innerJoinAndSelect(
+        'internshipProcess.internshipAdvisor',
+        'internshipAdvisor',
+      )
+      .innerJoinAndSelect('internshipProcess.intern', 'intern')
+      .where('internshipAdvisor.id = :internshipAdvisorId', {
+        internshipAdvisorId,
+      })
+      .skip(skip)
+      .take(take)
+      .getManyAndCount();
+  }
+
+  async getMonthlyReportsByInternshipAdvisorId(
+    internshipAdvisorId: string | number,
+    _order?: OrderClause,
+    skip?: number,
+    take?: number,
+  ) {
+    return this.monthlyReportRepository
+      .createQueryBuilder('monthlyReport')
+      .innerJoinAndSelect(
+        'monthlyReport.internshipProcess',
+        'internshipProcess',
+      )
+      .innerJoinAndSelect(
+        'internshipProcess.internshipAdvisor',
+        'internshipAdvisor',
+      )
+      .innerJoinAndSelect('internshipProcess.intern', 'intern')
+      .where('internshipAdvisor.id = :internshipAdvisorId', {
+        internshipAdvisorId,
+      })
       .skip(skip)
       .take(take)
       .getManyAndCount();

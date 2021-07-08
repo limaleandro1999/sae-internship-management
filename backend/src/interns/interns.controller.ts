@@ -37,10 +37,24 @@ export class InternsController {
     return this.internsService.getInternInfo(req.user.email);
   }
 
-  @Get('/reports')
-  getInternReports(@Req() req: RequestWithQueryInfo) {
+  @Get('/semester-reports')
+  getSemesterReports(@Req() req: RequestWithQueryInfo) {
     const { skip, take } = req.queryInfo;
-    return this.reportsService.getInternReports(req.user.email, skip, take);
+    return this.reportsService.getInternSemesterReports(
+      req.user.email,
+      skip,
+      take,
+    );
+  }
+
+  @Get('/monthly-reports')
+  getMonthlyReports(@Req() req: RequestWithQueryInfo) {
+    const { skip, take } = req.queryInfo;
+    return this.reportsService.getInternMonthlyReports(
+      req.user.email,
+      skip,
+      take,
+    );
   }
 
   @Get('/classes')

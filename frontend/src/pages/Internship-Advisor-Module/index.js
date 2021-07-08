@@ -4,6 +4,30 @@ import InternTasksShow from '../../components/Intern-Tasks/InternTasksShow';
 import { InternshipAdvisorDashboard } from '../../components/Internship-Advisor-Dashboard';
 import { InternshipAdvisorInternshipProcessList } from '../../components/Internship-Advisor-Internship-Process';
 import { InternshipProcessShow } from '../../components/Internship-Process';
+import {
+  SemesterReportsList,
+  MonthlyReportsList,
+} from '../../components/Reports';
+
+function SemesterReportsListWrapper(props) {
+  return (
+    <SemesterReportsList
+      {...props}
+      showInternNameField
+      showRegistrationNumberField
+    />
+  );
+}
+
+function MonthlyReportsListWrapper(props) {
+  return (
+    <MonthlyReportsList
+      {...props}
+      showInternNameField
+      showRegistrationNumberField
+    />
+  );
+}
 
 function InternshipAdvisorModule({ theme, dataProvider, authProvider }) {
   return (
@@ -24,9 +48,14 @@ function InternshipAdvisorModule({ theme, dataProvider, authProvider }) {
         show={InternshipProcessShow}
       />
       <Resource
-        name="internship-advisors/reports"
-        options={{ label: 'Relatórios' }}
-        list={InternshipAdvisorDashboard}
+        name="internship-advisors/semester-reports"
+        options={{ label: 'Relatórios Semestrais' }}
+        list={SemesterReportsListWrapper}
+      />
+      <Resource
+        name="internship-advisors/monthly-reports"
+        options={{ label: 'Relatórios Mensais' }}
+        list={MonthlyReportsListWrapper}
       />
       <Resource name="interns/tasks" show={InternTasksShow} />
     </Admin>
