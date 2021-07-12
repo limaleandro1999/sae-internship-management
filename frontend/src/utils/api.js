@@ -54,10 +54,22 @@ export default {
 
     return { data: data[0], total: data[1] };
   },
-  update: (resource, params) =>
-    api.put(`/${resource}/${params.id}`, params.data, {
+  update: (resource, params) => {
+    console.log(resource);
+    if (resource !== 'interns/monthly-reports') {
+      return api.put(`/${resource}/${params.id}`, params.data, {
+        headers: { ...getAuthHeaders() },
+      });
+    }
+
+    const formData = new FormData();
+
+    formData.append('report-file', params.data['report-file'].rawFile);
+
+    return api.put(`/${resource}/${params.id}`, formData, {
       headers: { ...getAuthHeaders() },
-    }),
+    });
+  },
   updateMany: (resource, params) => {
     const query = {
       filter: JSON.stringify({ id: params.ids }),

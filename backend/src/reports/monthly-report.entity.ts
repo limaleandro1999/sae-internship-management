@@ -24,6 +24,11 @@ export class MonthlyReport {
   })
   notes?: string;
 
+  @Column({ nullable: true })
+  reportFileUrl?: string;
+
+  // @Column()
+
   @ManyToOne(
     () => InternshipProcess,
     internshipProcess => internshipProcess.monthlyReports,

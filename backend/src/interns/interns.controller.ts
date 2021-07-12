@@ -1,5 +1,25 @@
-import { Body, Controller, Get, Param, Post, Put, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Req,
+  Res,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Response } from 'express';
+import { diskStorage } from 'multer';
+import { resolve } from 'path';
+import { Public } from 'src/common/decorators/public.decorator';
+import { editFileName } from 'src/common/utils';
+import environment from 'src/common/environment';
 import { RequestWithQueryInfo } from 'src/common/interfaces/request-query-info.interface';
+import { UpdateMonthlyReportDTO } from 'src/reports/dto/update-monthly-report.dto';
+import { MonthlyReport } from 'src/reports/monthly-report.entity';
 import { ReportsService } from 'src/reports/reports.service';
 import { CreateTaskDTO } from 'src/tasks/dto/create-task-dto';
 import { Task } from 'src/tasks/task.entity';
@@ -10,6 +30,7 @@ import { UpdateInternDTO } from './dto/update-intern.dto';
 import { ClassesSchedule } from './interfaces/classes-schedule.interface';
 import { Intern } from './intern.entity';
 import { InternsService } from './interns.service';
+import * as dayjs from 'dayjs';
 
 @Controller('interns')
 export class InternsController {
@@ -47,6 +68,11 @@ export class InternsController {
     );
   }
 
+  @Get('/semester-reports/:id')
+  getSemesterReport(@Param('id') id: string) {
+    return this.reportsService.getMonthlyReportById(id);
+  }
+
   @Get('/monthly-reports')
   getMonthlyReports(@Req() req: RequestWithQueryInfo) {
     const { skip, take } = req.queryInfo;
@@ -55,6 +81,44 @@ export class InternsController {
       skip,
       take,
     );
+  }
+
+  @Public()
+  @Get('/monthly-reports/:id/report-file')
+  async getMonthlyReportFile(@Param('id') id: string, @Res() res: Response) {
+    const monthlyReport = await this.reportsService.getMonthlyReportById(id);
+    return res.sendFile(monthlyReport.reportFileUrl);
+  }
+
+  @Public()
+  @Get('/monthly-reports/:id/generate-file')
+  async generateMonthlyReportFile(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ) {
+    const generatedFile = await this.reportsService.generateMonthlyReportFile(
+      id,
+    );
+    const monthlyReport = await this.reportsService.getMonthlyReportById(id);
+    const filename = `${
+      (<Intern>monthlyReport?.internshipProcess?.intern).name
+    } - ${dayjs(monthlyReport.startDate).format('MM-YYYY')}.docx`;
+
+    res.set(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    );
+    res.set('Content-Disposition', `attachment; filename=${filename}`);
+    return res.end(generatedFile);
+  }
+
+  @Get('/monthly-reports/:id')
+  async getMonthlyReport(@Param('id') id: string) {
+    const monthlyReport = await this.reportsService.getMonthlyReportById(id);
+    monthlyReport.reportFileUrl = `${environment().server.protocol}://${
+      environment().server.host
+    }:${environment().server.port}/interns/monthly-reports/${id}/report-file`;
+    return monthlyReport;
   }
 
   @Get('/classes')
@@ -150,5 +214,24 @@ export class InternsController {
   @Put('/tasks/:id')
   async updateTask(@Body() taskDTO: CreateTaskDTO): Promise<Task> {
     return this.tasksService.createTask(taskDTO);
+  }
+
+  @Put('/monthly-reports/:id')
+  @UseInterceptors(
+    FileInterceptor('report-file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: editFileName,
+      }),
+    }),
+  )
+  updateMonthlyReport(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<MonthlyReport> {
+    const monthlyReport: UpdateMonthlyReportDTO = {
+      reportFileUrl: resolve(file.path),
+    };
+    return this.reportsService.updateMonthlyReport(id, monthlyReport);
   }
 }

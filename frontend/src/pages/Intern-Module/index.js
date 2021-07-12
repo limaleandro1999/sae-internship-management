@@ -18,6 +18,10 @@ import {
   InternTasksCreate,
   InternTasksShow,
 } from '../../components/Intern-Tasks';
+import {
+  InternMonthlyReportEdit,
+  InternMonthlyReportShow,
+} from '../../components/Intern-Monthly-Report';
 
 function InternModule({ theme, dataProvider, authProvider }) {
   const userRole = localStorage.getItem('role');
@@ -88,6 +92,8 @@ function InternModule({ theme, dataProvider, authProvider }) {
             ? MonthlyReportsList
             : null
         }
+        edit={InternMonthlyReportEdit}
+        show={InternMonthlyReportShow}
       />
       <Resource
         name="interns/classes"

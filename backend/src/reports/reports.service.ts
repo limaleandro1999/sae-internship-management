@@ -1,12 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as dayjs from 'dayjs';
 import { OrderClause } from 'src/common/interfaces/order-clause.interface';
+import { generateDocxFile } from 'src/common/utils';
+import { Company } from 'src/companies/company.entity';
+import { Course } from 'src/courses/course.entity';
+import { Intern } from 'src/interns/intern.entity';
 import { InternsService } from 'src/interns/interns.service';
+import { InternshipAdvisor } from 'src/internship-advisors/internship-advisor.entity';
 import { TasksService } from 'src/tasks/tasks.service';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateMonthlyReportDTO } from './dto/create-monthly-report.dto';
 import { CreateSemesterReportDTO } from './dto/create-semester-report.dto';
+import { UpdateMonthlyReportDTO } from './dto/update-monthly-report.dto';
 import { MonthlyReport } from './monthly-report.entity';
 import { SemesterReport } from './semester-report.entity';
 
@@ -137,5 +144,77 @@ export class ReportsService {
       .skip(skip)
       .take(take)
       .getManyAndCount();
+  }
+
+  async getSemesterReportById(id: number | string) {
+    return this.monthlyReportRepository
+      .createQueryBuilder('semesterReport')
+      .leftJoinAndSelect('semesterReport.tasks', 'tasks')
+      .innerJoinAndSelect(
+        'semesterReport.internshipProcess',
+        'internshipProcess',
+      )
+      .where('semesterReport.id = :reportId', { reportId: id })
+      .getOne();
+  }
+
+  async getMonthlyReportById(id: number | string) {
+    return this.monthlyReportRepository
+      .createQueryBuilder('monthlyReport')
+      .leftJoinAndSelect('monthlyReport.tasks', 'tasks')
+      .innerJoinAndSelect(
+        'monthlyReport.internshipProcess',
+        'internshipProcess',
+      )
+      .innerJoinAndSelect('internshipProcess.intern', 'intern')
+      .innerJoinAndSelect('internshipProcess.company', 'company')
+      .innerJoinAndSelect(
+        'internshipProcess.internshipAdvisor',
+        'internshipAdvisor',
+      )
+      .innerJoinAndSelect('intern.course', 'course')
+      .where('monthlyReport.id = :reportId', { reportId: id })
+      .getOne();
+  }
+
+  async updateMonthlyReport(
+    id: number | string,
+    monthlyReport: UpdateMonthlyReportDTO,
+  ) {
+    await this.monthlyReportRepository.update(id, monthlyReport);
+    return this.monthlyReportRepository.findOne(id);
+  }
+
+  async generateMonthlyReportFile(id: number | string) {
+    const report = await this.getMonthlyReportById(id);
+    const internshipProcess = report?.internshipProcess;
+    const intern = <Intern>report?.internshipProcess?.intern;
+    const company = <Company>report?.internshipProcess?.company;
+    const internshipAdvisor = <InternshipAdvisor>(
+      report?.internshipProcess?.internshipAdvisor
+    );
+    const course = <Course>intern?.course;
+
+    return await generateDocxFile(
+      {
+        intern_name: intern?.name,
+        company: company?.name,
+        intern_course: course?.name,
+        internship_advisor_name: internshipAdvisor?.name,
+        internship_supervisor_name: internshipProcess?.supervisor,
+        month: dayjs(report?.startDate)?.month() + 1,
+        year: dayjs(report?.startDate)?.year(),
+        total_hour_amount_month: report?.tasks?.reduce(
+          (acc, task) => acc + task.workedHoursAmount,
+          0,
+        ),
+        accumulated_total_hour_amount: 200,
+        tasks: report.tasks.map(task => ({
+          ...task,
+          date: dayjs(task.date).format('DD/MM/YYYY'),
+        })),
+      },
+      'templates/monthly-report.docx',
+    );
   }
 }
