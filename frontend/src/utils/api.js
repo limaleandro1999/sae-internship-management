@@ -55,8 +55,11 @@ export default {
     return { data: data[0], total: data[1] };
   },
   update: (resource, params) => {
-    console.log(resource);
-    if (resource !== 'interns/monthly-reports') {
+    if (
+      !['interns/monthly-reports', 'interns/semester-reports'].includes(
+        resource
+      )
+    ) {
       return api.put(`/${resource}/${params.id}`, params.data, {
         headers: { ...getAuthHeaders() },
       });

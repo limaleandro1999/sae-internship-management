@@ -28,6 +28,9 @@ export class SemesterReport {
   @Column({ nullable: true })
   comments?: string;
 
+  @Column({ nullable: true })
+  reportFileUrl?: string;
+
   @Column({ type: 'json', nullable: true })
   evaluation?: EvaluationTopics;
 

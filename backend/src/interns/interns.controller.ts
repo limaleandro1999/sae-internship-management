@@ -31,6 +31,9 @@ import { ClassesSchedule } from './interfaces/classes-schedule.interface';
 import { Intern } from './intern.entity';
 import { InternsService } from './interns.service';
 import * as dayjs from 'dayjs';
+import { InternshipProcess } from 'src/internship-processes/internship-process.entity';
+import { SemesterReport } from 'src/reports/semester-report.entity';
+import { UpdateSemesterReportDTO } from 'src/reports/dto/update-semester-report.dto';
 
 @Controller('interns')
 export class InternsController {
@@ -68,9 +71,53 @@ export class InternsController {
     );
   }
 
+  @Public()
+  @Get('/semester-reports/:id/report-file')
+  async getSemesterReportFile(@Param('id') id: string, @Res() res: Response) {
+    const semesterReport = await this.reportsService.getSemesterReportById(id);
+    return res.sendFile(semesterReport.reportFileUrl);
+  }
+
+  @Public()
+  @Get('/semester-reports/:id/generate-file')
+  async generateSemesterReportFile(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ) {
+    const generatedFile = await this.reportsService.generateSemesterReportFile(
+      id,
+    );
+    const semesterReport = await this.reportsService.getSemesterReportById(id);
+    const filename = `${
+      (<Intern>(<InternshipProcess>semesterReport?.internshipProcess).intern)
+        .name
+    }-${dayjs(semesterReport.startDate).format('DD/MM/YYYY')}-${dayjs(
+      semesterReport.finishDate,
+    ).format('DD/MM/YYYY')}.docx`;
+
+    res.set(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    );
+    res.set('Content-Disposition', `attachment; filename=${filename}`);
+    return res.end(generatedFile);
+  }
+
   @Get('/semester-reports/:id')
-  getSemesterReport(@Param('id') id: string) {
-    return this.reportsService.getMonthlyReportById(id);
+  async getSemesterReport(@Param('id') id: string) {
+    const semesterReport = await this.reportsService.getSemesterReportById(id);
+
+    if (semesterReport.reportFileUrl) {
+      semesterReport.reportFileUrl = `${environment().server.protocol}://${
+        environment().server.host
+      }:${
+        environment().server.port
+      }/interns/semester-reports/${id}/report-file`;
+    } else {
+      semesterReport.reportFileUrl = null;
+    }
+
+    return semesterReport;
   }
 
   @Get('/monthly-reports')
@@ -102,7 +149,7 @@ export class InternsController {
     const monthlyReport = await this.reportsService.getMonthlyReportById(id);
     const filename = `${
       (<Intern>monthlyReport?.internshipProcess?.intern).name
-    } - ${dayjs(monthlyReport.startDate).format('MM-YYYY')}.docx`;
+    }-${dayjs(monthlyReport.startDate).format('MM/YYYY')}.docx`;
 
     res.set(
       'Content-Type',
@@ -115,9 +162,14 @@ export class InternsController {
   @Get('/monthly-reports/:id')
   async getMonthlyReport(@Param('id') id: string) {
     const monthlyReport = await this.reportsService.getMonthlyReportById(id);
-    monthlyReport.reportFileUrl = `${environment().server.protocol}://${
-      environment().server.host
-    }:${environment().server.port}/interns/monthly-reports/${id}/report-file`;
+    if (monthlyReport.reportFileUrl) {
+      monthlyReport.reportFileUrl = `${environment().server.protocol}://${
+        environment().server.host
+      }:${environment().server.port}/interns/monthly-reports/${id}/report-file`;
+    } else {
+      monthlyReport.reportFileUrl = null;
+    }
+
     return monthlyReport;
   }
 
@@ -214,6 +266,25 @@ export class InternsController {
   @Put('/tasks/:id')
   async updateTask(@Body() taskDTO: CreateTaskDTO): Promise<Task> {
     return this.tasksService.createTask(taskDTO);
+  }
+
+  @Put('/semester-reports/:id')
+  @UseInterceptors(
+    FileInterceptor('report-file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: editFileName,
+      }),
+    }),
+  )
+  updateSemesterReport(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<SemesterReport> {
+    const semesterReport: UpdateSemesterReportDTO = {
+      reportFileUrl: resolve(file.path),
+    };
+    return this.reportsService.updateSemesterReport(id, semesterReport);
   }
 
   @Put('/monthly-reports/:id')

@@ -14,11 +14,11 @@ import { GetApp } from '@material-ui/icons';
 import { api } from '../../utils/api';
 import fileDownload from 'js-file-download';
 
-function DownloadGeneratedReport(props) {
-  const { record } = props;
+export function DownloadGeneratedReport(props) {
+  const { record, reportType } = props;
   const handleDownload = async () => {
     const content = await api.get(
-      `/interns/monthly-reports/${record.id}/generate-file`,
+      `/interns/${reportType}-reports/${record.id}/generate-file`,
       { responseType: 'blob' }
     );
     fileDownload(
@@ -69,7 +69,7 @@ function MonthlyReportsList(props) {
         {showButtonEnabled ? <ShowButton label="Mostrar" /> : null}
         {editButtonEnabled ? <EditButton label="Editar" /> : null}
         {downloadButtonEnabled ? (
-          <DownloadGeneratedReport label="Download" />
+          <DownloadGeneratedReport label="Download" reportType="monthly" />
         ) : null}
       </Datagrid>
     </List>

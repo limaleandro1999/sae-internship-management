@@ -8,6 +8,12 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+export enum ReportStatus {
+  DELIVERED = 'DELIVERED',
+  PENDING = 'PENDING',
+  WITH_OBSERVATIONS = 'WITH_OBSERVATIONS',
+}
+
 @Entity()
 export class MonthlyReport {
   @PrimaryGeneratedColumn()
@@ -27,7 +33,8 @@ export class MonthlyReport {
   @Column({ nullable: true })
   reportFileUrl?: string;
 
-  // @Column()
+  @Column({ type: 'enum', enum: ReportStatus, default: ReportStatus.PENDING })
+  status: ReportStatus;
 
   @ManyToOne(
     () => InternshipProcess,

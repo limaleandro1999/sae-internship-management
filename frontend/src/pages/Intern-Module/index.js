@@ -22,6 +22,8 @@ import {
   InternMonthlyReportEdit,
   InternMonthlyReportShow,
 } from '../../components/Intern-Monthly-Report';
+import InternSemesterReportEdit from '../../components/Intern-Semester-Report/InternSemesterReportEdit';
+import { InternSemesterReportShow } from '../../components/Intern-Semester-Report';
 
 function InternModule({ theme, dataProvider, authProvider }) {
   const userRole = localStorage.getItem('role');
@@ -83,6 +85,8 @@ function InternModule({ theme, dataProvider, authProvider }) {
         name="interns/semester-reports"
         options={{ label: 'Relatórios Semestrais' }}
         list={SemesterReportsList}
+        edit={InternSemesterReportEdit}
+        show={InternSemesterReportShow}
       />
       <Resource
         name="interns/monthly-reports"

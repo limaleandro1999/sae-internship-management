@@ -15,11 +15,12 @@ export class TasksService {
 
   createTask(task: CreateTaskDTO) {
     delete task.id;
-    return this.taskRepository.save({
+    const taskObj = this.taskRepository.create({
       ...task,
       delivered: true,
       deliveredDate: dayjs(),
     });
+    return this.taskRepository.save(taskObj);
   }
 
   findOne(id: string | number) {

@@ -8,12 +8,14 @@ import { Course } from 'src/courses/course.entity';
 import { Intern } from 'src/interns/intern.entity';
 import { InternsService } from 'src/interns/interns.service';
 import { InternshipAdvisor } from 'src/internship-advisors/internship-advisor.entity';
+import { InternshipProcess } from 'src/internship-processes/internship-process.entity';
 import { TasksService } from 'src/tasks/tasks.service';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateMonthlyReportDTO } from './dto/create-monthly-report.dto';
 import { CreateSemesterReportDTO } from './dto/create-semester-report.dto';
 import { UpdateMonthlyReportDTO } from './dto/update-monthly-report.dto';
+import { UpdateSemesterReportDTO } from './dto/update-semester-report.dto';
 import { MonthlyReport } from './monthly-report.entity';
 import { SemesterReport } from './semester-report.entity';
 
@@ -43,17 +45,25 @@ export class ReportsService {
     const { month, year } = createMonthlyReportDTO;
     const startDate = new Date(year, month - 1, 1, 0, 0);
     const finishDate = new Date(year, month - 1, 23, 59, 59);
+    const monthlyReport = await this.monthlyReportRepository.findOne({
+      startDate,
+      finishDate,
+      internshipProcess,
+    });
     const tasks = await this.tasksService.getTasksByDateRangeAndEmail(
       internshipProcess.id,
       startDate,
       finishDate,
     );
-    return this.monthlyReportRepository.save({
-      startDate,
-      finishDate,
-      internshipProcess,
-      tasks,
-    });
+
+    return !monthlyReport
+      ? this.monthlyReportRepository.save({
+          startDate,
+          finishDate,
+          internshipProcess,
+          tasks,
+        })
+      : this.monthlyReportRepository.save({ ...monthlyReport, tasks });
   }
 
   async getInternSemesterReports(
@@ -147,13 +157,19 @@ export class ReportsService {
   }
 
   async getSemesterReportById(id: number | string) {
-    return this.monthlyReportRepository
+    return this.semesterReportRepository
       .createQueryBuilder('semesterReport')
-      .leftJoinAndSelect('semesterReport.tasks', 'tasks')
       .innerJoinAndSelect(
         'semesterReport.internshipProcess',
         'internshipProcess',
       )
+      .innerJoinAndSelect('internshipProcess.intern', 'intern')
+      .innerJoinAndSelect('internshipProcess.company', 'company')
+      .innerJoinAndSelect(
+        'internshipProcess.internshipAdvisor',
+        'internshipAdvisor',
+      )
+      .innerJoinAndSelect('intern.course', 'course')
       .where('semesterReport.id = :reportId', { reportId: id })
       .getOne();
   }
@@ -185,13 +201,21 @@ export class ReportsService {
     return this.monthlyReportRepository.findOne(id);
   }
 
+  async updateSemesterReport(
+    id: number | string,
+    semesterReport: UpdateSemesterReportDTO,
+  ) {
+    await this.semesterReportRepository.update(id, semesterReport);
+    return this.semesterReportRepository.findOne(id);
+  }
+
   async generateMonthlyReportFile(id: number | string) {
     const report = await this.getMonthlyReportById(id);
     const internshipProcess = report?.internshipProcess;
-    const intern = <Intern>report?.internshipProcess?.intern;
-    const company = <Company>report?.internshipProcess?.company;
+    const intern = <Intern>internshipProcess.intern;
+    const company = <Company>internshipProcess.company;
     const internshipAdvisor = <InternshipAdvisor>(
-      report?.internshipProcess?.internshipAdvisor
+      internshipProcess.internshipAdvisor
     );
     const course = <Course>intern?.course;
 
@@ -209,12 +233,41 @@ export class ReportsService {
           0,
         ),
         accumulated_total_hour_amount: 200,
-        tasks: report.tasks.map(task => ({
-          ...task,
-          date: dayjs(task.date).format('DD/MM/YYYY'),
-        })),
+        tasks: report.tasks
+          .sort((taskA, taskB) =>
+            dayjs(taskA.date).isAfter(dayjs(taskB.date)) ? 1 : -1,
+          )
+          .map(task => ({
+            ...task,
+            date: dayjs(task.date).format('DD/MM/YYYY'),
+          })),
       },
       'templates/monthly-report.docx',
+    );
+  }
+
+  async generateSemesterReportFile(id: number | string) {
+    const report = await this.getSemesterReportById(id);
+    const internshipProcess = <InternshipProcess>report?.internshipProcess;
+    const intern = <Intern>internshipProcess.intern;
+    const company = <Company>internshipProcess.company;
+    const internshipAdvisor = <InternshipAdvisor>(
+      internshipProcess.internshipAdvisor
+    );
+    const course = <Course>intern?.course;
+
+    return await generateDocxFile(
+      {
+        intern_name: intern?.name,
+        company: company?.name,
+        intern_course: course?.name,
+        intern_registration_number: intern?.registrationNumber,
+        internship_advisor_name: internshipAdvisor?.name,
+        internship_supervisor_name: internshipProcess?.supervisor,
+        start_date: dayjs(report.startDate).format('DD/MM/YYYY'),
+        finish_date: dayjs(report.finishDate).format('DD/MM/YYYY'),
+      },
+      'templates/semester-report.docx',
     );
   }
 }

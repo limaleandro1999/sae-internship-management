@@ -8,11 +8,13 @@ import {
   ShowButton,
 } from 'react-admin';
 import { ReportStatus } from '../Internship-Process/InternshipProcessShow';
+import { DownloadGeneratedReport } from './MonthlyReportList';
 
 function SemesterReportsList(props) {
   const {
     showButtonEnabled = true,
     editButtonEnabled = true,
+    downloadButtonEnabled = true,
     showInternNameField = false,
     showRegistrationNumberField = false,
   } = props;
@@ -37,6 +39,9 @@ function SemesterReportsList(props) {
         <ReportStatus label="Estado" />
         {showButtonEnabled ? <ShowButton label="Mostrar" /> : null}
         {editButtonEnabled ? <EditButton label="Editar" /> : null}
+        {downloadButtonEnabled ? (
+          <DownloadGeneratedReport label="Download" reportType="semester" />
+        ) : null}
       </Datagrid>
     </List>
   );

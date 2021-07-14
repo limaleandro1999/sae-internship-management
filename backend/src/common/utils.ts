@@ -5,7 +5,7 @@ import * as Docxtemplater from 'docxtemplater';
 
 const { readFile } = promises;
 
-export function editFileName(req, file, callback) {
+export function editFileName(_req, file, callback) {
   const name = file.originalname.split('.')[0];
   const fileExtName = extname(file.originalname);
   const randomName = Array(10)
