@@ -71,6 +71,22 @@ function ShowTaskInfo({ realId, delivered }) {
   );
 }
 
+function ShowReportButton(props) {
+  const { reportType } = props;
+  const { id } = useRecordContext();
+  const history = useHistory();
+
+  return (
+    <Button
+      title="Mostrar"
+      label="Mostrar"
+      onClick={() => history.push(`/reports/${reportType}-reports/${id}/show`)}
+    >
+      <Create />
+    </Button>
+  );
+}
+
 function DailySchedule(props) {
   const { label, day } = props;
 
@@ -121,6 +137,27 @@ function SemesterReportsTab(props) {
         <DateField source="startDate" label="Início do período avaliativo" />
         <DateField source="finishDate" label="Fim do período avaliativo" />
         <ReportStatus />
+        <ShowReportButton reportType="semester" />
+      </Datagrid>
+    </ArrayField>
+  ) : (
+    <Typography variant="h6">
+      Não há relatórios semestrais para esse estagiário
+    </Typography>
+  );
+}
+
+function MonthlyReportsTab(props) {
+  const { mandatory, monthlyReports } = useRecordContext();
+
+  return mandatory && monthlyReports?.length ? (
+    <ArrayField source="monthlyReports" label="Relatórios Mensais">
+      <Datagrid>
+        <DateField source="deadline" label="Prazo de entrega" />
+        <DateField source="startDate" label="Início do período avaliativo" />
+        <DateField source="finishDate" label="Fim do período avaliativo" />
+        <ReportStatus />
+        <ShowReportButton reportType="monthly" />
       </Datagrid>
     </ArrayField>
   ) : (
@@ -255,8 +292,11 @@ function InternshipProcessShow(props) {
           <DailySchedule label="Quinta" day="thursday" />
           <DailySchedule label="Sexta" day="friday" />
         </Tab>
-        <Tab label="Relatórios">
+        <Tab label="Relatórios Semestrais">
           <SemesterReportsTab />
+        </Tab>
+        <Tab label="Relatórios Mensais">
+          <MonthlyReportsTab />
         </Tab>
         <Tab label="Tarefas">
           <TasksTab {...props} />

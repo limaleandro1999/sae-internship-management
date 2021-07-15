@@ -1,5 +1,7 @@
 import React from 'react';
 import { Admin, Resource } from 'react-admin';
+import { InternMonthlyReportShow } from '../../components/Intern-Monthly-Report';
+import { InternSemesterReportShow } from '../../components/Intern-Semester-Report';
 import InternTasksShow from '../../components/Intern-Tasks/InternTasksShow';
 import { InternshipAdvisorDashboard } from '../../components/Internship-Advisor-Dashboard';
 import { InternshipAdvisorInternshipProcessList } from '../../components/Internship-Advisor-Internship-Process';
@@ -15,6 +17,7 @@ function SemesterReportsListWrapper(props) {
       {...props}
       showInternNameField
       showRegistrationNumberField
+      downloadButtonEnabled={false}
     />
   );
 }
@@ -25,6 +28,7 @@ function MonthlyReportsListWrapper(props) {
       {...props}
       showInternNameField
       showRegistrationNumberField
+      downloadButtonEnabled={false}
     />
   );
 }
@@ -51,11 +55,13 @@ function InternshipAdvisorModule({ theme, dataProvider, authProvider }) {
         name="internship-advisors/semester-reports"
         options={{ label: 'Relatórios Semestrais' }}
         list={SemesterReportsListWrapper}
+        show={InternSemesterReportShow}
       />
       <Resource
         name="internship-advisors/monthly-reports"
         options={{ label: 'Relatórios Mensais' }}
         list={MonthlyReportsListWrapper}
+        show={InternMonthlyReportShow}
       />
       <Resource name="interns/tasks" show={InternTasksShow} />
     </Admin>

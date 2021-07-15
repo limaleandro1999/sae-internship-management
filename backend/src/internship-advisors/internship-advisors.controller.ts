@@ -15,12 +15,14 @@ import { InternshipProcessesService } from 'src/internship-processes/internship-
 import { InternsService } from 'src/interns/interns.service';
 import { SemesterReport } from 'src/reports/semester-report.entity';
 import { MonthlyReport } from 'src/reports/monthly-report.entity';
+import { ReportsService } from 'src/reports/reports.service';
 
 @Controller('internship-advisors')
 export class InternshipAdvisorsController {
   constructor(
     private readonly internshipAdvisorService: InternshipAdvisorsService,
     private readonly internshipProcessesService: InternshipProcessesService,
+    private readonly reportsService: ReportsService,
     private readonly internsService: InternsService,
     private readonly userService: UsersService,
     private readonly emailService: EmailsService,
@@ -78,6 +80,26 @@ export class InternshipAdvisorsController {
       skip,
       take,
     );
+  }
+
+  @Get('/semester-reports/:id')
+  async getSemesterReport(@Param('id') id: string) {
+    const semesterReport = await this.reportsService.getSemesterReportById(id);
+    semesterReport.reportFileUrl = this.reportsService.getReportDownloadLink(
+      semesterReport,
+    );
+
+    return semesterReport;
+  }
+
+  @Get('/monthly-reports/:id')
+  async getMonthlyReport(@Param('id') id: string) {
+    const monthlyReport = await this.reportsService.getMonthlyReportById(id);
+    monthlyReport.reportFileUrl = this.reportsService.getReportDownloadLink(
+      monthlyReport,
+    );
+
+    return monthlyReport;
   }
 
   @Get('/internship-processes/:id/tasks')

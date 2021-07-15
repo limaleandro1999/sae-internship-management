@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as dayjs from 'dayjs';
+import environment from 'src/common/environment';
 import { OrderClause } from 'src/common/interfaces/order-clause.interface';
 import { generateDocxFile } from 'src/common/utils';
 import { Company } from 'src/companies/company.entity';
@@ -43,8 +44,21 @@ export class ReportsService {
       internshipProcesses: [internshipProcess],
     } = await this.internsService.getInternInfo(email);
     const { month, year } = createMonthlyReportDTO;
-    const startDate = new Date(year, month - 1, 1, 0, 0);
-    const finishDate = new Date(year, month - 1, 23, 59, 59);
+    const startDate = dayjs()
+      .set('date', 1)
+      .set('month', month - 1)
+      .set('year', year)
+      .toDate();
+    const finishDate = dayjs(startDate)
+      .add(1, 'month')
+      .subtract(1, 'day')
+      .set('hour', 23)
+      .set('minute', 59)
+      .set('second', 59)
+      .toDate();
+    const deadline = dayjs(finishDate)
+      .add(1, 'month')
+      .toDate();
     const monthlyReport = await this.monthlyReportRepository.findOne({
       startDate,
       finishDate,
@@ -60,6 +74,7 @@ export class ReportsService {
       ? this.monthlyReportRepository.save({
           startDate,
           finishDate,
+          deadline,
           internshipProcess,
           tasks,
         })
@@ -269,5 +284,23 @@ export class ReportsService {
       },
       'templates/semester-report.docx',
     );
+  }
+
+  getReportDownloadLink(report: SemesterReport | MonthlyReport) {
+    const reportType =
+      report instanceof SemesterReport ? 'semester' : 'monthly';
+    let downloadLink;
+
+    if (report.reportFileUrl) {
+      downloadLink = `${environment().server.protocol}://${
+        environment().server.host
+      }:${environment().server.port}/interns/${reportType}-reports/${
+        report.id
+      }/report-file`;
+    } else {
+      downloadLink = null;
+    }
+
+    return downloadLink;
   }
 }

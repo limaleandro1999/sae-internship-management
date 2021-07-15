@@ -70,6 +70,7 @@ export class InternshipProcessesService {
       .innerJoinAndSelect('internship.company', 'company')
       .innerJoinAndSelect('internship.internshipAdvisor', 'internshipAdvisor')
       .leftJoinAndSelect('internship.semesterReports', 'semesterReports')
+      .leftJoinAndSelect('internship.monthlyReports', 'monthlyReports')
       .where('internship.id = :id', { id })
       .getOne();
   }
@@ -97,7 +98,7 @@ export class InternshipProcessesService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (const _ of asyncGenerator()) {
       const report = await this.reportsService.create({
-        deadline: lastFinishDate.toDate(),
+        deadline: lastFinishDate.add(1, 'month').toDate(),
         finishDate: lastFinishDate.toDate(),
         startDate: lastStartDate.toDate(),
         delivered: false,

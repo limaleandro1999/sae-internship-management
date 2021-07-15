@@ -13,6 +13,7 @@ import {
 import { GetApp } from '@material-ui/icons';
 import { api } from '../../utils/api';
 import fileDownload from 'js-file-download';
+import { ReportStatus } from '../Internship-Process/InternshipProcessShow';
 
 export function DownloadGeneratedReport(props) {
   const { record, reportType } = props;
@@ -66,6 +67,7 @@ function MonthlyReportsList(props) {
         />
         <DateField source="startDate" label="Início do período avaliativo" />
         <DateField source="finishDate" label="Fim do período avaliativo" />
+        <ReportStatus label="Estado" />
         {showButtonEnabled ? <ShowButton label="Mostrar" /> : null}
         {editButtonEnabled ? <EditButton label="Editar" /> : null}
         {downloadButtonEnabled ? (

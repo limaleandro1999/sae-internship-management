@@ -16,7 +16,6 @@ import { diskStorage } from 'multer';
 import { resolve } from 'path';
 import { Public } from 'src/common/decorators/public.decorator';
 import { editFileName } from 'src/common/utils';
-import environment from 'src/common/environment';
 import { RequestWithQueryInfo } from 'src/common/interfaces/request-query-info.interface';
 import { UpdateMonthlyReportDTO } from 'src/reports/dto/update-monthly-report.dto';
 import { MonthlyReport } from 'src/reports/monthly-report.entity';
@@ -106,16 +105,9 @@ export class InternsController {
   @Get('/semester-reports/:id')
   async getSemesterReport(@Param('id') id: string) {
     const semesterReport = await this.reportsService.getSemesterReportById(id);
-
-    if (semesterReport.reportFileUrl) {
-      semesterReport.reportFileUrl = `${environment().server.protocol}://${
-        environment().server.host
-      }:${
-        environment().server.port
-      }/interns/semester-reports/${id}/report-file`;
-    } else {
-      semesterReport.reportFileUrl = null;
-    }
+    semesterReport.reportFileUrl = this.reportsService.getReportDownloadLink(
+      semesterReport,
+    );
 
     return semesterReport;
   }
@@ -162,13 +154,9 @@ export class InternsController {
   @Get('/monthly-reports/:id')
   async getMonthlyReport(@Param('id') id: string) {
     const monthlyReport = await this.reportsService.getMonthlyReportById(id);
-    if (monthlyReport.reportFileUrl) {
-      monthlyReport.reportFileUrl = `${environment().server.protocol}://${
-        environment().server.host
-      }:${environment().server.port}/interns/monthly-reports/${id}/report-file`;
-    } else {
-      monthlyReport.reportFileUrl = null;
-    }
+    monthlyReport.reportFileUrl = this.reportsService.getReportDownloadLink(
+      monthlyReport,
+    );
 
     return monthlyReport;
   }
@@ -282,7 +270,9 @@ export class InternsController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<SemesterReport> {
     const semesterReport: UpdateSemesterReportDTO = {
-      reportFileUrl: resolve(file.path),
+      reportFileUrl: file ? resolve(file.path) : null,
+      deliveredDate: file ? new Date(Date.now()) : null,
+      delivered: !!file,
     };
     return this.reportsService.updateSemesterReport(id, semesterReport);
   }
@@ -301,7 +291,9 @@ export class InternsController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<MonthlyReport> {
     const monthlyReport: UpdateMonthlyReportDTO = {
-      reportFileUrl: resolve(file.path),
+      reportFileUrl: file ? resolve(file.path) : null,
+      deliveredDate: file ? new Date(Date.now()) : null,
+      delivered: !!file,
     };
     return this.reportsService.updateMonthlyReport(id, monthlyReport);
   }
