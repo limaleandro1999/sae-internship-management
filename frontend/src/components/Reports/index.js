@@ -1,3 +1,4 @@
-import ReportList from './ReportList';
+import SemesterReportsList from './SemesterReportsList';
+import MonthlyReportsList from './MonthlyReportList';
 
-export { ReportList };
+export { SemesterReportsList, MonthlyReportsList };

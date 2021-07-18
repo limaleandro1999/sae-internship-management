@@ -23,10 +23,16 @@ export class SemesterReport {
   finishDate: Date;
 
   @Column({ nullable: true })
+  advisorComment?: string;
+
+  @Column({ nullable: true })
   activities?: string;
 
   @Column({ nullable: true })
   comments?: string;
+
+  @Column({ nullable: true })
+  reportFileUrl?: string;
 
   @Column({ type: 'json', nullable: true })
   evaluation?: EvaluationTopics;

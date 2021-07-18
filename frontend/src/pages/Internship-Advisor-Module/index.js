@@ -1,9 +1,43 @@
 import React from 'react';
 import { Admin, Resource } from 'react-admin';
-import InternTasksShow from '../../components/Intern-Tasks/InternTasksShow';
+import {
+  InternMonthlyReportEdit,
+  InternMonthlyReportShow,
+} from '../../components/Intern-Monthly-Report';
+import {
+  InternSemesterReportEdit,
+  InternSemesterReportShow,
+} from '../../components/Intern-Semester-Report';
+import { InternTasksShow } from '../../components/Intern-Tasks';
 import { InternshipAdvisorDashboard } from '../../components/Internship-Advisor-Dashboard';
 import { InternshipAdvisorInternshipProcessList } from '../../components/Internship-Advisor-Internship-Process';
 import { InternshipProcessShow } from '../../components/Internship-Process';
+import {
+  SemesterReportsList,
+  MonthlyReportsList,
+} from '../../components/Reports';
+
+function SemesterReportsListWrapper(props) {
+  return (
+    <SemesterReportsList
+      {...props}
+      showInternNameField
+      showRegistrationNumberField
+      downloadButtonEnabled={false}
+    />
+  );
+}
+
+function MonthlyReportsListWrapper(props) {
+  return (
+    <MonthlyReportsList
+      {...props}
+      showInternNameField
+      showRegistrationNumberField
+      downloadButtonEnabled={false}
+    />
+  );
+}
 
 function InternshipAdvisorModule({ theme, dataProvider, authProvider }) {
   return (
@@ -24,9 +58,30 @@ function InternshipAdvisorModule({ theme, dataProvider, authProvider }) {
         show={InternshipProcessShow}
       />
       <Resource
-        name="internship-advisors/reports"
-        options={{ label: 'Relatórios' }}
-        list={InternshipAdvisorDashboard}
+        name="internship-advisors/semester-reports"
+        options={{ label: 'Relatórios Semestrais' }}
+        list={SemesterReportsListWrapper}
+        show={InternSemesterReportShow}
+        edit={(props) => (
+          <InternSemesterReportEdit
+            {...props}
+            showFileInput={false}
+            showCommentInput={true}
+          />
+        )}
+      />
+      <Resource
+        name="internship-advisors/monthly-reports"
+        options={{ label: 'Relatórios Mensais' }}
+        list={MonthlyReportsListWrapper}
+        show={InternMonthlyReportShow}
+        edit={(props) => (
+          <InternMonthlyReportEdit
+            {...props}
+            showFileInput={false}
+            showCommentInput={true}
+          />
+        )}
       />
       <Resource name="interns/tasks" show={InternTasksShow} />
     </Admin>

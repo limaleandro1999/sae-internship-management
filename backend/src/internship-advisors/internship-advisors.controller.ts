@@ -13,12 +13,18 @@ import environment from 'src/common/environment';
 import { InternshipProcess } from 'src/internship-processes/internship-process.entity';
 import { InternshipProcessesService } from 'src/internship-processes/internship-processes.service';
 import { InternsService } from 'src/interns/interns.service';
+import { SemesterReport } from 'src/reports/semester-report.entity';
+import { MonthlyReport } from 'src/reports/monthly-report.entity';
+import { ReportsService } from 'src/reports/reports.service';
+import { UpdateSemesterReportDTO } from 'src/reports/dto/update-semester-report.dto';
+import { UpdateMonthlyReportDTO } from 'src/reports/dto/update-monthly-report.dto';
 
 @Controller('internship-advisors')
 export class InternshipAdvisorsController {
   constructor(
     private readonly internshipAdvisorService: InternshipAdvisorsService,
     private readonly internshipProcessesService: InternshipProcessesService,
+    private readonly reportsService: ReportsService,
     private readonly internsService: InternsService,
     private readonly userService: UsersService,
     private readonly emailService: EmailsService,
@@ -50,6 +56,52 @@ export class InternshipAdvisorsController {
       take,
       filter,
     );
+  }
+
+  @Get('/semester-reports')
+  getSemesterReports(
+    @Req() req: RequestWithQueryInfo,
+  ): Promise<[SemesterReport[], number]> {
+    const { order, skip, take } = req.queryInfo;
+    return this.internshipAdvisorService.getSemesterReports(
+      req.user.email,
+      order,
+      skip,
+      take,
+    );
+  }
+
+  @Get('/monthly-reports')
+  getMonthlyReports(
+    @Req() req: RequestWithQueryInfo,
+  ): Promise<[MonthlyReport[], number]> {
+    const { order, skip, take } = req.queryInfo;
+    return this.internshipAdvisorService.getMonthlyReports(
+      req.user.email,
+      order,
+      skip,
+      take,
+    );
+  }
+
+  @Get('/semester-reports/:id')
+  async getSemesterReport(@Param('id') id: string) {
+    const semesterReport = await this.reportsService.getSemesterReportById(id);
+    semesterReport.reportFileUrl = this.reportsService.getReportDownloadLink(
+      semesterReport,
+    );
+
+    return semesterReport;
+  }
+
+  @Get('/monthly-reports/:id')
+  async getMonthlyReport(@Param('id') id: string) {
+    const monthlyReport = await this.reportsService.getMonthlyReportById(id);
+    monthlyReport.reportFileUrl = this.reportsService.getReportDownloadLink(
+      monthlyReport,
+    );
+
+    return monthlyReport;
   }
 
   @Get('/internship-processes/:id/tasks')
@@ -117,5 +169,21 @@ export class InternshipAdvisorsController {
     @Body() updateCourseDTO: UpdateInternshipAdvisorDTO,
   ): Promise<InternshipAdvisor> {
     return this.internshipAdvisorService.update(id, updateCourseDTO);
+  }
+
+  @Put('/semester-reports/:id')
+  updateSemesterReport(
+    @Param('id') id: string,
+    @Body() updateCourseDTO: UpdateSemesterReportDTO,
+  ): Promise<SemesterReport> {
+    return this.reportsService.updateSemesterReport(id, updateCourseDTO);
+  }
+
+  @Put('/monthly-reports/:id')
+  updateMonthlyReport(
+    @Param('id') id: string,
+    @Body() updateCourseDTO: UpdateMonthlyReportDTO,
+  ): Promise<MonthlyReport> {
+    return this.reportsService.updateMonthlyReport(id, updateCourseDTO);
   }
 }

@@ -30,6 +30,7 @@ import { InternsModule } from './interns/interns.module';
 import { InternshipProcessesModule } from './internship-processes/internship-processes.module';
 import { ReportsModule } from './reports/reports.module';
 import { TasksModule } from './tasks/tasks.module';
+import { MulterModule } from '@nestjs/platform-express';
 @Module({
   imports: [
     ConfigModule.forRoot({ load: [environment] }),
@@ -52,6 +53,9 @@ import { TasksModule } from './tasks/tasks.module';
         dir: resolve('backend', '../templates'),
         ...environment().mailer.template,
       },
+    }),
+    MulterModule.register({
+      dest: './upload',
     }),
     CampiModule,
     CampusAdminModule,

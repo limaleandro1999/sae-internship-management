@@ -7,11 +7,17 @@ import {
   Filter,
   TextInput,
   Button,
+  useListContext,
 } from 'react-admin';
 import { Typography, Box } from '@material-ui/core';
 import { Create, Description } from '@material-ui/icons';
 import dayjs from 'dayjs';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import { api, getAuthHeaders } from '../../utils/api';
+
+const Alert = withReactContent(Swal);
 
 export function TaskStatus({ label }) {
   const { delivered, date } = useRecordContext();
@@ -37,10 +43,52 @@ export function TaskStatus({ label }) {
   );
 }
 
+async function generateMontlhyReportAction(month, year, history) {
+  const { status } = await api.post(
+    `/reports/monthly`,
+    {
+      month,
+      year,
+    },
+    { headers: getAuthHeaders() }
+  );
+
+  if (status >= 200 && status < 400) {
+    await Alert.fire({
+      title: 'Relatório criado com sucesso!',
+      showCloseButton: true,
+      confirmButtonText: 'Ok',
+    });
+
+    history.push('/interns/monthly-reports');
+  }
+}
+
 function GenerateMonthlyReport(props) {
+  const history = useHistory();
+  const { filterValues } = useListContext();
+  const date = dayjs(filterValues?.date);
+  const triggerGenerateMonthlyReportModal = async () => {
+    const { isConfirmed } = await Alert.fire({
+      title: 'Gerar relatório mensal?',
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Ok',
+      cancelButtonText: 'Não',
+    });
+
+    if (isConfirmed) {
+      generateMontlhyReportAction(date.month() + 1, date.year(), history);
+    }
+  };
+
   return (
     <Box>
-      <Button label="Gerar Relatório" title="Gerar Relatório">
+      <Button
+        label="Gerar Relatório"
+        title="Gerar Relatório"
+        onClick={triggerGenerateMonthlyReportModal}
+      >
         <Description />
       </Button>
     </Box>
@@ -91,19 +139,26 @@ function TasksFilters(props) {
 
 function InternTasksList(props) {
   return (
-    <List
-      {...props}
-      title="Atividades"
-      actions={<GenerateMonthlyReport />}
-      filters={<TasksFilters />}
-    >
-      <Datagrid>
-        <DateField label="Data" source="date" />
-        <TaskStatus label="Estado" />
-        <FillTaskButton label="Preencher" />
-        <ShowTaskInfo label="Mostrar" />
-      </Datagrid>
-    </List>
+    <>
+      <Typography>
+        Caso já tenha gerado um relatório para este mês e deseje atualizar as
+        atividades do mesmo, clique novamente em "Gerar Relatório" e o relatório
+        será atualizado com as novas atividades
+      </Typography>
+      <List
+        {...props}
+        title="Atividades"
+        actions={<GenerateMonthlyReport />}
+        filters={<TasksFilters />}
+      >
+        <Datagrid>
+          <DateField label="Data" source="date" />
+          <TaskStatus label="Estado" />
+          <FillTaskButton label="Preencher" />
+          <ShowTaskInfo label="Mostrar" />
+        </Datagrid>
+      </List>
+    </>
   );
 }
 

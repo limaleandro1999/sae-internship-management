@@ -3,7 +3,10 @@ import { Admin, Resource } from 'react-admin';
 import { useHistory } from 'react-router-dom';
 import { CLIENT_ALLOWED_ROLES } from '../../utils/roles';
 import { InternDashboard } from '../../components/Intern-Dashboard';
-import { ReportList } from '../../components/Reports';
+import {
+  MonthlyReportsList,
+  SemesterReportsList,
+} from '../../components/Reports';
 import {
   InternClassesScheduleList,
   InternClassesScheduleEdit,
@@ -15,6 +18,14 @@ import {
   InternTasksCreate,
   InternTasksShow,
 } from '../../components/Intern-Tasks';
+import {
+  InternMonthlyReportEdit,
+  InternMonthlyReportShow,
+} from '../../components/Intern-Monthly-Report';
+import {
+  InternSemesterReportShow,
+  InternSemesterReportEdit,
+} from '../../components/Intern-Semester-Report';
 
 function InternModule({ theme, dataProvider, authProvider }) {
   const userRole = localStorage.getItem('role');
@@ -64,11 +75,6 @@ function InternModule({ theme, dataProvider, authProvider }) {
         list={InternDashboard}
       />
       <Resource
-        name="interns/reports"
-        options={{ label: 'Relatórios' }}
-        list={ReportList}
-      />
-      <Resource
         name="interns/tasks"
         options={{ label: 'Atividades' }}
         list={
@@ -76,6 +82,24 @@ function InternModule({ theme, dataProvider, authProvider }) {
         }
         show={InternTasksShow}
         edit={InternTasksCreate}
+      />
+      <Resource
+        name="interns/semester-reports"
+        options={{ label: 'Relatórios Semestrais' }}
+        list={SemesterReportsList}
+        edit={InternSemesterReportEdit}
+        show={InternSemesterReportShow}
+      />
+      <Resource
+        name="interns/monthly-reports"
+        options={{ label: 'Relatórios Mensais' }}
+        list={
+          internInfo?.internshipProcesses[0]?.mandatory
+            ? MonthlyReportsList
+            : null
+        }
+        edit={InternMonthlyReportEdit}
+        show={InternMonthlyReportShow}
       />
       <Resource
         name="interns/classes"

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 import { OrderClause } from 'src/common/interfaces/order-clause.interface';
 import { InternshipProcessesService } from 'src/internship-processes/internship-processes.service';
+import { ReportsService } from 'src/reports/reports.service';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateInternshipAdvisorDTO } from './dto/create-internship-advisor.dto';
@@ -16,6 +17,7 @@ export class InternshipAdvisorsService {
     private internshipAdvisorRepository: Repository<InternshipAdvisor>,
     private readonly userService: UsersService,
     private readonly internshipProcessesService: InternshipProcessesService,
+    private readonly reportsService: ReportsService,
   ) {}
 
   findAll(
@@ -96,6 +98,36 @@ export class InternshipAdvisorsService {
       skip,
       take,
       filter,
+    );
+  }
+
+  async getSemesterReports(
+    email: string,
+    order?: OrderClause,
+    skip?: number,
+    take?: number,
+  ) {
+    const user = await this.userService.findUser(email);
+    return this.reportsService.getSemesterReportsByInternshipAdvisorId(
+      user?.internshipAdvisor?.id,
+      order,
+      skip,
+      take,
+    );
+  }
+
+  async getMonthlyReports(
+    email: string,
+    order?: OrderClause,
+    skip?: number,
+    take?: number,
+  ) {
+    const user = await this.userService.findUser(email);
+    return this.reportsService.getMonthlyReportsByInternshipAdvisorId(
+      user?.internshipAdvisor?.id,
+      order,
+      skip,
+      take,
     );
   }
 }

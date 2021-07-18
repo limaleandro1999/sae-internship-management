@@ -1,6 +1,13 @@
 import { InternshipProcess } from 'src/internship-processes/internship-process.entity';
 import { MonthlyReport } from 'src/reports/monthly-report.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Task {
@@ -40,4 +47,16 @@ export class Task {
     { nullable: true },
   )
   internshipProcess: InternshipProcess;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  removeParagraphTags() {
+    if (this.activity) {
+      this.activity = this.activity.replace(/<\/?p>/gm, '');
+    }
+
+    if (this.observation) {
+      this.observation = this.observation.replace(/<\/?p>/gm, '');
+    }
+  }
 }

@@ -54,7 +54,14 @@ import {
 } from '../../components/Internship-Process';
 import { CLIENT_ALLOWED_ROLES } from '../../utils/roles';
 import { useHistory } from 'react-router-dom';
-
+import {
+  InternMonthlyReportEdit,
+  InternMonthlyReportShow,
+} from '../../components/Intern-Monthly-Report';
+import {
+  InternSemesterReportEdit,
+  InternSemesterReportShow,
+} from '../../components/Intern-Semester-Report';
 function AdminIcon(props) {
   return (
     <SvgIcon {...props}>
@@ -168,6 +175,16 @@ function InternshipSectorModule({ theme, dataProvider, authProvider }) {
           show={InternshipProcessShow}
           edit={InternshipProcessEdit}
           options={{ label: 'Processo de Estágio' }}
+        />,
+        <Resource
+          name="reports/monthly-reports"
+          show={InternMonthlyReportShow}
+          edit={InternMonthlyReportEdit}
+        />,
+        <Resource
+          name="reports/semester-reports"
+          show={InternSemesterReportShow}
+          edit={InternSemesterReportEdit}
         />,
       ]}
     </Admin>
