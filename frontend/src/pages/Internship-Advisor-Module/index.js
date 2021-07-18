@@ -1,8 +1,14 @@
 import React from 'react';
 import { Admin, Resource } from 'react-admin';
-import { InternMonthlyReportShow } from '../../components/Intern-Monthly-Report';
-import { InternSemesterReportShow } from '../../components/Intern-Semester-Report';
-import InternTasksShow from '../../components/Intern-Tasks/InternTasksShow';
+import {
+  InternMonthlyReportEdit,
+  InternMonthlyReportShow,
+} from '../../components/Intern-Monthly-Report';
+import {
+  InternSemesterReportEdit,
+  InternSemesterReportShow,
+} from '../../components/Intern-Semester-Report';
+import { InternTasksShow } from '../../components/Intern-Tasks';
 import { InternshipAdvisorDashboard } from '../../components/Internship-Advisor-Dashboard';
 import { InternshipAdvisorInternshipProcessList } from '../../components/Internship-Advisor-Internship-Process';
 import { InternshipProcessShow } from '../../components/Internship-Process';
@@ -56,12 +62,26 @@ function InternshipAdvisorModule({ theme, dataProvider, authProvider }) {
         options={{ label: 'Relatórios Semestrais' }}
         list={SemesterReportsListWrapper}
         show={InternSemesterReportShow}
+        edit={(props) => (
+          <InternSemesterReportEdit
+            {...props}
+            showFileInput={false}
+            showCommentInput={true}
+          />
+        )}
       />
       <Resource
         name="internship-advisors/monthly-reports"
         options={{ label: 'Relatórios Mensais' }}
         list={MonthlyReportsListWrapper}
         show={InternMonthlyReportShow}
+        edit={(props) => (
+          <InternMonthlyReportEdit
+            {...props}
+            showFileInput={false}
+            showCommentInput={true}
+          />
+        )}
       />
       <Resource name="interns/tasks" show={InternTasksShow} />
     </Admin>

@@ -16,6 +16,8 @@ import { InternsService } from 'src/interns/interns.service';
 import { SemesterReport } from 'src/reports/semester-report.entity';
 import { MonthlyReport } from 'src/reports/monthly-report.entity';
 import { ReportsService } from 'src/reports/reports.service';
+import { UpdateSemesterReportDTO } from 'src/reports/dto/update-semester-report.dto';
+import { UpdateMonthlyReportDTO } from 'src/reports/dto/update-monthly-report.dto';
 
 @Controller('internship-advisors')
 export class InternshipAdvisorsController {
@@ -167,5 +169,21 @@ export class InternshipAdvisorsController {
     @Body() updateCourseDTO: UpdateInternshipAdvisorDTO,
   ): Promise<InternshipAdvisor> {
     return this.internshipAdvisorService.update(id, updateCourseDTO);
+  }
+
+  @Put('/semester-reports/:id')
+  updateSemesterReport(
+    @Param('id') id: string,
+    @Body() updateCourseDTO: UpdateSemesterReportDTO,
+  ): Promise<SemesterReport> {
+    return this.reportsService.updateSemesterReport(id, updateCourseDTO);
+  }
+
+  @Put('/monthly-reports/:id')
+  updateMonthlyReport(
+    @Param('id') id: string,
+    @Body() updateCourseDTO: UpdateMonthlyReportDTO,
+  ): Promise<MonthlyReport> {
+    return this.reportsService.updateMonthlyReport(id, updateCourseDTO);
   }
 }

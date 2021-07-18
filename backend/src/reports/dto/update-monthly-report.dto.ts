@@ -3,4 +3,5 @@ export interface UpdateMonthlyReportDTO {
   reportFileUrl?: string;
   delivered?: boolean;
   deliveredDate?: Date;
+  advisorComment?: string;
 }

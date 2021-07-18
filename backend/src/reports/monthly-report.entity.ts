@@ -34,6 +34,9 @@ export class MonthlyReport {
   notes?: string;
 
   @Column({ nullable: true })
+  advisorComment?: string;
+
+  @Column({ nullable: true })
   reportFileUrl?: string;
 
   @Column({ default: false })
