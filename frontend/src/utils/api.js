@@ -55,23 +55,46 @@ export default {
     return { data: data[0], total: data[1] };
   },
   update: (resource, params) => {
-    if (
-      !['interns/monthly-reports', 'interns/semester-reports'].includes(
-        resource
-      )
-    ) {
-      return api.put(`/${resource}/${params.id}`, params.data, {
-        headers: { ...getAuthHeaders() },
-      });
-    }
-
     const formData = new FormData();
+    const { data } = params;
 
-    formData.append('report-file', params.data['report-file'].rawFile);
+    switch (resource) {
+      case 'interns/monthly-reports':
+      case 'interns/semester-reports':
+        formData.append('report-file', params.data['report-file'].rawFile);
 
-    return api.put(`/${resource}/${params.id}`, formData, {
-      headers: { ...getAuthHeaders() },
-    });
+        return api.put(`/${resource}/${params.id}`, formData, {
+          headers: { ...getAuthHeaders() },
+        });
+
+      case 'internship-processes/time-additive':
+        for (let key in data) {
+          formData.append(
+            key,
+            data[key]?.rawFile ? data[key]?.rawFile : data[key]
+          );
+        }
+
+        return api.put(`/${resource}/${params.id}`, formData, {
+          headers: { ...getAuthHeaders() },
+        });
+
+      case 'internship-processes/finish':
+        for (let key in data) {
+          if (data[key]?.rawFile) {
+            formData.append(key, data[key]?.rawFile);
+          }
+        }
+
+        return api.put(`/${resource}/${params.id}`, formData, {
+          headers: { ...getAuthHeaders() },
+        });
+
+      default:
+        return api.put(`/${resource}/${params.id}`, params.data, {
+          headers: { ...getAuthHeaders() },
+        });
+    }
   },
   updateMany: (resource, params) => {
     const query = {
@@ -82,8 +105,30 @@ export default {
       headers: { ...getAuthHeaders() },
     });
   },
-  create: (resource, params) =>
-    api.post(`/${resource}`, params.data, { headers: { ...getAuthHeaders() } }),
+  create: (resource, params) => {
+    if (resource === 'internship-processes') {
+      const formData = new FormData();
+      const { data } = params;
+
+      for (let key in data) {
+        if (data[key].rawFile) {
+          formData.append(key, data[key]?.rawFile);
+        } else {
+          formData.append(
+            key,
+            key === 'weeklySchedule' ? JSON.stringify(data[key]) : data[key]
+          );
+        }
+      }
+
+      return api.post(`/${resource}`, formData, {
+        headers: { ...getAuthHeaders() },
+      });
+    }
+    return api.post(`/${resource}`, params.data, {
+      headers: { ...getAuthHeaders() },
+    });
+  },
   delete: (resource, params) =>
     api.delete(`/${resource}/${params.id}`, {
       headers: { ...getAuthHeaders() },

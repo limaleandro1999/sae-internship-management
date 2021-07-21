@@ -3,4 +3,5 @@ export interface UpdateSemesterReportDTO {
   delivered?: boolean;
   deliveredDate?: Date;
   advisorComment?: string;
+  finishDate?: Date;
 }

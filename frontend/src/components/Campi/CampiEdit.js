@@ -26,7 +26,7 @@ const validateAddress = required('O campo endereço é obrigatório');
 
 function CampiEdit(props) {
   return (
-    <Edit {...props} title="Novo Campus">
+    <Edit {...props} title="Edit Campus">
       <SimpleForm>
         <TextInput
           source="name"

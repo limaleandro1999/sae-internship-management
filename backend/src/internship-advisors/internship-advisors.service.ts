@@ -89,7 +89,6 @@ export class InternshipAdvisorsService {
     order?: OrderClause,
     skip?: number,
     take?: number,
-    filter?: BaseFilter,
   ) {
     const user = await this.userService.findUser(email);
     return this.internshipProcessesService.getInternshipProcessesByInternshipAdvisorId(
@@ -97,7 +96,6 @@ export class InternshipAdvisorsService {
       order,
       skip,
       take,
-      filter,
     );
   }
 

@@ -17,6 +17,7 @@ import { SemesterReport } from 'src/reports/semester-report.entity';
 import { MonthlyReport } from 'src/reports/monthly-report.entity';
 import { TasksService } from 'src/tasks/tasks.service';
 import { Task } from 'src/tasks/task.entity';
+import { AdditiveTerm } from 'src/internship-processes/additive-term.entity';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { Task } from 'src/tasks/task.entity';
       SemesterReport,
       MonthlyReport,
       Task,
+      AdditiveTerm,
     ]),
   ],
   providers: [

@@ -13,8 +13,11 @@ export interface CreateInternshipProcessDTO {
   insuranceCompany: string;
   supervisor: string;
   supervisorPosition: string;
+  mandatory?: boolean;
   company: CreateCompanyDTO | number;
   intern: CreateInternDTO | number;
   internshipAdvisor: number;
   campus?: number;
+  registrationFormFileURL?: string;
+  internshipCommitmentTermAndActivityPlanFileURL?: string;
 }

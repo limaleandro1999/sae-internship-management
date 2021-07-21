@@ -8,6 +8,8 @@ import {
   BooleanInput,
   ReferenceInput,
   AutocompleteInput,
+  FileInput,
+  FileField,
   Button,
 } from 'react-admin';
 import { Typography, Box } from '@material-ui/core';
@@ -112,6 +114,7 @@ function CompanyTabFrom() {
 
 function ContractTabForm(props) {
   const { isCreateForm = false } = props;
+  const [mandatory, setMandatory] = useState(false);
 
   return (
     <Box p="1em" width="100%">
@@ -308,7 +311,30 @@ function ContractTabForm(props) {
             source="mandatory"
             label="Estágio Obrigatório?"
             fullWidth={true}
+            onChange={() => setMandatory(!mandatory)}
           />
+          {isCreateForm ? (
+            <>
+              {mandatory ? (
+                <FileInput
+                  source="registrationForm"
+                  label="Ficha de Matrícula"
+                  accept="application/pdf"
+                  placeholder="Solte um arquivo para fazer upload ou clique para selecioná-lo."
+                >
+                  <FileField source="src" title="title" />
+                </FileInput>
+              ) : null}
+              <FileInput
+                source="internshipCommitmentTermAndActivityPlan"
+                label="Termo de compromisso de estágio e plano de atividades"
+                accept="application/pdf"
+                placeholder="Solte um arquivo para fazer upload ou clique para selecioná-lo."
+              >
+                <FileField source="src" title="title" />
+              </FileInput>
+            </>
+          ) : null}
         </Box>
       </Box>
     </Box>

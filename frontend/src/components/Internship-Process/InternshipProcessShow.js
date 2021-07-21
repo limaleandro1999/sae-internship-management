@@ -15,6 +15,7 @@ import {
   Button,
   SimpleForm,
   TextInput,
+  FileField,
 } from 'react-admin';
 import {
   Typography,
@@ -284,6 +285,70 @@ function InternshipProcessShow(props) {
           <TextField source="insuranceCompany" label="Empresa Seguradora" />
 
           <BooleanField source="mandatory" label="Obrigatório" />
+
+          <FileField
+            source="registrationFormFileURL"
+            title="Download do documento"
+            label="Ficha de Matrícula"
+            accept="application/pdf"
+            emptyText="Documento não enviado"
+          />
+          <FileField
+            source="internshipCommitmentTermAndActivityPlanFileURL"
+            title="Download do documento"
+            label="Termo de compromisso de estágio e plano de atividades"
+            accept="application/pdf"
+            emptyText="Documento não enviado"
+          />
+          <FileField
+            source="internEvaluationSheetFileURL"
+            title="Download do documento"
+            label="Ficha de avaliação do estagiário"
+            accept="application/pdf"
+            emptyText="Documento não enviado"
+          />
+          <FileField
+            source="finalInternshipReportFileURL"
+            title="Download do documento"
+            label="Relatório final de estágio"
+            accept="application/pdf"
+            emptyText="Documento não enviado"
+          />
+          <FileField
+            source="applicationCompletionInternshipFileURL"
+            title="Download do documento"
+            label="Requerimento conclusão estágio"
+            accept="application/pdf"
+            emptyText="Documento não enviado"
+          />
+          <FileField
+            source="internshipCompletionStatementFileURL"
+            title="Download do documento"
+            label="Declaração de conclusão de estágio"
+            accept="application/pdf"
+            emptyText="Documento não enviado"
+          />
+          <FileField
+            source="internshipAgreementTerminationTermFileURL"
+            title="Download do documento"
+            label="Termo de rescisão de contrato de estágio "
+            accept="application/pdf"
+            emptyText="Documento não enviado"
+          />
+          <FileField
+            source="applicationCompletionInternshipFileURL"
+            title="Download do documento"
+            label="Requerimento conclusão estágio"
+            accept="application/pdf"
+            emptyText="Documento não enviado"
+          />
+          <FileField
+            source="guidanceForFinalInternshipReportFileURL"
+            title="Download do documento"
+            label="Orientação para relatório final de estágio"
+            accept="application/pdf"
+            emptyText="Documento não enviado"
+          />
         </Tab>
         <Tab label="Horário">
           <DailySchedule label="Segunda" day="monday" />

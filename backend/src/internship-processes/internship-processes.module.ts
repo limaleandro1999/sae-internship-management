@@ -12,6 +12,7 @@ import { Task } from 'src/tasks/task.entity';
 import { TasksService } from 'src/tasks/tasks.service';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
+import { AdditiveTerm } from './additive-term.entity';
 import { InternshipProcess } from './internship-process.entity';
 import { InternshipProcessesController } from './internship-processes.controller';
 import { InternshipProcessesService } from './internship-processes.service';
@@ -26,6 +27,7 @@ import { InternshipProcessesService } from './internship-processes.service';
       SemesterReport,
       Task,
       MonthlyReport,
+      AdditiveTerm,
     ]),
   ],
   controllers: [InternshipProcessesController],

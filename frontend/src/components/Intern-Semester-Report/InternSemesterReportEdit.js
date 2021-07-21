@@ -19,6 +19,7 @@ function InternSemesterReportEdit(props) {
             source="report-file"
             label="Relatório Semestral"
             accept="application/pdf"
+            placeholder="Solte um arquivo para fazer upload ou clique para selecioná-lo."
           >
             <FileField source="src" title="title" />
           </FileInput>

@@ -51,6 +51,8 @@ import {
   InternshipProcessList,
   InternshipProcessShow,
   InternshipProcessEdit,
+  InternshipProcessFinishForm,
+  InternshipProcessTimeAdditiveForm,
 } from '../../components/Internship-Process';
 import { CLIENT_ALLOWED_ROLES } from '../../utils/roles';
 import { useHistory } from 'react-router-dom';
@@ -168,6 +170,14 @@ function InternshipSectorModule({ theme, dataProvider, authProvider }) {
             options={{ label: 'Estagiários' }}
           />
         ) : null,
+        <Resource
+          name="internship-processes/time-additive"
+          edit={InternshipProcessTimeAdditiveForm}
+        />,
+        <Resource
+          name="internship-processes/finish"
+          edit={InternshipProcessFinishForm}
+        />,
         <Resource
           name="internship-processes"
           list={InternshipProcessList}
