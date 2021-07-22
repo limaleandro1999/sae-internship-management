@@ -26,6 +26,8 @@ import {
   InternSemesterReportShow,
   InternSemesterReportEdit,
 } from '../../components/Intern-Semester-Report';
+import { i18nProvider } from '../../utils/i18nProvider';
+import { InternLoginPage } from '../Login';
 
 function InternModule({ theme, dataProvider, authProvider }) {
   const userRole = localStorage.getItem('role');
@@ -68,6 +70,8 @@ function InternModule({ theme, dataProvider, authProvider }) {
       theme={theme}
       dataProvider={dataProvider}
       authProvider={authProvider}
+      i18nProvider={i18nProvider}
+      loginPage={InternLoginPage}
     >
       <Resource
         name="dashboard"

@@ -64,6 +64,8 @@ import {
   InternSemesterReportEdit,
   InternSemesterReportShow,
 } from '../../components/Intern-Semester-Report';
+import { i18nProvider } from '../../utils/i18nProvider';
+import { InternshipSectorLoginPage } from '../Login';
 function AdminIcon(props) {
   return (
     <SvgIcon {...props}>
@@ -95,6 +97,8 @@ function InternshipSectorModule({ theme, dataProvider, authProvider }) {
       theme={theme}
       dataProvider={dataProvider}
       authProvider={authProvider}
+      i18nProvider={i18nProvider}
+      loginPage={InternshipSectorLoginPage}
     >
       {(permissions) => [
         ['Admin'].includes(permissions) ? (

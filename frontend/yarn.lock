@@ -9989,6 +9989,20 @@ quill@~1.3.6:
     parchment "^1.1.4"
     quill-delta "^3.6.2"
 
+ra-core@^3.10.2:
+  version "3.17.0"
+  resolved "https://registry.yarnpkg.com/ra-core/-/ra-core-3.17.0.tgz#2a6631a172611b562145f182bb882918deb28ac9"
+  integrity sha512-nwlOndh+eGJEz2Cn0McNbtXg+pulG6C2yT4mKC+lp523u820Sqn2eStn7IKtnfIvClXs/z8Ttyh9fR4sVlFrGw==
+  dependencies:
+    classnames "~2.2.5"
+    date-fns "^1.29.0"
+    eventemitter3 "^3.0.0"
+    inflection "~1.12.0"
+    lodash "~4.17.5"
+    prop-types "^15.6.1"
+    query-string "^5.1.1"
+    reselect "~3.0.0"
+
 ra-core@^3.15.2:
   version "3.15.2"
   resolved "https://registry.yarnpkg.com/ra-core/-/ra-core-3.15.2.tgz#a1e66d50d028554e4cf6562ad132480837d64f59"
@@ -10027,6 +10041,13 @@ ra-language-english@^3.15.2:
   integrity sha512-jFSqF8Qsf0ENraw44P5pBYNHXxyPsA48ACbTR95Ds0az2s7BAHRxLL6g57PbCaad5ND6Jl6phjJqbfQt0DizQg==
   dependencies:
     ra-core "^3.15.2"
+
+ra-language-pt-br@^1.3.6:
+  version "1.3.6"
+  resolved "https://registry.yarnpkg.com/ra-language-pt-br/-/ra-language-pt-br-1.3.6.tgz#5c451da0292978c494f170ca48d5af236583e229"
+  integrity sha512-uS7CCzLNUpH59g1IK0hi4n0e0C3epCAgtZp2cm+qwAO/JIA5Le3bHNUtCotbOhA29YboZf6OhHrSnCFeyQPAyw==
+  dependencies:
+    ra-core "^3.10.2"
 
 ra-ui-materialui@^3.15.2:
   version "3.15.2"
