@@ -9,6 +9,7 @@ import {
   email,
 } from 'react-admin';
 import { ROLES } from '../../utils/roles';
+import { CustomToolbar } from '../Course/CourseCreate';
 
 const validateName = required('O campo nome é obrigatório');
 const validateEmail = [
@@ -21,7 +22,7 @@ function InternshipAdvisorCreate(props) {
 
   return (
     <Create {...props} title="Novo Orientador de Estágio">
-      <SimpleForm>
+      <SimpleForm toolbar={<CustomToolbar />}>
         <TextInput
           source="name"
           label="Nome"

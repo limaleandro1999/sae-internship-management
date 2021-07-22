@@ -12,6 +12,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { AdditiveTerm } from './additive-term.entity';
 import { WeeklySchedule } from './interfaces/weekly-schedule.interface';
 
 export enum InternshipProcessStatus {
@@ -52,6 +53,30 @@ export class InternshipProcess {
 
   @Column()
   supervisorPosition: string;
+
+  @Column({ nullable: true })
+  registrationFormFileURL?: string;
+
+  @Column({ nullable: true })
+  internshipCommitmentTermAndActivityPlanFileURL?: string;
+
+  @Column({ nullable: true })
+  internEvaluationSheetFileURL?: string;
+
+  @Column({ nullable: true })
+  finalInternshipReportFileURL?: string;
+
+  @Column({ nullable: true })
+  applicationCompletionInternshipFileURL?: string;
+
+  @Column({ nullable: true })
+  internshipCompletionStatementFileURL?: string;
+
+  @Column({ nullable: true })
+  internshipAgreementTerminationTermFileURL?: string;
+
+  @Column({ nullable: true })
+  SEINumber?: string;
 
   @Column({
     type: 'enum',
@@ -105,4 +130,10 @@ export class InternshipProcess {
     task => task.internshipProcess,
   )
   tasks: Task[];
+
+  @OneToMany(
+    () => AdditiveTerm,
+    additiveTerms => additiveTerms.internshipProcess,
+  )
+  additiveTerms: AdditiveTerm[];
 }

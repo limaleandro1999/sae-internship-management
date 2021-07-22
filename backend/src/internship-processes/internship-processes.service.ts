@@ -10,7 +10,10 @@ import { InternsService } from 'src/interns/interns.service';
 import { ReportsService } from 'src/reports/reports.service';
 import { SemesterReport } from 'src/reports/semester-report.entity';
 import { Repository } from 'typeorm';
+import { AdditiveTerm } from './additive-term.entity';
+import { AdditivateInternshipProcessDTO } from './dto/addivate-internship-process.dto';
 import { CreateInternshipProcessDTO } from './dto/create-interniship-process.dto';
+import { FinishInternshipProcessDTO } from './dto/finish-internship-process.dto';
 import {
   InternshipProcess,
   InternshipProcessStatus,
@@ -20,6 +23,8 @@ export class InternshipProcessesService {
   constructor(
     @InjectRepository(InternshipProcess)
     private internshipProcessesRepository: Repository<InternshipProcess>,
+    @InjectRepository(AdditiveTerm)
+    private additiveTermRepository: Repository<AdditiveTerm>,
     private readonly companiesService: CompaniesService,
     private readonly internsService: InternsService,
     private readonly reportsService: ReportsService,
@@ -71,12 +76,16 @@ export class InternshipProcessesService {
       .innerJoinAndSelect('internship.internshipAdvisor', 'internshipAdvisor')
       .leftJoinAndSelect('internship.semesterReports', 'semesterReports')
       .leftJoinAndSelect('internship.monthlyReports', 'monthlyReports')
+      .orderBy({ 'semesterReports.startDate': 'ASC' })
       .where('internship.id = :id', { id })
       .getOne();
   }
 
-  async createSemesterReports(internshipProcess: InternshipProcess) {
-    const { startDate, finishDate } = internshipProcess;
+  async createSemesterReports(
+    internshipProcessId: number,
+    startDate: Date,
+    finishDate: Date,
+  ) {
     const parsedStartDate = dayjs(startDate);
     const parsedFinishtDate = dayjs(finishDate);
     const monthDiff = dayjs(parsedFinishtDate).diff(parsedStartDate, 'months');
@@ -102,7 +111,7 @@ export class InternshipProcessesService {
         finishDate: lastFinishDate.toDate(),
         startDate: lastStartDate.toDate(),
         delivered: false,
-        internshipProcess: internshipProcess.id,
+        internshipProcess: internshipProcessId,
       });
 
       generatedReports.push(report);
@@ -123,7 +132,10 @@ export class InternshipProcessesService {
     let company: Company;
     let intern: Intern;
 
-    if (typeof internshipProcess.intern !== 'number') {
+    if (
+      typeof internshipProcess.intern !== 'number' &&
+      typeof internshipProcess.intern !== 'string'
+    ) {
       intern = await this.internsService.create(
         internshipProcess.intern,
         campusId,
@@ -138,7 +150,10 @@ export class InternshipProcessesService {
       }
     }
 
-    if (typeof internshipProcess.company !== 'number') {
+    if (
+      typeof internshipProcess.company !== 'number' &&
+      typeof internshipProcess.company !== 'string'
+    ) {
       company = await this.companiesService.create(
         internshipProcess.company,
         campusId,
@@ -156,7 +171,9 @@ export class InternshipProcessesService {
       internshipProcessObj,
     );
     const generatedReports = await this.createSemesterReports(
-      createdInternshipProcess,
+      createdInternshipProcess.id,
+      createdInternshipProcess.startDate,
+      createdInternshipProcess.finishDate,
     );
 
     return { ...createdInternshipProcess, semesterReports: generatedReports };
@@ -165,9 +182,11 @@ export class InternshipProcessesService {
   // TO-DO: Add checks for tasks and reports
   async finishInternshipProcess(
     id: number | string,
+    finishInternshipProcessDTO: FinishInternshipProcessDTO,
   ): Promise<InternshipProcess> {
     const result = await this.internshipProcessesRepository.update(id, {
       status: InternshipProcessStatus.FINISHED,
+      ...finishInternshipProcessDTO,
     });
 
     if (result.affected) {
@@ -182,7 +201,6 @@ export class InternshipProcessesService {
     _order?: OrderClause,
     skip?: number,
     take?: number,
-    _filter?: BaseFilter,
   ) {
     return this.internshipProcessesRepository
       .createQueryBuilder('internship')
@@ -197,5 +215,62 @@ export class InternshipProcessesService {
       .skip(skip)
       .take(take)
       .getManyAndCount();
+  }
+
+  async additivateInternshipProcess(
+    id: number | string,
+    additivateInternshipProcessDTO: AdditivateInternshipProcessDTO,
+  ) {
+    let internshipProcess = await this.findOne(id);
+    const newFinishDateMonthDiff = dayjs(
+      additivateInternshipProcessDTO.finishDate,
+    ).diff(dayjs(internshipProcess.finishDate), 'month');
+    const lastSemesterReport =
+      internshipProcess.semesterReports[
+        internshipProcess.semesterReports.length - 1
+      ];
+
+    if (newFinishDateMonthDiff <= 6) {
+      if (lastSemesterReport) {
+        lastSemesterReport.finishDate =
+          additivateInternshipProcessDTO.finishDate;
+      }
+    } else {
+      if (lastSemesterReport) {
+        lastSemesterReport.finishDate = dayjs(lastSemesterReport.startDate)
+          .add(6, 'month')
+          .toDate();
+      }
+
+      await this.createSemesterReports(
+        internshipProcess.id,
+        dayjs(lastSemesterReport?.finishDate)
+          .add(1, 'day')
+          .toDate() ?? internshipProcess.startDate,
+        additivateInternshipProcessDTO.finishDate,
+      );
+    }
+
+    if (lastSemesterReport) {
+      await this.reportsService.updateSemesterReport(
+        lastSemesterReport.id,
+        lastSemesterReport,
+      );
+    }
+
+    const createdAdditiveTerm = await this.additiveTermRepository.save({
+      previousFinishDate: internshipProcess.finishDate,
+      newFinishDate: additivateInternshipProcessDTO.finishDate,
+      internshipProcess: internshipProcess.id,
+      timeAdditiveTermFileURL:
+        additivateInternshipProcessDTO.timeAdditiveTermFileURL,
+    });
+
+    await this.internshipProcessesRepository.update(internshipProcess.id, {
+      finishDate: additivateInternshipProcessDTO.finishDate,
+    });
+    internshipProcess = await this.findOne(id);
+
+    return { ...internshipProcess, createdAdditiveTerm };
   }
 }

@@ -5,7 +5,6 @@ import {
   ReferenceInput,
   SelectInput,
   SaveButton,
-  DeleteButton,
   BooleanInput,
   DateInput,
   required,
@@ -241,10 +240,10 @@ function CompanyForm(props) {
               width="100%"
             >
               <SaveButton
+                label="Salvar"
                 saving={formProps.saving}
                 handleSubmitWithRedirect={formProps.handleSubmitWithRedirect}
               />
-              <DeleteButton record={formProps.record} />
             </Box>
           </Toolbar>
         </form>

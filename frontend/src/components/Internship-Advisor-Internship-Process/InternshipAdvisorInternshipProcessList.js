@@ -3,7 +3,7 @@ import { List, Datagrid, TextField, ShowButton } from 'react-admin';
 
 function InternshipAdvisorInternshipProcessList(props) {
   return (
-    <List {...props} title="Estagiários">
+    <List {...props} title="Estagiários" actions={null}>
       <Datagrid>
         <TextField source="intern.name" label="Nome" />
         <TextField source="intern.registrationNumber" label="Matrícula" />

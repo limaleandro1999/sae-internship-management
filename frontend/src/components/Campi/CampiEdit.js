@@ -9,6 +9,7 @@ import {
 } from 'react-admin';
 
 import cities from '../../utils/cities.json';
+import { CustomToolbar } from '../Course/CourseCreate';
 
 const formCities = cities.map((city) => ({
   id: city.toLowerCase(),
@@ -26,8 +27,8 @@ const validateAddress = required('O campo endereço é obrigatório');
 
 function CampiEdit(props) {
   return (
-    <Edit {...props} title="Novo Campus">
-      <SimpleForm>
+    <Edit {...props} title="Edit Campus" actions={null}>
+      <SimpleForm toolbar={<CustomToolbar />}>
         <TextInput
           source="name"
           label="Nome"

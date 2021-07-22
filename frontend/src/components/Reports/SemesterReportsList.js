@@ -19,7 +19,7 @@ function SemesterReportsList(props) {
     showRegistrationNumberField = false,
   } = props;
   return (
-    <List {...props} title="Relatórios">
+    <List {...props} title="Relatórios" actions={null}>
       <Datagrid>
         {showInternNameField ? (
           <TextField
@@ -36,9 +36,10 @@ function SemesterReportsList(props) {
         <DateField source="deadline" label="Prazo de entrega" />
         <DateField source="startDate" label="Início do período avaliativo" />
         <DateField source="finishDate" label="Fim do período avaliativo" />
+        <DateField source="deliveredDate" label="Data de entrega" />
         <ReportStatus label="Estado" />
         {showButtonEnabled ? <ShowButton label="Mostrar" /> : null}
-        {editButtonEnabled ? <EditButton label="Editar" /> : null}
+        {editButtonEnabled ? <EditButton label="Enviar Documento" /> : null}
         {downloadButtonEnabled ? (
           <DownloadGeneratedReport label="Download" reportType="semester" />
         ) : null}

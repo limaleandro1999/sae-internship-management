@@ -10,14 +10,10 @@ import {
   EditButton,
   ShowButton,
   Button,
-  useRefresh,
 } from 'react-admin';
-import { Done } from '@material-ui/icons';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-import { api, getAuthHeaders } from '../../utils/api';
-
-const Alert = withReactContent(Swal);
+import { Done, Alarm } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
+import { ListActions } from '../Campi/CampiList';
 
 function InternshipProcessFilters(props) {
   return (
@@ -29,35 +25,44 @@ function InternshipProcessFilters(props) {
 
 function FinishInternshipProcessButton(props) {
   const { record } = props;
-  const refresh = useRefresh();
-  const triggerFinishInternshipModal = async () => {
-    const { isConfirmed } = await Alert.fire({
-      title: 'Finalizar estágio?',
-      showCloseButton: true,
-      showCancelButton: true,
-      confirmButtonText: 'Ok',
-      cancelButtonText: 'Não',
-    });
-
-    if (isConfirmed) {
-      finishInternshipAction(record, refresh);
-    }
-  };
+  const history = useHistory();
 
   return (
     <Button
       title="Finalizar"
       label="Finalizar"
-      onClick={triggerFinishInternshipModal}
+      onClick={() => history.push(`/internship-processes/finish/${record.id}`)}
     >
       <Done />
     </Button>
   );
 }
 
+function AddHoursButton(props) {
+  const { record } = props;
+  const history = useHistory();
+
+  return (
+    <Button
+      title="Adicionar Horas"
+      label="Adicionar Horas"
+      onClick={() =>
+        history.push(`/internship-processes/time-additive/${record.id}`)
+      }
+    >
+      <Alarm />
+    </Button>
+  );
+}
+
 function InternshipProcessList(props) {
   return (
-    <List {...props} title="Estágios" filters={<InternshipProcessFilters />}>
+    <List
+      {...props}
+      title="Estágios"
+      filters={<InternshipProcessFilters />}
+      actions={<ListActions />}
+    >
       <Datagrid>
         <TextField source="intern.name" label="Nome" />
         <TextField source="intern.registrationNumber" label="Matrícula" />
@@ -69,30 +74,13 @@ function InternshipProcessList(props) {
             status === 'ACTIVE' ? 'Em andamento' : 'Finalizado'
           }
         />
-        <FinishInternshipProcessButton />
+        <AddHoursButton label="Adicionar Horas" />
+        <FinishInternshipProcessButton label="Finalizar" />
         <ShowButton label="Mostrar" />
         <EditButton label="Editar" />
       </Datagrid>
     </List>
   );
-}
-
-async function finishInternshipAction(internshipProcess, refreshPage) {
-  const { data } = await api.post(
-    `/internship-processes/${internshipProcess?.id}/finish`,
-    {},
-    { headers: getAuthHeaders() }
-  );
-
-  if (data?.status === 'FINISHED') {
-    await Alert.fire({
-      title: 'Estágio finalizado com sucesso!',
-      showCloseButton: true,
-      confirmButtonText: 'Ok',
-    });
-
-    refreshPage();
-  }
 }
 
 export default InternshipProcessList;

@@ -4,7 +4,7 @@ import InternshipProcessForm from './InternshipProcessForm';
 
 function InternshipProcessEdit(props) {
   return (
-    <Edit {...props} title="Editar Processo de Estágio">
+    <Edit {...props} title="Editar Processo de Estágio" actions={null}>
       <InternshipProcessForm isCreateForm={false} />
     </Edit>
   );

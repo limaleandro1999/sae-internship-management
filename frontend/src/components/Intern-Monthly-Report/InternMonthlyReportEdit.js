@@ -1,12 +1,13 @@
 import React from 'react';
 import { Edit, FileInput, SimpleForm, FileField } from 'react-admin';
 import RichTextInput from 'ra-input-rich-text';
+import { CustomToolbar } from '../Course/CourseCreate';
 
 function InternMonthlyReportEdit(props) {
   const { showFileInput = true, showCommentInput = false } = props;
   return (
-    <Edit {...props}>
-      <SimpleForm>
+    <Edit {...props} actions={null}>
+      <SimpleForm toolbar={<CustomToolbar />}>
         <FileField
           source="reportFileUrl"
           title="Download do relatório"
@@ -19,6 +20,7 @@ function InternMonthlyReportEdit(props) {
             source="report-file"
             label="Relatório Mensal"
             accept="application/pdf"
+            placeholder="Solte um arquivo para fazer upload ou clique para selecioná-lo."
           >
             <FileField source="src" title="title" />
           </FileInput>

@@ -8,6 +8,7 @@ import {
   ShowButton,
   Filter,
 } from 'react-admin';
+import { ListActions } from '../Campi/CampiList';
 
 function CompanyFilters(props) {
   return (
@@ -19,7 +20,12 @@ function CompanyFilters(props) {
 
 function CompanyList(props) {
   return (
-    <List {...props} title="Empresa" filters={<CompanyFilters />}>
+    <List
+      {...props}
+      title="Empresa"
+      filters={<CompanyFilters />}
+      actions={<ListActions />}
+    >
       <Datagrid>
         <TextField source="name" label="Nome" />
         <TextField source="cnpj" label="CNPJ" />

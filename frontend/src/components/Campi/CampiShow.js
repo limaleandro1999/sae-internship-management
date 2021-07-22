@@ -7,7 +7,7 @@ function CampusTitle({ record }) {
 
 function CampiShow(props) {
   return (
-    <Show {...props} title={<CampusTitle />}>
+    <Show {...props} title={<CampusTitle />} actions={null}>
       <SimpleShowLayout>
         <TextField source="name" label="Nome" />
         <TextField source="emailAddress" label="Email" />

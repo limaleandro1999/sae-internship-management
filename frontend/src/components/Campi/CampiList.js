@@ -7,6 +7,8 @@ import {
   EditButton,
   ShowButton,
   Filter,
+  CreateButton,
+  TopToolbar,
 } from 'react-admin';
 
 function CampiFilters(props) {
@@ -17,9 +19,20 @@ function CampiFilters(props) {
   );
 }
 
+export const ListActions = (props) => (
+  <TopToolbar>
+    <CreateButton label="Novo" />
+  </TopToolbar>
+);
+
 function CampiList(props) {
   return (
-    <List {...props} title="Campi" filters={<CampiFilters />}>
+    <List
+      {...props}
+      title="Campi"
+      filters={<CampiFilters />}
+      actions={<ListActions />}
+    >
       <Datagrid>
         <TextField source="name" label="Nome" />
         <TextField source="emailAddress" label="Email" />

@@ -12,6 +12,7 @@ import { InternshipProcess } from 'src/internship-processes/internship-process.e
 import { SemesterReport } from 'src/reports/semester-report.entity';
 import { MonthlyReport } from 'src/reports/monthly-report.entity';
 import { Task } from 'src/tasks/task.entity';
+import { AdditiveTerm } from 'src/internship-processes/additive-term.entity';
 
 export default () => ({
   jwt: {
@@ -49,6 +50,7 @@ export default () => ({
       InternshipAdvisor,
       Intern,
       InternshipProcess,
+      AdditiveTerm,
       SemesterReport,
       MonthlyReport,
       Task,

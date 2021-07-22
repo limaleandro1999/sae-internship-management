@@ -1,5 +1,6 @@
 import React from 'react';
 import { Edit, SimpleForm, TextInput, required } from 'react-admin';
+import { CustomToolbar } from '../Course/CourseCreate';
 
 const validateName = required('O campo nome é obrigatório');
 
@@ -9,8 +10,8 @@ function InternshipAdvisorTitle({ record }) {
 
 function InternshipAdvisorEdit(props) {
   return (
-    <Edit {...props} title={<InternshipAdvisorTitle />}>
-      <SimpleForm>
+    <Edit {...props} title={<InternshipAdvisorTitle />} actions={null}>
+      <SimpleForm toolbar={<CustomToolbar />}>
         <TextInput
           source="name"
           label="Nome"

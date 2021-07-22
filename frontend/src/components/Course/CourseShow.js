@@ -7,7 +7,7 @@ function CourseTitle({ record }) {
 
 function CourseShow(props) {
   return (
-    <Show {...props} title={<CourseTitle />}>
+    <Show {...props} title={<CourseTitle />} actions={null}>
       <SimpleShowLayout>
         <TextField source="name" label="Nome" />
       </SimpleShowLayout>

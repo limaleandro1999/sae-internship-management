@@ -2,6 +2,7 @@ import React from 'react';
 import { Edit, SimpleForm, NumberInput, required } from 'react-admin';
 import RichTextInput from 'ra-input-rich-text';
 import dayjs from 'dayjs';
+import { CustomToolbar } from '../Course/CourseCreate';
 
 function InternTasksCreate(props) {
   const { id: date } = props;
@@ -11,7 +12,7 @@ function InternTasksCreate(props) {
       {...props}
       title={`Atividade do dia ${dayjs(date).format('DD/MM/YYYY')}`}
     >
-      <SimpleForm>
+      <SimpleForm toolbar={<CustomToolbar />}>
         <RichTextInput
           source="activity"
           label="Descrição da atividade"

@@ -8,7 +8,7 @@ function CompanyTitle({ record }) {
 
 function CompanyShow(props) {
   return (
-    <Show {...props} title={<CompanyTitle />}>
+    <Show {...props} title={<CompanyTitle />} actions={null}>
       <SimpleShowLayout>
         <Typography variant="h6" gutterBottom>
           Dados da empresa

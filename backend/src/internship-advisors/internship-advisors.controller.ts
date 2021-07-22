@@ -48,13 +48,12 @@ export class InternshipAdvisorsController {
   getInternshipProcesses(
     @Req() req: RequestWithQueryInfo,
   ): Promise<[InternshipProcess[], number]> {
-    const { order, skip, filter, take } = req.queryInfo;
+    const { order, skip, take } = req.queryInfo;
     return this.internshipAdvisorService.getInternshipProcesses(
       req.user.email,
       order,
       skip,
       take,
-      filter,
     );
   }
 

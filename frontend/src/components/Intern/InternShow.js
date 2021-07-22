@@ -7,7 +7,7 @@ function InternTitle({ record }) {
 
 function InternShow(props) {
   return (
-    <Show {...props} title={<InternTitle />}>
+    <Show {...props} title={<InternTitle />} actions={null}>
       <SimpleShowLayout>
         <TextField source="name" label="Nome" />
         <TextField source="user.email" label="Email" />
