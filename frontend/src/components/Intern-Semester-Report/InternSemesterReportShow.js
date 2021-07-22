@@ -16,7 +16,7 @@ function SemesterReportTitle({ record }) {
 
 function InternSemesterReportShow(props) {
   return (
-    <Show {...props} title={<SemesterReportTitle />}>
+    <Show {...props} title={<SemesterReportTitle />} actions={null}>
       <SimpleShowLayout>
         <FileField
           source="reportFileUrl"

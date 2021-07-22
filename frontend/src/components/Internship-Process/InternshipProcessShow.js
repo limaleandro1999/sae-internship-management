@@ -137,6 +137,7 @@ function SemesterReportsTab(props) {
         <DateField source="deadline" label="Prazo de entrega" />
         <DateField source="startDate" label="Início do período avaliativo" />
         <DateField source="finishDate" label="Fim do período avaliativo" />
+        <DateField source="deliveredDate" label="Data de entrega" />
         <ReportStatus />
         <ShowReportButton reportType="semester" />
       </Datagrid>
@@ -157,6 +158,7 @@ function MonthlyReportsTab(props) {
         <DateField source="deadline" label="Prazo de entrega" />
         <DateField source="startDate" label="Início do período avaliativo" />
         <DateField source="finishDate" label="Fim do período avaliativo" />
+        <DateField source="deliveredDate" label="Data de entrega" />
         <ReportStatus />
         <ShowReportButton reportType="monthly" />
       </Datagrid>

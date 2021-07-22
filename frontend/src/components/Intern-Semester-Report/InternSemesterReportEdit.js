@@ -1,12 +1,13 @@
 import React from 'react';
 import { Edit, FileInput, SimpleForm, FileField } from 'react-admin';
 import RichTextInput from 'ra-input-rich-text';
+import { CustomToolbar } from '../Course/CourseCreate';
 
 function InternSemesterReportEdit(props) {
   const { showFileInput = true, showCommentInput = false } = props;
   return (
-    <Edit {...props}>
-      <SimpleForm>
+    <Edit {...props} actions={null}>
+      <SimpleForm toolbar={<CustomToolbar />}>
         <FileField
           source="reportFileUrl"
           title="Download do relatório"

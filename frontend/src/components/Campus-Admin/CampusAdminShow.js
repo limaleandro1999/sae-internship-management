@@ -7,7 +7,7 @@ function CampusAdminTitle({ record }) {
 
 function CampusAdminShow(props) {
   return (
-    <Show {...props} title={<CampusAdminTitle />}>
+    <Show {...props} title={<CampusAdminTitle />} actions={null}>
       <SimpleShowLayout>
         <TextField source="name" label="Nome" />
         <TextField source="user.email" label="Email" />

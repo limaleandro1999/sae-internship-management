@@ -75,6 +75,9 @@ export class InternshipProcess {
   @Column({ nullable: true })
   internshipAgreementTerminationTermFileURL?: string;
 
+  @Column({ nullable: true })
+  SEINumber?: string;
+
   @Column({
     type: 'enum',
     enum: InternshipProcessStatus,

@@ -12,7 +12,7 @@ function MonthlyReportTitle({ record }) {
 
 function InternMonthlyReportShow(props) {
   return (
-    <Show {...props} title={<MonthlyReportTitle />}>
+    <Show {...props} title={<MonthlyReportTitle />} actions={null}>
       <SimpleShowLayout>
         <FileField
           source="reportFileUrl"

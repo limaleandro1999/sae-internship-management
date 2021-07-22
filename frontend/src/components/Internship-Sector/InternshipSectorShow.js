@@ -7,7 +7,7 @@ function InternshipSectorTitle({ record }) {
 
 function InternshipSectorShow(props) {
   return (
-    <Show {...props} title={<InternshipSectorTitle />}>
+    <Show {...props} title={<InternshipSectorTitle />} actions={null}>
       <SimpleShowLayout>
         <TextField source="name" label="Nome" />
         <TextField source="user.email" label="Email" />

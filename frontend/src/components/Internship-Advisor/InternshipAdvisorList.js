@@ -9,6 +9,7 @@ import {
   Filter,
   BooleanField,
 } from 'react-admin';
+import { ListActions } from '../Campi/CampiList';
 
 function InternshipAdvisorFilters(props) {
   return (
@@ -24,6 +25,7 @@ function InternshipAdvisorList(props) {
       {...props}
       title="Orientadores de Estágio"
       filters={<InternshipAdvisorFilters />}
+      actions={<ListActions />}
     >
       <Datagrid>
         <TextField source="name" label="Nome" />

@@ -6,7 +6,6 @@ import {
   SelectInput,
   DateInput,
   SaveButton,
-  DeleteButton,
   required,
   email,
 } from 'react-admin';
@@ -196,10 +195,10 @@ function InternForm(props) {
           <Toolbar>
             <Box display="flex" justifyContent="space-between" width="100%">
               <SaveButton
+                label="Salvar"
                 saving={formProps.saving}
                 handleSubmitWithRedirect={formProps.handleSubmitWithRedirect}
               />
-              <DeleteButton record={formProps.record} />
             </Box>
           </Toolbar>
         </form>

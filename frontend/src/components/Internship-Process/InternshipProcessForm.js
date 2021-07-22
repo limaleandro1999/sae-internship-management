@@ -15,6 +15,7 @@ import {
 import { Typography, Box } from '@material-ui/core';
 import { InternFormFields } from '../Intern/InternForm';
 import { CompanyFormFields } from '../Company/CompanyForm';
+import { CustomToolbar } from '../Course/CourseCreate';
 
 function InternTabForm(props) {
   const [showCreateIntern, setShowCreateIntern] = useState(false);
@@ -307,6 +308,7 @@ function ContractTabForm(props) {
               />
             </Box>
           </Box>
+          <TextInput source="SEINumber" label="Número do processo SEI" />
           <BooleanInput
             source="mandatory"
             label="Estágio Obrigatório?"
@@ -348,7 +350,7 @@ function InternshipProcessForm(props) {
     /**
      * Yeah, I don't like it either, but it worked
      */
-    <TabbedForm {...props}>
+    <TabbedForm {...props} toolbar={<CustomToolbar />}>
       {[
         <FormTab label="Estagiário">
           <InternTabForm />

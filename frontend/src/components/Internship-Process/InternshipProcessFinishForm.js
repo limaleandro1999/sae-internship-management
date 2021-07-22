@@ -7,6 +7,7 @@ import {
   TextField,
   BooleanField,
 } from 'react-admin';
+import { CustomToolbar } from '../Course/CourseCreate';
 
 const redirect = (basePath, id, data) =>
   `/internship-processes/${data.id}/show`;
@@ -14,7 +15,7 @@ const redirect = (basePath, id, data) =>
 function InternshipProcessFinishEdit(props) {
   return (
     <Edit {...props} title="Finalizar Estágio">
-      <SimpleForm redirect={redirect}>
+      <SimpleForm redirect={redirect} toolbar={<CustomToolbar />}>
         <TextField source="intern.name" label="Nome" />
         <TextField source="intern.registrationNumber" label="Matrícula" />
         <TextField source="company.name" label="Empresa" />

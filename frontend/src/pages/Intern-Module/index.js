@@ -103,13 +103,13 @@ function InternModule({ theme, dataProvider, authProvider }) {
       />
       <Resource
         name="interns/classes"
-        options={{ label: 'Horários de aula' }}
+        options={{ label: 'Horários de Aula' }}
         list={InternClassesScheduleList}
         edit={InternClassesScheduleEdit}
       />
       <Resource
         name="interns/internship-schedule"
-        options={{ label: 'Horários de estágio' }}
+        options={{ label: 'Horários de Estágio' }}
         list={InternInternshipScheduleList}
       />
     </Admin>

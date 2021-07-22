@@ -13,6 +13,7 @@ import {
 } from 'react-admin';
 import { Done, Alarm } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
+import { ListActions } from '../Campi/CampiList';
 
 function InternshipProcessFilters(props) {
   return (
@@ -56,7 +57,12 @@ function AddHoursButton(props) {
 
 function InternshipProcessList(props) {
   return (
-    <List {...props} title="Estágios" filters={<InternshipProcessFilters />}>
+    <List
+      {...props}
+      title="Estágios"
+      filters={<InternshipProcessFilters />}
+      actions={<ListActions />}
+    >
       <Datagrid>
         <TextField source="intern.name" label="Nome" />
         <TextField source="intern.registrationNumber" label="Matrícula" />

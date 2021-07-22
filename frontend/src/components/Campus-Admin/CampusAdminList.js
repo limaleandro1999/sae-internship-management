@@ -9,6 +9,7 @@ import {
   Filter,
   BooleanField,
 } from 'react-admin';
+import { ListActions } from '../Campi/CampiList';
 
 function CampiFilters(props) {
   return (
@@ -20,7 +21,12 @@ function CampiFilters(props) {
 
 function CampusAdminList(props) {
   return (
-    <List {...props} title="Campus Admin" filters={<CampiFilters />}>
+    <List
+      {...props}
+      title="Campus Admin"
+      filters={<CampiFilters />}
+      actions={<ListActions />}
+    >
       <Datagrid>
         <TextField source="name" label="Nome" />
         <TextField source="user.email" label="Email" />
