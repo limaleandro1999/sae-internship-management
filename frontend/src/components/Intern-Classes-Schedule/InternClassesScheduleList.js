@@ -7,8 +7,9 @@ import {
   TableCell,
   TableBody,
   Box,
+  Typography,
 } from '@material-ui/core';
-import { Check, Close, Edit } from '@material-ui/icons';
+import { Edit } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 
 function ClassesGrid(props) {
@@ -65,7 +66,7 @@ function ClassesGrid(props) {
             <TableCell>{times[index]}</TableCell>
             {time.map((dayTime, index) => (
               <TableCell key={index}>
-                {dayTime ? <Check /> : <Close />}
+                {dayTime ? <Typography>Aula</Typography> : '-'}
               </TableCell>
             ))}
           </TableRow>

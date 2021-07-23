@@ -108,6 +108,73 @@ function DailySchedule(props) {
   );
 }
 
+export function ClassesGrid(props) {
+  const record = useRecordContext();
+  const classesSchedule =
+    record.intern?.classesSchedule ?? record.classesSchedule;
+
+  const times = [
+    '07:40 - 9:40',
+    '10:00 - 12:00',
+    '13:40 - 14:40',
+    '15:00 - 18:00',
+    '18:30 - 20:09',
+    '20:20 - 22:00',
+  ];
+  const schedule = classesSchedule
+    ? Object.values(
+        classesSchedule
+      ).map(
+        ({
+          morningAB,
+          morningCD,
+          afternoonAB,
+          afternoonCD,
+          nightAB,
+          nightCD,
+        }) => [morningAB, morningCD, afternoonAB, afternoonCD, nightAB, nightCD]
+      )
+    : [];
+
+  /* 
+    Transposing schedule matrix
+    Sorry for that, I was in a hurry to finish TCC
+  */
+  if (schedule.length) {
+    schedule.push([]);
+  }
+  const transposedSchedule = schedule
+    .map((x, i) => schedule.map((x) => x[i]))
+    .map((x) => x.slice(0, 5));
+
+  return (
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Horário</TableCell>
+          <TableCell>Segunda</TableCell>
+          <TableCell>Terça</TableCell>
+          <TableCell>Quarta</TableCell>
+          <TableCell>Quinta</TableCell>
+          <TableCell>Sexta</TableCell>
+        </TableRow>
+      </TableHead>
+      {transposedSchedule.map((time, index) => (
+        <TableBody key={index}>
+          <TableRow>
+            <TableCell>{times[index]}</TableCell>
+            {time.map((dayTime, index) => (
+              <TableCell key={index}>
+                {dayTime ? <Typography>Aula</Typography> : '-'}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableBody>
+      ))}
+    </Table>
+  );
+}
+
 export function ReportStatus(props) {
   const { delivered, deadline } = useRecordContext();
   const parsedDeadline = dayjs(deadline);
@@ -282,9 +349,10 @@ function InternshipProcessShow(props) {
           <Typography variant="h6" gutterBottom>
             Bolsa
           </Typography>
-          <TextField source="salaryAmount" label="Valor da bolsa" />
-          <TextField source="policyNumber" label="Número da apólice" />
+          <TextField source="salaryAmount" label="Valor da Bolsa" />
+          <TextField source="policyNumber" label="Número da Apólice" />
           <TextField source="insuranceCompany" label="Empresa Seguradora" />
+          <TextField source="SEINumber" label="Número do Processo SEI" />
 
           <BooleanField source="mandatory" label="Obrigatório" />
 
@@ -353,11 +421,15 @@ function InternshipProcessShow(props) {
           />
         </Tab>
         <Tab label="Horário">
+          <Typography variant="h6">Horários de Estágio</Typography>
           <DailySchedule label="Segunda" day="monday" />
           <DailySchedule label="Terça" day="tuesday" />
           <DailySchedule label="Quarta" day="wednesday" />
           <DailySchedule label="Quinta" day="thursday" />
           <DailySchedule label="Sexta" day="friday" />
+
+          <Typography variant="h6">Horários de aula</Typography>
+          <ClassesGrid />
         </Tab>
         <Tab label="Relatórios Semestrais">
           <SemesterReportsTab />

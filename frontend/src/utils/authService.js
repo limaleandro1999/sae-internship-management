@@ -28,7 +28,7 @@ export default async (type, params) => {
     const { access_token, type } = await response.json();
 
     if (!CLIENT_ALLOWED_ROLES[currentClient].includes(type)) {
-      throw new Error('User not allowed');
+      throw new Error('Usuário não autorizado neste módulo');
     }
 
     localStorage.setItem('token', access_token);

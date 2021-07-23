@@ -16,6 +16,8 @@ import {
   SemesterReportsList,
   MonthlyReportsList,
 } from '../../components/Reports';
+import { i18nProvider } from '../../utils/i18nProvider';
+import { InternshipAdvisorLoginPage } from '../Login';
 
 function SemesterReportsListWrapper(props) {
   return (
@@ -45,6 +47,8 @@ function InternshipAdvisorModule({ theme, dataProvider, authProvider }) {
       theme={theme}
       dataProvider={dataProvider}
       authProvider={authProvider}
+      i18nProvider={i18nProvider}
+      loginPage={InternshipAdvisorLoginPage}
     >
       <Resource
         name="dashboard"

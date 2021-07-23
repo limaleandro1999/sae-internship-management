@@ -1,5 +1,6 @@
 import React from 'react';
 import { Show, SimpleShowLayout, TextField, DateField } from 'react-admin';
+import { ClassesGrid } from '../Internship-Process/InternshipProcessShow';
 
 function InternTitle({ record }) {
   return <span>{record ? `${record.name}` : ''}</span>;
@@ -25,6 +26,7 @@ function InternShow(props) {
         <TextField source="coursePeriod" label="Período" />
         <TextField source="responsible" label="Responsável" />
         <TextField source="course.name" label="Curso" />
+        <ClassesGrid />
       </SimpleShowLayout>
     </Show>
   );
