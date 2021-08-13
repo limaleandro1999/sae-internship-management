@@ -1,14 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as dayjs from 'dayjs';
 import { BaseFilter } from 'src/common/interfaces/base-filter-interface';
 import { OrderClause } from 'src/common/interfaces/order-clause.interface';
 import { CompaniesService } from 'src/companies/companies.service';
 import { Company } from 'src/companies/company.entity';
+import { EmailsService } from 'src/emails/emails.service';
 import { Intern } from 'src/interns/intern.entity';
 import { InternsService } from 'src/interns/interns.service';
+import { InternshipAdvisorsService } from 'src/internship-advisors/internship-advisors.service';
 import { ReportsService } from 'src/reports/reports.service';
 import { SemesterReport } from 'src/reports/semester-report.entity';
+import { User } from 'src/users/user.entity';
 import { Repository } from 'typeorm';
 import { AdditiveTerm } from './additive-term.entity';
 import { AdditivateInternshipProcessDTO } from './dto/addivate-internship-process.dto';
@@ -27,7 +30,10 @@ export class InternshipProcessesService {
     private additiveTermRepository: Repository<AdditiveTerm>,
     private readonly companiesService: CompaniesService,
     private readonly internsService: InternsService,
+    @Inject(forwardRef(() => InternshipAdvisorsService))
+    private readonly internshipAdvisorService: InternshipAdvisorsService,
     private readonly reportsService: ReportsService,
+    private readonly emailService: EmailsService,
   ) {}
 
   findAll(
@@ -148,6 +154,8 @@ export class InternshipProcessesService {
       if (hasActiveInternshipProcess) {
         throw new Error('Intern has active Internship');
       }
+
+      intern = await this.internsService.findOne(internshipProcess.intern);
     }
 
     if (
@@ -175,6 +183,24 @@ export class InternshipProcessesService {
       createdInternshipProcess.startDate,
       createdInternshipProcess.finishDate,
     );
+
+    try {
+      const internshipAdvisor = await this.internshipAdvisorService.findOne(
+        createdInternshipProcess?.internshipAdvisor,
+      );
+
+      await this.emailService.sendStartInternshipProcessNotification({
+        internName: intern?.name,
+        isMandatory: createdInternshipProcess?.mandatory,
+        startDate: dayjs(createdInternshipProcess?.startDate).format(
+          'DD/MM/YYYY',
+        ),
+        to: (<User>internshipAdvisor?.user).email,
+        name: internshipAdvisor?.name,
+      });
+    } catch (error) {
+      console.error(error);
+    }
 
     return { ...createdInternshipProcess, semesterReports: generatedReports };
   }
