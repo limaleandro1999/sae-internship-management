@@ -6,11 +6,13 @@ import { OrderClause } from 'src/common/interfaces/order-clause.interface';
 import { generateDocxFile } from 'src/common/utils';
 import { Company } from 'src/companies/company.entity';
 import { Course } from 'src/courses/course.entity';
+import { EmailsService } from 'src/emails/emails.service';
 import { Intern } from 'src/interns/intern.entity';
 import { InternsService } from 'src/interns/interns.service';
 import { InternshipAdvisor } from 'src/internship-advisors/internship-advisor.entity';
 import { InternshipProcess } from 'src/internship-processes/internship-process.entity';
 import { TasksService } from 'src/tasks/tasks.service';
+import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateMonthlyReportDTO } from './dto/create-monthly-report.dto';
@@ -30,6 +32,7 @@ export class ReportsService {
     private readonly userService: UsersService,
     private readonly tasksService: TasksService,
     private readonly internsService: InternsService,
+    private readonly emailService: EmailsService,
   ) {}
 
   create(semesterReport: CreateSemesterReportDTO): Promise<SemesterReport> {
@@ -184,6 +187,7 @@ export class ReportsService {
         'internshipProcess.internshipAdvisor',
         'internshipAdvisor',
       )
+      .innerJoinAndSelect('internshipAdvisor.user', 'internshipAdvisorUser')
       .innerJoinAndSelect('intern.course', 'course')
       .where('semesterReport.id = :reportId', { reportId: id })
       .getOne();
@@ -213,6 +217,26 @@ export class ReportsService {
     monthlyReport: UpdateMonthlyReportDTO,
   ) {
     await this.monthlyReportRepository.update(id, monthlyReport);
+    try {
+      const monthlyReportObj = await this.getMonthlyReportById(id);
+      const internshipProcess = <InternshipProcess>(
+        monthlyReportObj?.internshipProcess
+      );
+      const intern = <Intern>internshipProcess?.intern;
+      const internshipAdvisor = <InternshipAdvisor>(
+        internshipProcess?.internshipAdvisor
+      );
+
+      await this.emailService.sendMonthlyReportDeliveredNotification({
+        internName: intern?.name,
+        deliveredDate: dayjs(monthlyReport.deliveredDate).format('DD/MM/YYYY'),
+        month: dayjs(monthlyReportObj.startDate).format('MM/YYYY'),
+        name: (<InternshipAdvisor>internshipProcess?.internshipAdvisor)?.name,
+        to: (<User>internshipAdvisor?.user)?.email,
+      });
+    } catch (error) {
+      console.error(error);
+    }
     return this.monthlyReportRepository.findOne(id);
   }
 
@@ -221,6 +245,27 @@ export class ReportsService {
     semesterReport: UpdateSemesterReportDTO,
   ) {
     await this.semesterReportRepository.update(id, semesterReport);
+    try {
+      const semesterReportObj = await this.getSemesterReportById(id);
+      const internshipProcess = <InternshipProcess>(
+        semesterReportObj?.internshipProcess
+      );
+      const intern = <Intern>internshipProcess?.intern;
+      const internshipAdvisor = <InternshipAdvisor>(
+        internshipProcess?.internshipAdvisor
+      );
+
+      await this.emailService.sendSemesterReportDeliveredNotification({
+        internName: intern?.name,
+        deliveredDate: dayjs(semesterReport.deliveredDate).format('DD/MM/YYYY'),
+        startDate: dayjs(semesterReportObj.startDate).format('DD/MM/YYYY'),
+        finishDate: dayjs(semesterReportObj.finishDate).format('DD/MM/YYYY'),
+        name: (<InternshipAdvisor>internshipProcess?.internshipAdvisor)?.name,
+        to: (<User>internshipAdvisor?.user)?.email,
+      });
+    } catch (error) {
+      console.error(error);
+    }
     return this.semesterReportRepository.findOne(id);
   }
 

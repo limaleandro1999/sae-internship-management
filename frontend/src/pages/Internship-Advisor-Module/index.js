@@ -25,6 +25,7 @@ function SemesterReportsListWrapper(props) {
       {...props}
       showInternNameField
       showRegistrationNumberField
+      editButtonEnabled={false}
       downloadButtonEnabled={false}
     />
   );
@@ -36,6 +37,7 @@ function MonthlyReportsListWrapper(props) {
       {...props}
       showInternNameField
       showRegistrationNumberField
+      editButtonEnabled={false}
       downloadButtonEnabled={false}
     />
   );
