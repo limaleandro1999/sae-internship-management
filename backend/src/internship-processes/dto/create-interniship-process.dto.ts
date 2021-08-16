@@ -8,7 +8,7 @@ export interface CreateInternshipProcessDTO {
   dailyWorkload: number;
   weeklyWorkload: number;
   weeklySchedule: WeeklySchedule;
-  salaryAmount: number; // in cents
+  salaryAmount: number;
   policyNumber: string;
   insuranceCompany: string;
   supervisor: string;

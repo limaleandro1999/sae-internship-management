@@ -39,7 +39,7 @@ export class InternshipProcess {
   @Column({ type: 'json' })
   weeklySchedule: WeeklySchedule;
 
-  @Column({ type: 'int' }) // salary amount in cents
+  @Column({ type: 'float', nullable: true })
   salaryAmount: number;
 
   @Column()

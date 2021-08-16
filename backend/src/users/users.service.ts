@@ -37,10 +37,25 @@ export class UsersService {
       where: { email, confirmationId },
       loadEagerRelations: false,
     });
+
+    if (user.active) {
+      return {
+        confirmed: false,
+        message: 'User already active',
+      };
+    }
+
     user.password = password;
     user.active = true;
 
-    return this.userRepository.update({ confirmationId }, user);
+    const rowsAffected = await this.userRepository.update(
+      { confirmationId },
+      user,
+    );
+
+    return {
+      confirmed: rowsAffected.affected > 0,
+    };
   }
 
   findUser(email: string) {

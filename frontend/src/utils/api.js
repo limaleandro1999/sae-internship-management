@@ -114,10 +114,19 @@ export default {
         if (data[key].rawFile) {
           formData.append(key, data[key]?.rawFile);
         } else {
-          formData.append(
-            key,
-            key === 'weeklySchedule' ? JSON.stringify(data[key]) : data[key]
-          );
+          if (key === 'intern' || key === 'company') {
+            formData.append(
+              key,
+              typeof data[key] !== 'number'
+                ? JSON.stringify(data[key])
+                : data[key]
+            );
+          } else {
+            formData.append(
+              key,
+              key === 'weeklySchedule' ? JSON.stringify(data[key]) : data[key]
+            );
+          }
         }
       }
 

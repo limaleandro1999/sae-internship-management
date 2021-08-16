@@ -138,10 +138,18 @@ export class InternshipProcessesService {
     let company: Company;
     let intern: Intern;
 
-    if (
-      typeof internshipProcess.intern !== 'number' &&
-      typeof internshipProcess.intern !== 'string'
-    ) {
+    try {
+      internshipProcess.intern = JSON.parse(
+        <string>(<unknown>internshipProcess.intern),
+      );
+      internshipProcess.company = JSON.parse(
+        <string>(<unknown>internshipProcess.company),
+      );
+    } catch (error) {
+      console.error(error);
+    }
+
+    if (typeof internshipProcess.intern !== 'number') {
       intern = await this.internsService.create(
         internshipProcess.intern,
         campusId,
@@ -158,10 +166,7 @@ export class InternshipProcessesService {
       intern = await this.internsService.findOne(internshipProcess.intern);
     }
 
-    if (
-      typeof internshipProcess.company !== 'number' &&
-      typeof internshipProcess.company !== 'string'
-    ) {
+    if (typeof internshipProcess.company !== 'number') {
       company = await this.companiesService.create(
         internshipProcess.company,
         campusId,

@@ -21,7 +21,11 @@ export class UsersController {
   async confirmUser(@Body() confirmUserDTO: ConfirmUserDTO, @Res() res) {
     const { email, confirmationId } = confirmUserDTO;
     if (await this.userService.isValid(email, confirmationId)) {
-      return this.userService.confirmUser(confirmUserDTO);
+      const result = await this.userService.confirmUser(confirmUserDTO);
+
+      return res
+        .status(result.confirmed ? HttpStatus.OK : HttpStatus.BAD_REQUEST)
+        .json(result);
     }
     return res
       .status(HttpStatus.FORBIDDEN)

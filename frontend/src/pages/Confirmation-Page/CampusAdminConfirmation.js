@@ -71,6 +71,7 @@ function CampusAdminConfirmation() {
   const handleSubmit = async () => {
     try {
       await api.post('/users/confirm', user);
+      setIsConfirmed(true);
       setErrors([]);
     } catch (error) {
       setErrors([errorsByStatusCode[error.response.status]]);
