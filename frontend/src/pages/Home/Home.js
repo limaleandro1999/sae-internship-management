@@ -33,7 +33,7 @@ function Home() {
     <Main>
       <Paper elevation={5} className={clsx(classes.container)}>
         <Typography variant="h3" gutterBottom>
-          Sistema de Gerenciamento de Estágios
+          Sistema de Acompanhamento de Estágios
         </Typography>
         <Typography variant="body1" gutterBottom>
           Seja bem-vindo! Clique em um dos links abaixo para acessar o módulo do
