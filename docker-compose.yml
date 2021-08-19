@@ -17,8 +17,8 @@ services:
       DB_DATABASE: postgres
       MAILER_HOST: smtp.gmail.com
       MAILER_PORT: 587
-      SMTP_EMAIL: limaleandro1999@gmail.com
-      SMTP_PASSWORD: 130599Lopes@
+      SMTP_EMAIL: email-here####
+      SMTP_PASSWORD: password-here####
       JWT_SECRET: secretKey
       JWT_EXPIRES_IN: 1d
     depends_on:
