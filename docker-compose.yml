@@ -7,43 +7,26 @@ services:
     command: yarn start:prod
     ports: 
       - "4000:3005"
-    environment: 
-      PORT: 3005
-      DB_TYPE: postgres
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USERNAME: postgres
-      DB_PASSWORD: root
-      DB_DATABASE: postgres
-      MAILER_HOST: smtp.gmail.com
-      MAILER_PORT: 587
-      SMTP_EMAIL: limaleandro1999@gmail.com
-      SMTP_PASSWORD: 130599Lopes@
-      JWT_SECRET: secretKey
-      JWT_EXPIRES_IN: 1d
+    env_file:
+      - .backend.env
     depends_on:
       - postgres
     networks:
       - postgres
-    # volumes: 
-    #   - ./backend:/home/node
   frontend:
     container_name: sae_frontend
     build: ./frontend
+    env_file:
+      - .frontend.env
     ports:
       - '8080:80'
     networks:
       - postgres
-    # volumes: 
-    #   - ./frontend:/home/node
   postgres:
     container_name: postgres_container
     image: postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: postgres
-      PGDATA: /data/postgres
+    env_file:
+      - .database.env
     volumes:
        - postgres:/data/postgres
     ports:

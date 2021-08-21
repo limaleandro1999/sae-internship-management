@@ -24,7 +24,7 @@ function App() {
     },
   });
 
-  document.title = getPageTitle();
+  document.title = 'SAE - Sistema de Acompanhamento de Estágios';
 
   return (
     <Router>
@@ -59,18 +59,6 @@ function App() {
       </Switch>
     </Router>
   );
-}
-
-function getPageTitle() {
-  if (window.location.pathname.includes('/admin')) {
-    return 'Painel Administrativo';
-  }
-
-  if (window.location.pathname.includes('/account-confirmation')) {
-    return 'Confirme sua conta!';
-  }
-
-  return '';
 }
 
 export default App;

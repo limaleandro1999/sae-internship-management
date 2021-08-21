@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import React from 'react';
-import { Show, SimpleShowLayout, FileField, RichTextField } from 'react-admin';
+import { Show, SimpleShowLayout, FileField } from 'react-admin';
 
 function SemesterReportTitle({ record }) {
   return (
@@ -23,11 +23,6 @@ function InternSemesterReportShow(props) {
           title="Download do relatório"
           label="Relatório"
           accept="application/pdf"
-        />
-        <RichTextField
-          source="advisorComment"
-          title="Comentário do orientador"
-          emptyText="Sem comentários"
         />
       </SimpleShowLayout>
     </Show>
