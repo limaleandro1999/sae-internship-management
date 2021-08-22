@@ -7,20 +7,8 @@ services:
     command: yarn start:prod
     ports: 
       - "4000:3005"
-    environment: 
-      PORT: 3005
-      DB_TYPE: postgres
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USERNAME: postgres
-      DB_PASSWORD: root
-      DB_DATABASE: postgres
-      MAILER_HOST: smtp.gmail.com
-      MAILER_PORT: 587
-      SMTP_EMAIL: email-here####
-      SMTP_PASSWORD: password-here####
-      JWT_SECRET: secretKey
-      JWT_EXPIRES_IN: 1d
+    env_file:
+      - .backend.env
     depends_on:
       - postgres
     networks:
