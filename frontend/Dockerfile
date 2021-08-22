@@ -1,7 +1,7 @@
 # 1 - Build environment
 FROM node:14 as builder
 
-ARG REACT_APP_SERVER_URL
+ARG REACT_APP_SERVER_URL=http://locahost:4000
 
 ENV NODE_ENV build
 ENV REACT_APP_SERVER_URL $REACT_APP_SERVER_URL
