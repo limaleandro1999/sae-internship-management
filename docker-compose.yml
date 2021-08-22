@@ -15,7 +15,10 @@ services:
       - postgres
   frontend:
     container_name: sae_frontend
-    build: ./frontend
+    build: 
+      context: ./frontend
+      args: 
+        REACT_APP_SERVER_URL: http://estagio.leandrolima.site/api
     ports:
       - '8080:80'
     networks:
