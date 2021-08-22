@@ -1,3 +1,4 @@
+# 1 - Build environment
 FROM node:14 as builder
 
 ENV NODE_ENV build
@@ -9,9 +10,8 @@ COPY . /home/node
 
 RUN yarn install --frozen-lockfile && yarn build
 
+# 2 - Production environment
 FROM node:14
-
-# ENV NODE_ENV production
 
 USER node
 WORKDIR /home/node

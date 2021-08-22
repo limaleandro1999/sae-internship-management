@@ -25,8 +25,6 @@ services:
       - postgres
     networks:
       - postgres
-    # volumes: 
-    #   - ./backend:/home/node
   frontend:
     container_name: sae_frontend
     build: ./frontend
@@ -34,16 +32,11 @@ services:
       - '8080:80'
     networks:
       - postgres
-    # volumes: 
-    #   - ./frontend:/home/node
   postgres:
     container_name: postgres_container
     image: postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: postgres
-      PGDATA: /data/postgres
+    env_file:
+      - .database.env
     volumes:
        - postgres:/data/postgres
     ports:
