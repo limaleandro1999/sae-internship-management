@@ -85,3 +85,47 @@ $ yarn format ## formata o código do backend
 $ cd frontend/ ## entra no diretório do frontend
 $ yarn format ## formata o código do frontend
 ```
+
+## Templates de email/documento
+
+No diretório do `backend` existe uma pasta chamada `templates` a qual armazena os templates utilizados nos e-mails e na geração de documentos `.docx`. Os templates do e-mail utilizam [handlebars](https://handlebarsjs.com/) e os templates para geração de documentos utilizam a biblioteca [docxtemplater](https://docxtemplater.com/).
+
+## Armazenamento de arquivos
+
+Até agora os arquivos de relatórios e documentos referentes ao processo de estágio são armazenados na pasta `/uploads` no backend. O upload de arquivos é feito utilizando uma das funcionalidades do NestJS. [Exemplo](https://docs.nestjs.com/techniques/file-upload). Para o futuro seria interessante mover esses arquivos para um servidor ou serviço próprio para arquivos como o [AWS S3](https://aws.amazon.com/pt/s3/).
+
+## Ambiente de produção
+
+Para o ambiente de produção foram escritos Dockerfiles para ambos [frontend](frontend/Dockerfile) e [backend](backend/Dockerfile) e um arquivo [docker-compose.yml](docker-compose.yml) que facilitam no processo de subir para produção já que o docker permite o uso de imagens que contém todas as dependências necessárias e processo de build de ambos os lados são feitos pelo docker utilizando Dockerfiles.
+
+### Simular ambiente de produção na sua máquina
+
+Para simular o ambiente de produção é necessário a instalação do docker e do docker-compose:
+
+- [Docker](https://docs.docker.com/engine/install/)
+- [Docker-compose](https://docs.docker.com/compose/install/)
+  
+Após isso é necessário criar dois arquivos na raiz do repositório: `.backend.env` e `.database.env`. O primeiro arquivo seta as variáveis de ambiente utilizadas pelo backend e o segundo especifica define as credenciais que serão utilizadas para criar um banco de dados no container do PostgreSQL. Na raiz do repositório existem os arquivos [.backend.env.example](.backend.env.example) e [.database.env.example](.database.env.example) que são exemplos dos arquivos citados.
+
+Feito isso, para simular em sua máquina modifique a linha 21 do arquivo [docker-compose.yml](docker-compose.yml) para que ela aponte para o endereço local onde está rodando o servidor na sua máquina
+
+![Arquivo docker-compose.yml](https://drive.google.com/uc?export=view&id=1X-Qb90Du9w8hXpYKW3jGvxZgsEkve7Nl)
+
+Então, na raiz do repositório rode:
+```
+$ docker-compose up -d
+```
+
+Esse comando irá criar as imagens docker e iniciar os containers, dependendo da sua máquina esse processo pode demorar um pouco.
+
+### Rodar o projeto em produção
+
+Para rodar o projeto em produção faça os passos indicados na sessão anterior, exceto o de modificar o arquivo `docker-compose.yml`. Para o futuro seria interessante que fosse configurado um CI para fazer este processo automaticamente após alguma alteração ser mergeada em master.
+
+## O sistema
+
+O sistema é dividido em 3 módulos principais: setor de estágio, orientadores de estágio e estagiários. O primeiro é utilizado tanto pelos usuários do setor de estágio, quanto os administradores de campus e administradores. O usuário administrador tem como função manter os campus e criar usuários administradores de campus. O administrador de campus também pode criar outros administradores campus dentro do campus ao qual ele está alocado e também é responsável por criar usuários de setor de estágio. Este é responsável por manter as outras informações disponíveis no módulo: cursos, orientadores de estágio, empresas, estagiários e processos de estágios. Ao criar um registro de orientador de estágio ou de estagiário, um e-mail será enviado para o e-mail informado para que seja completado o cadastro.
+
+O módulo de orientadores de estágio é utilizado pelo orientadores para fazer o acompanhamento dos seus estagiários, podendo acessar as informações dos alunos, horários de estágio e de aula, relatórios mensais e semestrais.
+
+O módulo de estagiários é utilizado pelos alunos para pode visualizar informações dos prazos de entrega de suas tarefas e relatórios e também para entregá-los.
