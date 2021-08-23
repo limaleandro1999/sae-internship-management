@@ -1,11 +1,11 @@
 version: "3"
 
-services: 
-  backend: 
+services:
+  backend:
     container_name: sae_backend
     build: ./backend
     command: yarn start:prod
-    ports: 
+    ports:
       - "4000:3005"
     env_file:
       - .backend.env
@@ -15,12 +15,12 @@ services:
       - postgres
   frontend:
     container_name: sae_frontend
-    build: 
+    build:
       context: ./frontend
-      args: 
-        REACT_APP_SERVER_URL: http://estagio.leandrolima.site/api
+      args:
+        REACT_APP_SERVER_URL: http://estagio.maracanau.ifce.edu.br/api
     ports:
-      - '8080:80'
+      - '8083:80'
     networks:
       - postgres
   postgres:
@@ -35,7 +35,7 @@ services:
     networks:
       - postgres
     restart: on-failure
-  
+
 networks:
   postgres:
     driver: bridge
