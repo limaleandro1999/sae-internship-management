@@ -98,7 +98,9 @@ function InternshipSectorModule({ theme, dataProvider, authProvider }) {
       dataProvider={dataProvider}
       authProvider={authProvider}
       i18nProvider={i18nProvider}
-      loginPage={InternshipSectorLoginPage}
+      loginPage={(props) => (
+        <InternshipSectorLoginPage {...props} customHistory={history} />
+      )}
     >
       {(permissions) => [
         ['Admin'].includes(permissions) ? (

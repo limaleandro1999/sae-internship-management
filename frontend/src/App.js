@@ -12,6 +12,8 @@ import CampusAdminConfirmation from './pages/Confirmation-Page/CampusAdminConfir
 
 import api from './utils/api';
 import authProvider from './utils/authService';
+import ForgotPassword from './pages/Login/ForgotPassword';
+import ResetPassword from './pages/Login/ResetPassword';
 
 function App() {
   const theme = merge({}, defaultTheme, {
@@ -31,6 +33,12 @@ function App() {
       <Switch>
         <Route path="/account-confirmation/:confirmationId">
           <CampusAdminConfirmation />
+        </Route>
+        <Route path="/forgot-password">
+          <ForgotPassword />
+        </Route>
+        <Route path="/reset-password/:userId/:token">
+          <ResetPassword />
         </Route>
         <Route path="/internship-sector/admin">
           <InternshipSectorModule

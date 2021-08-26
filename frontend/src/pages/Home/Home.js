@@ -9,6 +9,10 @@ import { Link } from 'react-router-dom';
 const useStyle = makeStyles((_theme) => ({
   container: {
     padding: '40px',
+    margin: '15px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 }));
 
@@ -20,10 +24,12 @@ const Main = styled.div`
   text-align: center;
   background-color: #086218;
   height: 100vh;
+  min-width: 300px;
 `;
 
 const LinkList = styled.ul`
   list-style-type: none;
+  padding-inline-start: 0;
 `;
 
 function Home() {
@@ -32,30 +38,59 @@ function Home() {
   return (
     <Main>
       <Paper elevation={5} className={clsx(classes.container)}>
-        <Typography variant="h3" gutterBottom>
+        <Typography
+          variant="h3"
+          style={{
+            wordWrap: 'break-word',
+            fontSize: 'clamp(18px, 4vw, 30px)',
+            fontWeight: 'bold',
+          }}
+          gutterBottom
+        >
           Sistema de Acompanhamento de Estágios
         </Typography>
-        <Typography variant="body1" gutterBottom>
+        <Typography
+          variant="body1"
+          style={{ wordWrap: 'break-word', fontSize: 'clamp(15px, 2vw, 19px)' }}
+          gutterBottom
+        >
           Seja bem-vindo! Clique em um dos links abaixo para acessar o módulo do
           site desejado!
         </Typography>
-        <LinkList>
-          <li>
-            <Link to="/internship-sector/admin">
-              <Typography variant="body1">Setor de estágio</Typography>
-            </Link>
-          </li>
-          <li>
-            <Link to="/internship-advisors/admin">
-              <Typography variant="body1">Orientador de estágio</Typography>
-            </Link>
-          </li>
-          <li>
-            <Link to="/interns/admin">
-              <Typography variant="body1">Estagiário</Typography>
-            </Link>
-          </li>
-        </LinkList>
+        <div>
+          <LinkList>
+            <li>
+              <Link to="/internship-sector/admin">
+                <Typography
+                  variant="body1"
+                  style={{ fontSize: 'clamp(15px, 2vw, 17px)' }}
+                >
+                  Setor de estágio
+                </Typography>
+              </Link>
+            </li>
+            <li>
+              <Link to="/internship-advisors/admin">
+                <Typography
+                  variant="body1"
+                  style={{ fontSize: 'clamp(15px, 2vw, 17px)' }}
+                >
+                  Orientador de estágio
+                </Typography>
+              </Link>
+            </li>
+            <li>
+              <Link to="/interns/admin">
+                <Typography
+                  variant="body1"
+                  style={{ fontSize: 'clamp(15px, 2vw, 17px)' }}
+                >
+                  Estagiário
+                </Typography>
+              </Link>
+            </li>
+          </LinkList>
+        </div>
       </Paper>
     </Main>
   );

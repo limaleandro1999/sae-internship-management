@@ -1,5 +1,6 @@
 import React from 'react';
 import { Admin, Resource } from 'react-admin';
+import { useHistory } from 'react-router-dom';
 import {
   InternMonthlyReportEdit,
   InternMonthlyReportShow,
@@ -44,13 +45,17 @@ function MonthlyReportsListWrapper(props) {
 }
 
 function InternshipAdvisorModule({ theme, dataProvider, authProvider }) {
+  const history = useHistory();
+
   return (
     <Admin
       theme={theme}
       dataProvider={dataProvider}
       authProvider={authProvider}
       i18nProvider={i18nProvider}
-      loginPage={InternshipAdvisorLoginPage}
+      loginPage={(props) => (
+        <InternshipAdvisorLoginPage {...props} customHistory={history} />
+      )}
     >
       <Resource
         name="dashboard"

@@ -71,7 +71,9 @@ function InternModule({ theme, dataProvider, authProvider }) {
       dataProvider={dataProvider}
       authProvider={authProvider}
       i18nProvider={i18nProvider}
-      loginPage={InternLoginPage}
+      loginPage={(props) => (
+        <InternLoginPage {...props} customHistory={history} />
+      )}
     >
       <Resource
         name="dashboard"

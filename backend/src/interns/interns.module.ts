@@ -11,6 +11,7 @@ import { SemesterReport } from 'src/reports/semester-report.entity';
 import { Task } from 'src/tasks/task.entity';
 import { TasksService } from 'src/tasks/tasks.service';
 import { MonthlyReport } from 'src/reports/monthly-report.entity';
+import { ForgotPassword } from 'src/users/forgot-password.entity';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MonthlyReport } from 'src/reports/monthly-report.entity';
       SemesterReport,
       Task,
       MonthlyReport,
+      ForgotPassword,
     ]),
   ],
   providers: [

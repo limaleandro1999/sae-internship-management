@@ -11,6 +11,7 @@ import { TasksService } from 'src/tasks/tasks.service';
 import { InternsService } from 'src/interns/interns.service';
 import { Intern } from 'src/interns/intern.entity';
 import { EmailsService } from 'src/emails/emails.service';
+import { ForgotPassword } from 'src/users/forgot-password.entity';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { EmailsService } from 'src/emails/emails.service';
       User,
       Task,
       Intern,
+      ForgotPassword,
     ]),
   ],
   exports: [ReportsService],
