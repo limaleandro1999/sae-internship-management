@@ -18,6 +18,7 @@ import { MonthlyReport } from 'src/reports/monthly-report.entity';
 import { TasksService } from 'src/tasks/tasks.service';
 import { Task } from 'src/tasks/task.entity';
 import { AdditiveTerm } from 'src/internship-processes/additive-term.entity';
+import { ForgotPassword } from 'src/users/forgot-password.entity';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { AdditiveTerm } from 'src/internship-processes/additive-term.entity';
       MonthlyReport,
       Task,
       AdditiveTerm,
+      ForgotPassword,
     ]),
   ],
   providers: [

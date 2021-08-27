@@ -8,10 +8,12 @@ import { Home } from './pages/Home';
 import InternshipSectorModule from './pages/Internship-Sector-Module';
 import InternModule from './pages/Intern-Module';
 import InternshipAdvisorModule from './pages/Internship-Advisor-Module';
-import CampusAdminConfirmation from './pages/Confirmation-Page/CampusAdminConfirmation';
+import ConfirmationPage from './pages/Confirmation-Page/ConfirmationPage';
 
 import api from './utils/api';
 import authProvider from './utils/authService';
+import ForgotPassword from './pages/Login/ForgotPassword';
+import ResetPassword from './pages/Login/ResetPassword';
 
 function App() {
   const theme = merge({}, defaultTheme, {
@@ -30,7 +32,13 @@ function App() {
     <Router>
       <Switch>
         <Route path="/account-confirmation/:confirmationId">
-          <CampusAdminConfirmation />
+          <ConfirmationPage />
+        </Route>
+        <Route path="/forgot-password">
+          <ForgotPassword />
+        </Route>
+        <Route path="/reset-password/:userId/:token">
+          <ResetPassword />
         </Route>
         <Route path="/internship-sector/admin">
           <InternshipSectorModule

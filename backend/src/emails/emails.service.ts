@@ -1,5 +1,6 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
+import environment from 'src/common/environment';
 
 import { ConfirmationEmailDTO } from './dto/confirmation-email.dto';
 import { MonthlyReportDeliveredNotificationDTO } from './dto/monthly-report-delivered-notification.dto';
@@ -15,12 +16,12 @@ export class EmailsService {
 
     await this.mailerService.sendMail({
       to,
-      from: 'no-replay@gerenciadordeestagaio.com',
+      from: environment().mailer?.transport?.auth?.user,
       context: {
         name,
         confirmationLink,
       },
-      subject: 'Confirme seu cadastro',
+      subject: 'SAE - Confirme seu cadastro',
       template: 'confirmation-email',
     });
   }
@@ -38,14 +39,14 @@ export class EmailsService {
 
     await this.mailerService.sendMail({
       to,
-      from: 'no-replay@gerenciadordeestagaio.com',
+      from: environment().mailer?.transport?.auth?.user,
       context: {
         internName,
         mandatory: isMandatory ? 'obrigatório' : 'não obrigatório',
         startDate,
         name,
       },
-      subject: 'Novo estágio',
+      subject: 'SAE - Novo estágio',
       template: 'start-internship-process-notification',
     });
   }
@@ -64,7 +65,7 @@ export class EmailsService {
 
     await this.mailerService.sendMail({
       to,
-      from: 'no-replay@gerenciadordeestagaio.com',
+      from: environment().mailer?.transport?.auth?.user,
       context: {
         internName,
         startDate,
@@ -72,7 +73,7 @@ export class EmailsService {
         name,
         deliveredDate,
       },
-      subject: 'Relatório Semestral Entregue',
+      subject: 'SAE - Relatório Semestral Entregue',
       template: 'semester-report-delivered-notification',
     });
   }
@@ -90,15 +91,38 @@ export class EmailsService {
 
     await this.mailerService.sendMail({
       to,
-      from: 'no-replay@gerenciadordeestagaio.com',
+      from: environment().mailer?.transport?.auth?.user,
       context: {
         internName,
         month,
         name,
         deliveredDate,
       },
-      subject: 'Relatório Mensal Entregue',
+      subject: 'SAE - Relatório Mensal Entregue',
       template: 'monthly-report-delivered-notification',
+    });
+  }
+
+  async sendForgotPasswordEmail(email: string, userId: number, token: string) {
+    await this.mailerService.sendMail({
+      to: email,
+      from: environment().mailer?.transport?.auth?.user,
+      context: {
+        forgotPasswordLink: `${
+          environment().links.webClientHost
+        }reset-password/${userId}/${token}`,
+      },
+      subject: 'SAE - Recuperar Senha',
+      template: 'forgot-password',
+    });
+  }
+
+  async sendResetPasswordEmail(email: string) {
+    await this.mailerService.sendMail({
+      to: email,
+      from: environment().mailer?.transport?.auth?.user,
+      subject: 'SAE - Senha Alterada',
+      template: 'reset-password',
     });
   }
 }

@@ -12,6 +12,7 @@ import { ReportsService } from 'src/reports/reports.service';
 import { SemesterReport } from 'src/reports/semester-report.entity';
 import { Task } from 'src/tasks/task.entity';
 import { TasksService } from 'src/tasks/tasks.service';
+import { ForgotPassword } from 'src/users/forgot-password.entity';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { AdditiveTerm } from './additive-term.entity';
@@ -31,6 +32,7 @@ import { InternshipProcessesService } from './internship-processes.service';
       MonthlyReport,
       AdditiveTerm,
       InternshipAdvisor,
+      ForgotPassword,
     ]),
   ],
   controllers: [InternshipProcessesController],

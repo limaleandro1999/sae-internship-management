@@ -13,6 +13,7 @@ import { SemesterReport } from 'src/reports/semester-report.entity';
 import { MonthlyReport } from 'src/reports/monthly-report.entity';
 import { Task } from 'src/tasks/task.entity';
 import { AdditiveTerm } from 'src/internship-processes/additive-term.entity';
+import { ForgotPassword } from 'src/users/forgot-password.entity';
 
 export default () => ({
   jwt: {
@@ -54,6 +55,7 @@ export default () => ({
       SemesterReport,
       MonthlyReport,
       Task,
+      ForgotPassword,
     ],
   },
   mailer: {
@@ -77,6 +79,7 @@ export default () => ({
     },
   },
   links: {
+    webClientHost: process.env.WEB_CLIENT_HOST ?? 'http://localhost:3001/',
     accountConfimationPrefixLink:
       process.env.LINK_ACCOUNT_CONFIRMATION_PREFIX ??
       'http://localhost:3001/account-confirmation/',
