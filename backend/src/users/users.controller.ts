@@ -28,12 +28,25 @@ export class UsersController {
   @Post('/confirm')
   async confirmUser(@Body() confirmUserDTO: ConfirmUserDTO, @Res() res) {
     const { email, confirmationId } = confirmUserDTO;
-    if (await this.userService.isValid(email, confirmationId)) {
-      return this.userService.confirmUser(confirmUserDTO);
+    const isValid = await this.userService.isValid(email, confirmationId);
+    if (!isValid) {
+      return res
+        .status(HttpStatus.FORBIDDEN)
+        .json({ message: "Email doesn't match" });
     }
-    return res
-      .status(HttpStatus.FORBIDDEN)
-      .json({ message: "Email doesn't match" });
+    
+    const isUserConfirmed = await this.userService.isConfirmed(confirmationId);
+
+    if (isUserConfirmed) {
+      return res
+        .status(HttpStatus.BAD_REQUEST)
+        .json({ message: "User already confirmed" });
+    }
+    
+    const confirmedUser = await this.userService.confirmUser(confirmUserDTO);
+    return confirmedUser.affected === 1
+      ? res.status(HttpStatus.OK).json({ message: 'User confirmed' })
+      : res.status(HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @Public()
@@ -55,7 +68,9 @@ export class UsersController {
     const user = await this.userService.findUser(email);
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res
+        .status(HttpStatus.NOT_FOUND)
+        .json({ message: 'User not found' });
     }
 
     try {
@@ -69,9 +84,11 @@ export class UsersController {
         forgotPasswordToken?.token,
       );
 
-      return res.status(200).json({ message: 'Forgot password e-mail sent' });
+      return res
+        .status(HttpStatus.OK)
+        .json({ message: 'Forgot password e-mail sent' });
     } catch (error) {
-      return res.status(500).json({ error });
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ error });
     }
   }
 

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { ThemeProvider, Card, Box, Typography } from '@material-ui/core';
 import { createMuiTheme, makeStyles } from '@material-ui/core/styles';
 import {
@@ -7,10 +8,10 @@ import {
   CircularProgress,
   TextField,
 } from '@material-ui/core';
+import styled from 'styled-components';
 import { Field, Form } from 'react-final-form';
 import classnames from 'classnames';
 import { api } from '../../utils/api';
-import { Link, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -50,6 +51,16 @@ const useStyles = makeStyles(
   { name: 'RaLogin' }
 );
 
+const ErrorMessage = styled.p`
+  color: #de0b2b;
+  margin: 5px;
+`;
+
+const errorsByStatusCode = {
+  403: 'O email informado não foi cadastrado',
+  400: 'O email já foi confirmado',
+};
+
 const Input = ({ meta: { touched, error }, input: inputProps, ...props }) => (
   <TextField
     error={!!(touched && error)}
@@ -60,35 +71,35 @@ const Input = ({ meta: { touched, error }, input: inputProps, ...props }) => (
   />
 );
 
-function ResetPassword() {
-  const history = useHistory();
-  const pathParameters = history?.location?.pathname?.split('/');
-  const userId = pathParameters[pathParameters.length - 2];
-  const token = pathParameters[pathParameters.length - 1];
-  const [loading, setLoading] = useState(false);
+function ConfirmationPage() {
+  const { confirmationId } = useParams();
   const classes = useStyles();
   const muiTheme = createMuiTheme({});
-  const [finished, setFinished] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
+  const [errors, setErrors] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const submit = async ({ password }) => {
-    setLoading(true);
-    try {
-      const { status } = await api.post(
-        `/users/reset-password/${userId}/${token}`,
-        {
-          password,
-        }
-      );
-      setFinished(status < 300 && status >= 200);
-      setLoading(false);
-    } catch (error) {
-      alert('Não foi possivel realizar a solicitção');
-      setLoading(false);
+  useEffect(() => {
+    async function isUserConfirmed() {
+      const {
+        data: { confirmed },
+      } = await api.get(`/users/is-confirmed/${confirmationId}`);
+      setIsConfirmed(confirmed);
     }
-  };
 
-  const validate = ({ password = '', passwordConfirmation = '' }) => {
-    const errors = { password: undefined, passwordConfirmation: undefined };
+    isUserConfirmed();
+  }, [confirmationId]);
+
+  const validate = ({ email, password = '', passwordConfirmation = '' }) => {
+    const errors = {
+      email: undefined,
+      password: undefined,
+      passwordConfirmation: undefined,
+    };
+
+    if (!email) {
+      errors.email = 'E-mail é um campo obrigatório';
+    }
 
     if (password.length < 8 && password.length > 16) {
       errors.password = 'Senha precisa ter pelo entre 8 e 16 caracteres';
@@ -101,28 +112,34 @@ function ResetPassword() {
     return errors;
   };
 
+  const submit = async ({ email, password }) => {
+    try {
+      setLoading(true);
+      await api.post('/users/confirm', { email, password, confirmationId });
+      setIsConfirmed(true);
+      setErrors([]);
+      setLoading(false);
+    } catch (error) {
+      setErrors([errorsByStatusCode[error.response.status]]);
+      setLoading(false);
+    }
+  };
+
   return (
     <ThemeProvider theme={muiTheme}>
       <div className={classnames(classes.main)}>
         <Card className={classes.card} style={{ width: '300px' }}>
-          {finished ? (
-            <Box
-              mt="10px"
-              padding="10px"
-              display="flex"
-              justifyContent="center"
-            >
-              <Typography
-                style={{ wordWrap: 'break-word', textAlign: 'justify' }}
-              >
-                Senha alterado com sucesso!
-                <Link to="/">Voltar para tela inicial</Link>
-              </Typography>
-            </Box>
-          ) : (
+          {isConfirmed ? (
             <>
-              <Box mt="10px" display="flex" justifyContent="center">
-                <Typography variant="h5">Recuperar sua senha</Typography>
+              <Box
+                mt="10px"
+                padding="10px"
+                display="flex"
+                justifyContent="center"
+              >
+                <Typography variant="h5">
+                  Olá! Seu cadastro já foi confirmado
+                </Typography>
               </Box>
               <Box
                 mt="10px"
@@ -141,7 +158,30 @@ function ResetPassword() {
                 <Typography
                   style={{ wordWrap: 'break-word', textAlign: 'justify' }}
                 >
-                  Digite uma nova senha para ter acesso a sua conta
+                  Por favor, dirija se a página de login para logar-se ao
+                  sistema!
+                </Typography>
+              </Box>
+            </>
+          ) : (
+            <>
+              <Box mt="10px" display="flex" justifyContent="center">
+                <Typography variant="h5">Confirme sua conta</Typography>
+              </Box>
+              {errors.map((error, idx) => (
+                <ErrorMessage key={idx}>{error}</ErrorMessage>
+              ))}
+              <Box
+                mt="10px"
+                padding="10px"
+                display="flex"
+                justifyContent="center"
+              >
+                <Typography
+                  style={{ wordWrap: 'break-word', textAlign: 'justify' }}
+                >
+                  Por favor complete seu cadastro utilizando o email que foi
+                  cadastrado e escolha uma senha para sua conta.
                 </Typography>
               </Box>
               <Form
@@ -150,6 +190,16 @@ function ResetPassword() {
                 render={({ handleSubmit }) => (
                   <form onSubmit={handleSubmit} noValidate>
                     <div className={classes.form}>
+                      <div className={classes.input}>
+                        <Field
+                          autoFocus
+                          id="email"
+                          name="email"
+                          component={Input}
+                          label="E-mail"
+                          disabled={loading}
+                        />
+                      </div>
                       <div className={classes.input}>
                         <Field
                           autoFocus
@@ -167,8 +217,8 @@ function ResetPassword() {
                           id="passwordConfirmation"
                           name="passwordConfirmation"
                           component={Input}
-                          label="Confirmação de Senha"
                           type="password"
+                          label="Confirmação de senha"
                           disabled={loading}
                         />
                       </div>
@@ -188,7 +238,7 @@ function ResetPassword() {
                             thickness={2}
                           />
                         )}
-                        Enviar
+                        Concluir
                       </Button>
                     </CardActions>
                   </form>
@@ -202,4 +252,4 @@ function ResetPassword() {
   );
 }
 
-export default ResetPassword;
+export default ConfirmationPage;
