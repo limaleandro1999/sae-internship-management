@@ -143,6 +143,7 @@ export function InternFormFields(props) {
                   source={`${sourcePrefix}.course`}
                   label="Curso"
                   reference="courses"
+                  validate={required('Campo é obrigatório')}
                 >
                   <SelectInput optionText="name" />
                 </ReferenceInput>

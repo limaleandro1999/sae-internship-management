@@ -7,6 +7,7 @@ import {
   Put,
   Req,
   Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { Campus } from './campus.entity';
 import { CampiService } from './campi.service';
@@ -27,13 +28,13 @@ export class CampiController {
   @Get()
   async findAll(
     @Req() req: RequestWithQueryInfo,
-    @Res() res: Response,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<[Campus[], number] | Response<any, Record<string, any>>> {
     // TODO: Use roles instead of this logic
     const user = await this.usersService.findUser(req.user.email);
 
     if (user.type !== UserType.ADMIN) {
-      return res.status(403);
+      return res.status(HttpStatus.FORBIDDEN);
     }
 
     const { order, skip, filter, take } = req.queryInfo;
