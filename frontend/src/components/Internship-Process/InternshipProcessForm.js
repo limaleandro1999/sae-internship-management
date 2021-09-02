@@ -11,6 +11,7 @@ import {
   FileInput,
   FileField,
   Button,
+  required,
 } from 'react-admin';
 import { Typography, Box } from '@material-ui/core';
 import { InternFormFields } from '../Intern/InternForm';
@@ -28,6 +29,7 @@ function InternTabForm(props) {
         reference="interns"
         perPage={5}
         fullWidth={true}
+        validate={required('Campo obrigatório')}
       >
         <AutocompleteInput
           optionText={(intern) =>
@@ -77,6 +79,7 @@ function CompanyTabFrom() {
         reference="companies"
         perPage={5}
         fullWidth={true}
+        validate={required('Campo obrigatório')}
       >
         <AutocompleteInput
           optionText={(company) => `${company.name} - ${company.cnpj}`}
@@ -130,6 +133,7 @@ function ContractTabForm(props) {
             reference="internship-advisors"
             perPage={10}
             fullWidth={true}
+            validate={required('Campo obrigatório')}
           >
             <AutocompleteInput
               optionText={(internshipAdvisor) =>
@@ -148,10 +152,18 @@ function ContractTabForm(props) {
           </Typography>
           <Box display="flex" flexWrap="wrap">
             <Box mr="0.5em">
-              <DateInput label="Data de início" source="startDate" />
+              <DateInput
+                label="Data de início"
+                source="startDate"
+                validate={required('Campo obrigatório')}
+              />
             </Box>
             <Box mr="0.5em">
-              <DateInput label="Data de término" source="finishDate" />
+              <DateInput
+                label="Data de término"
+                source="finishDate"
+                validate={required('Campo obrigatório')}
+              />
             </Box>
           </Box>
 
@@ -160,12 +172,14 @@ function ContractTabForm(props) {
               <NumberInput
                 label="Carga Horária Diária"
                 source="dailyWorkload"
+                validate={required('Campo obrigatório')}
               />
             </Box>
             <Box mr="0.5em">
               <NumberInput
                 label="Carga Horária Semanal"
                 source="weeklyWorkload"
+                validate={required('Campo obrigatório')}
               />
             </Box>
           </Box>
@@ -280,13 +294,25 @@ function ContractTabForm(props) {
           </Typography>
           <Box display="flex" flexWrap="wrap">
             <Box mr="0.5em">
-              <NumberInput label="Valor da Bolsa" source="salaryAmount" />
+              <NumberInput
+                label="Valor da Bolsa"
+                source="salaryAmount"
+                validate={required('Campo obrigatório')}
+              />
             </Box>
             <Box mr="0.5em">
-              <TextInput label="Nº da apólice" source="policyNumber" />
+              <TextInput
+                label="Nº da apólice"
+                source="policyNumber"
+                validate={required('Campo obrigatório')}
+              />
             </Box>
             <Box mr="0.5em">
-              <TextInput label="Empresa Seguradora" source="insuranceCompany" />
+              <TextInput
+                label="Empresa Seguradora"
+                source="insuranceCompany"
+                validate={required('Campo obrigatório')}
+              />
             </Box>
           </Box>
 
@@ -299,12 +325,14 @@ function ContractTabForm(props) {
                 label="Supervisor"
                 source="supervisor"
                 fullWidth={true}
+                validate={required('Campo obrigatório')}
               />
             </Box>
             <Box flex={1} mr="0.5em">
               <TextInput
                 label="Cargo do supervisor"
                 source="supervisorPosition"
+                validate={required('Campo obrigatório')}
               />
             </Box>
           </Box>
@@ -332,6 +360,7 @@ function ContractTabForm(props) {
                 label="Termo de compromisso de estágio e plano de atividades"
                 accept="application/pdf"
                 placeholder="Solte um arquivo para fazer upload ou clique para selecioná-lo."
+                validate={required('Campo obrigatório')}
               >
                 <FileField source="src" title="title" />
               </FileInput>
