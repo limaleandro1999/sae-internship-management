@@ -20,9 +20,19 @@ export class CampusAdminController {
   ) {}
 
   @Get()
-  findAll(@Req() req: RequestWithQueryInfo): Promise<[CampusAdmin[], number]> {
+  async findAll(
+    @Req() req: RequestWithQueryInfo,
+  ): Promise<[CampusAdmin[], number]> {
     const { order, skip, filter, take } = req.queryInfo;
-    return this.campusAdminService.findAll(
+
+    // TODO: Use roles instead of this logic
+    const user = await this.userService.findUser(req.user.email);
+
+    if (user.type === UserType.ADMIN) {
+      return this.campusAdminService.findAll(order, skip, take, filter);
+    }
+
+    return this.campusAdminService.findAllByCampusId(
       order,
       skip,
       take,

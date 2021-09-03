@@ -17,6 +17,25 @@ export class CampusAdminService {
     skip?: number,
     take?: number,
     filter?: BaseFilter,
+  ): Promise<[CampusAdmin[], number]> {
+    const { q } = filter;
+    const whereClause = q
+      ? { name: Raw(alias => `${alias} ILIKE '%${q}%'`) }
+      : null;
+    return this.campusAdminRepository.findAndCount({
+      order,
+      skip,
+      take,
+      where: { ...whereClause },
+      relations: ['user'],
+    });
+  }
+
+  findAllByCampusId(
+    order?: Record<string, unknown>,
+    skip?: number,
+    take?: number,
+    filter?: BaseFilter,
     campusId?: number,
   ): Promise<[CampusAdmin[], number]> {
     const { q } = filter;
@@ -27,7 +46,7 @@ export class CampusAdminService {
       order,
       skip,
       take,
-      where: { ...whereClause, campus: campusId },
+      where: { ...whereClause, campus: campusId ?? undefined },
       relations: ['user'],
     });
   }
