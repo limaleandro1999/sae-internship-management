@@ -34,15 +34,15 @@ export class UsersController {
         .status(HttpStatus.FORBIDDEN)
         .json({ message: "Email doesn't match" });
     }
-    
+
     const isUserConfirmed = await this.userService.isConfirmed(confirmationId);
 
     if (isUserConfirmed) {
       return res
         .status(HttpStatus.BAD_REQUEST)
-        .json({ message: "User already confirmed" });
+        .json({ message: 'User already confirmed' });
     }
-    
+
     const confirmedUser = await this.userService.confirmUser(confirmUserDTO);
     return confirmedUser.affected === 1
       ? res.status(HttpStatus.OK).json({ message: 'User confirmed' })
