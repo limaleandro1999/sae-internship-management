@@ -20,9 +20,11 @@ services:
       args:
         REACT_APP_SERVER_URL: http://estagio.maracanau.ifce.edu.br/api
     ports:
-      - '8083:80'
+      - '8083:3000'
     networks:
       - postgres
+    environment:
+      - CI=true
   postgres:
     container_name: postgres_container
     image: postgres
