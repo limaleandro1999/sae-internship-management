@@ -34,6 +34,8 @@ export class InternshipAdvisorsService {
       order: Object.values(order)[0],
     };
 
+    whereClause = { where: 'internshipAdvisor.campusId = :campusId', parameters: { campusId } };
+
     if (q) {
       whereClause = {
         where:

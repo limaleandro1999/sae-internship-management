@@ -3,7 +3,7 @@ FROM node:14 as builder
 
 ARG REACT_APP_SERVER_URL=http://locahost:4000
 
-ENV NODE_ENV build
+# ENV NODE_ENV build
 ENV REACT_APP_SERVER_URL $REACT_APP_SERVER_URL
 
 USER node
@@ -11,16 +11,20 @@ WORKDIR /home/node
 
 COPY . /home/node
 
-RUN yarn install --frozen-lockfile && yarn build
+RUN yarn install --frozen-lockfile
 
-# 2 - Production environment
-FROM nginx:1.16.0-alpine
+CMD [ "yarn", "start" ]
 
-COPY --from=builder /home/node/build/ /usr/share/nginx/html
+# RUN yarn install --frozen-lockfile && yarn build
 
-RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx/nginx.conf /etc/nginx/conf.d
+# # 2 - Production environment
+# FROM nginx:1.16.0-alpine
 
-EXPOSE 80
+# COPY --from=builder /home/node/build/ /usr/share/nginx/html
 
-CMD ["nginx", "-g", "daemon off;"]
+# RUN rm /etc/nginx/conf.d/default.conf
+# COPY nginx/nginx.conf /etc/nginx/conf.d
+
+# EXPOSE 80
+
+# CMD ["nginx", "-g", "daemon off;"]

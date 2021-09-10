@@ -376,9 +376,6 @@ function InternshipProcessForm(props) {
   const { isCreateForm = false } = props;
 
   return (
-    /**
-     * Yeah, I don't like it either, but it worked
-     */
     <TabbedForm {...props} toolbar={<CustomToolbar />}>
       {[
         <FormTab label="Estagiário">
