@@ -339,9 +339,7 @@ export class ReportsService {
     if (report.reportFileUrl) {
       downloadLink = `${environment().server.protocol}://${
         environment().server.host
-      }:${environment().server.port}/interns/${reportType}-reports/${
-        report.id
-      }/report-file`;
+      }/interns/${reportType}-reports/${report.id}/report-file`;
     } else {
       downloadLink = null;
     }
