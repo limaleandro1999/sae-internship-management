@@ -20,7 +20,7 @@ services:
     build:
       context: ./frontend
       args:
-        REACT_APP_SERVER_URL: http://localhost:4000
+        REACT_APP_SERVER_URL: https://estagio.maracanau.ifce.edu.br/api
     ports:
       - '8083:3000'
     networks:
