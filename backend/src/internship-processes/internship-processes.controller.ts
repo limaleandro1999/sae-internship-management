@@ -70,44 +70,44 @@ export class InternshipProcessesController {
     const internshipProcess = await this.internshipProcessesService.findOne(id);
 
     internshipProcess.registrationFormFileURL = internshipProcess.registrationFormFileURL
-      ? `${environment().server.protocol}://${environment().server.host}:${
-          environment().server.port
+      ? `${environment().server.protocol}://${
+          environment().server.host
         }/internship-processes/${internshipProcess.id}/registrationForm`
       : null;
     internshipProcess.internshipCommitmentTermAndActivityPlanFileURL = internshipProcess.internshipCommitmentTermAndActivityPlanFileURL
-      ? `${environment().server.protocol}://${environment().server.host}:${
-          environment().server.port
+      ? `${environment().server.protocol}://${
+          environment().server.host
         }/internship-processes/${
           internshipProcess.id
         }/internshipCommitmentTermAndActivityPlan`
       : null;
     internshipProcess.internEvaluationSheetFileURL = internshipProcess.internEvaluationSheetFileURL
-      ? `${environment().server.protocol}://${environment().server.host}:${
-          environment().server.port
+      ? `${environment().server.protocol}://${
+          environment().server.host
         }/internship-processes/${internshipProcess.id}/internEvaluationSheet`
       : null;
     internshipProcess.finalInternshipReportFileURL = internshipProcess.finalInternshipReportFileURL
-      ? `${environment().server.protocol}://${environment().server.host}:${
-          environment().server.port
+      ? `${environment().server.protocol}://${
+          environment().server.host
         }/internship-processes/${internshipProcess.id}/finalInternshipReport`
       : null;
     internshipProcess.applicationCompletionInternshipFileURL = internshipProcess.applicationCompletionInternshipFileURL
-      ? `${environment().server.protocol}://${environment().server.host}:${
-          environment().server.port
+      ? `${environment().server.protocol}://${
+          environment().server.host
         }/internship-processes/${
           internshipProcess.id
         }/applicationCompletionInternship`
       : null;
     internshipProcess.internshipCompletionStatementFileURL = internshipProcess.internshipCompletionStatementFileURL
-      ? `${environment().server.protocol}://${environment().server.host}:${
-          environment().server.port
+      ? `${environment().server.protocol}://${
+          environment().server.host
         }/internship-processes/${
           internshipProcess.id
         }/internshipCompletionStatement`
       : null;
     internshipProcess.internshipAgreementTerminationTermFileURL = internshipProcess.internshipAgreementTerminationTermFileURL
-      ? `${environment().server.protocol}://${environment().server.host}:${
-          environment().server.port
+      ? `${environment().server.protocol}://${
+          environment().server.host
         }/internship-processes/${
           internshipProcess.id
         }/internshipAgreementTerminationTerm`

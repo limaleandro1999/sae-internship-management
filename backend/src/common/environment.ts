@@ -22,7 +22,7 @@ export default () => ({
   },
   server: {
     port: process.env.PORT ?? 3000,
-    host: process.env.HOST ?? 'localhost',
+    host: process.env.HOST ?? 'localhost:3000',
     protocol: process.env.PROTOCOL ?? 'http',
   },
   database: {
