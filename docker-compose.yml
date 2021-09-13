@@ -13,12 +13,14 @@ services:
       - postgres
     networks:
       - postgres
+    volumes: 
+      - backend:/home/node
   frontend:
     container_name: sae_frontend
     build:
       context: ./frontend
       args:
-        REACT_APP_SERVER_URL: http://estagio.maracanau.ifce.edu.br/api
+        REACT_APP_SERVER_URL: https://estagio.maracanau.ifce.edu.br/api
     ports:
       - '8083:3000'
     networks:
@@ -31,7 +33,7 @@ services:
     env_file:
       - .database.env
     volumes:
-       - postgres:/data/postgres
+      - postgres:/data/postgres
     ports:
       - "5439:5432"
     networks:
@@ -44,3 +46,4 @@ networks:
 
 volumes:
   postgres:
+  backend:
