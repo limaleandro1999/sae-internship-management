@@ -143,6 +143,12 @@ export class InternshipProcessesController {
     createInternshipProcessDTO.weeklySchedule = createInternshipProcessDTO?.weeklySchedule
       ? JSON.parse(<string>createInternshipProcessDTO?.weeklySchedule)
       : null;
+    createInternshipProcessDTO.intern = createInternshipProcessDTO?.intern
+      ? JSON.parse(<string>(<unknown>createInternshipProcessDTO?.intern))
+      : null;
+    createInternshipProcessDTO.company = createInternshipProcessDTO?.company
+      ? JSON.parse(<string>(<unknown>createInternshipProcessDTO?.company))
+      : null;
     createInternshipProcessDTO.registrationFormFileURL = files?.registrationForm
       ? resolve(files?.registrationForm[0]?.path)
       : null;
